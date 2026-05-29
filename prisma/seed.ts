@@ -3,7 +3,9 @@ import { SFIC_MANDALAY_CLUBS } from "../src/lib/sfic-clubs";
 
 const prisma = new PrismaClient();
 
-const OFFICIAL_CLUB_NAMES = new Set(SFIC_MANDALAY_CLUBS.map((c) => c.name));
+const OFFICIAL_CLUB_NAMES = new Set<string>(
+  SFIC_MANDALAY_CLUBS.map((c) => c.name as string),
+);
 
 async function removeLegacyClubs(keepClubId: string) {
   const allClubs = await prisma.club.findMany();
