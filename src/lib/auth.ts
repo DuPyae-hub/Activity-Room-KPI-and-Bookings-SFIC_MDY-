@@ -7,6 +7,7 @@ import {
   verifyAdminSessionToken,
 } from "@/lib/admin-session";
 import { prisma } from "@/lib/db";
+import { isDbConnectionError } from "@/lib/safe-query";
 import type { UserWithClub } from "@/lib/types";
 
 const SESSION_COOKIE = "sfic_admin_session";
@@ -17,16 +18,21 @@ export async function getSessionAdmin(): Promise<UserWithClub | null> {
   const session = await verifyAdminSessionToken(token);
   if (!session) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    include: { club: true },
-  });
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: session.userId },
+      include: { club: true },
+    });
 
-  if (!user || user.role !== "ADMIN") {
-    return null;
+    if (!user || user.role !== "ADMIN") {
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    if (isDbConnectionError(error)) return null;
+    throw error;
   }
-
-  return user;
 }
 
 export async function requireAdmin(): Promise<UserWithClub> {

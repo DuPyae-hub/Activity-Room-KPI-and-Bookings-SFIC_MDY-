@@ -1,12 +1,21 @@
 import { ApprovalsQueue } from "@/components/admin/approvals-queue";
 import { KpiCharts } from "@/components/admin/kpi-charts";
 import { getAdminKpis, getPendingBookings } from "@/data/queries";
+import { isDbConnectionError } from "@/lib/safe-query";
 
 export default async function AdminPage() {
-  const [kpis, pending] = await Promise.all([
-    getAdminKpis(),
-    getPendingBookings(),
-  ]);
+  let kpis: Awaited<ReturnType<typeof getAdminKpis>> = {
+    topClubs: [],
+    peakHours: [],
+    pendingCount: 0,
+  };
+  let pending: Awaited<ReturnType<typeof getPendingBookings>> = [];
+
+  try {
+    [kpis, pending] = await Promise.all([getAdminKpis(), getPendingBookings()]);
+  } catch (error) {
+    if (!isDbConnectionError(error)) throw error;
+  }
 
   return (
     <div>
