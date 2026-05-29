@@ -37,9 +37,22 @@ export default async function DashboardPage() {
 
       {dbError && (
         <GlassCard className="mb-6 border-brand-red/30 bg-brand-red/10 p-4 text-sm text-brand-red-light">
-          Database unreachable. In terminal run:{" "}
-          <code className="text-white">npm run db:check</code> then{" "}
-          <code className="text-white">npm run fresh</code> (uses Session pooler in .env).
+          {process.env.VERCEL ? (
+            <>
+              Database unreachable. In Vercel → <strong className="text-white">Settings → Environment Variables</strong>,
+              add <code className="text-white">DATABASE_URL</code> and{" "}
+              <code className="text-white">DIRECT_URL</code> (Supabase Session pooler URI with{" "}
+              <code className="text-white">?sslmode=require</code>), then <strong className="text-white">Redeploy</strong>.
+              First time: run <code className="text-white">npx prisma db push</code> and{" "}
+              <code className="text-white">npm run db:seed</code> locally with your production URL.
+            </>
+          ) : (
+            <>
+              Database unreachable. In terminal run:{" "}
+              <code className="text-white">npm run db:check</code> then{" "}
+              <code className="text-white">npm run fresh</code> (uses Session pooler in .env).
+            </>
+          )}
         </GlassCard>
       )}
 

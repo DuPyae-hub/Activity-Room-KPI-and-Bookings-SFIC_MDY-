@@ -6,11 +6,16 @@ export function getAdminLoginPath(): string {
   return ADMIN_LOGIN_PATH;
 }
 
-export function verifyAdminPassword(input: string): boolean {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected || !input) return false;
+export function isAdminPasswordConfigured(): boolean {
+  return Boolean(process.env.ADMIN_PASSWORD?.trim());
+}
 
-  const a = createHash("sha256").update(input).digest();
+export function verifyAdminPassword(input: string): boolean {
+  const expected = process.env.ADMIN_PASSWORD?.trim();
+  const value = input.trim();
+  if (!expected || !value) return false;
+
+  const a = createHash("sha256").update(value).digest();
   const b = createHash("sha256").update(expected).digest();
   return timingSafeEqual(a, b);
 }

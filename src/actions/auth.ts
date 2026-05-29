@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import {
   getAdminLoginPath,
   getAdminUserForLogin,
+  isAdminPasswordConfigured,
   verifyAdminPassword,
 } from "@/lib/admin-auth";
 import { clearSession, setSessionAdmin } from "@/lib/auth";
@@ -25,6 +26,13 @@ export async function adminLoginAction(
   if (!parsed.success) {
     return {
       error: parsed.error.flatten().fieldErrors.password?.[0] ?? "Invalid credentials",
+    };
+  }
+
+  if (!isAdminPasswordConfigured()) {
+    return {
+      error:
+        "Admin password is not configured on this server. Add ADMIN_PASSWORD in Vercel → Environment Variables, then redeploy.",
     };
   }
 
