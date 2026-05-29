@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export type MascotPose = "wave" | "float" | "celebrate" | "think" | "sad" | "peek";
@@ -13,83 +13,9 @@ const sizeMap = {
   xl: { box: "h-64 w-64 sm:h-72 sm:w-72", img: 288 },
 };
 
-const poseVariants: Record<MascotPose, Variants> = {
-  wave: {
-    initial: { opacity: 0, scale: 0.9, y: 16 },
-    animate: {
-      opacity: 1,
-      scale: 1,
-      y: [0, -10, 0],
-      rotate: [0, -2, 2, 0],
-      transition: {
-        opacity: { duration: 0.4 },
-        scale: { type: "spring", stiffness: 260, damping: 20 },
-        y: { repeat: Infinity, duration: 3.2, ease: "easeInOut" },
-        rotate: { repeat: Infinity, duration: 2.8, ease: "easeInOut" },
-      },
-    },
-  },
-  float: {
-    initial: { opacity: 0, y: 12 },
-    animate: {
-      opacity: 1,
-      y: [0, -8, 0],
-      transition: {
-        opacity: { duration: 0.35 },
-        y: { repeat: Infinity, duration: 2.6, ease: "easeInOut" },
-      },
-    },
-  },
-  celebrate: {
-    initial: { opacity: 0, scale: 0.85 },
-    animate: {
-      opacity: 1,
-      scale: [1, 1.06, 1],
-      rotate: [0, -4, 4, 0],
-      y: [0, -12, 0],
-      transition: {
-        opacity: { duration: 0.35 },
-        scale: { repeat: Infinity, duration: 1.8, ease: "easeInOut" },
-        rotate: { repeat: Infinity, duration: 1.8, ease: "easeInOut" },
-        y: { repeat: Infinity, duration: 1.8, ease: "easeInOut" },
-      },
-    },
-  },
-  think: {
-    initial: { opacity: 0, x: 8 },
-    animate: {
-      opacity: 1,
-      x: 0,
-      rotate: [0, 2, -2, 0],
-      transition: {
-        opacity: { duration: 0.35 },
-        rotate: { repeat: Infinity, duration: 4, ease: "easeInOut" },
-      },
-    },
-  },
-  sad: {
-    initial: { opacity: 0, y: 8 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      rotate: -4,
-      transition: { type: "spring", stiffness: 200, damping: 22 },
-    },
-  },
-  peek: {
-    initial: { opacity: 0, x: 40, scale: 0.95 },
-    animate: {
-      opacity: 1,
-      x: [0, 6, 0],
-      scale: 1,
-      transition: {
-        opacity: { duration: 0.4 },
-        x: { repeat: Infinity, duration: 3.5, ease: "easeInOut" },
-        scale: { type: "spring", stiffness: 280, damping: 22 },
-      },
-    },
-  },
-};
+/** Hand-wave keyframes — pivot near raised arm / shoulder */
+const WAVE_ROTATE = [0, 6, -4, 10, -7, 12, -8, 6, 0];
+const WAVE_TIMES = [0, 0.12, 0.24, 0.36, 0.48, 0.62, 0.76, 0.88, 1];
 
 type AnimatedMascotProps = {
   pose?: MascotPose;
@@ -107,31 +33,95 @@ export function AnimatedMascot({
   label = "Strategy First college mascot",
 }: AnimatedMascotProps) {
   const dims = sizeMap[size];
+  const isWaving = pose === "wave" || pose === "peek";
 
   return (
     <div className={cn("relative inline-flex flex-col items-center", className)}>
       <motion.div
-        variants={poseVariants[pose]}
-        initial="initial"
-        animate="animate"
+        initial={{ opacity: 0, scale: 0.92, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 22 }}
         className={cn("relative", dims.box)}
       >
+        {/* Soft glow — no solid circle behind character */}
         <motion.span
-          className="absolute -inset-3 rounded-full bg-brand-red/15 blur-xl"
-          animate={{ opacity: [0.35, 0.55, 0.35], scale: [1, 1.05, 1] }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+          className="pointer-events-none absolute bottom-0 left-1/2 h-[18%] w-[55%] -translate-x-1/2 rounded-[100%] bg-brand-red/25 blur-2xl"
+          animate={{ opacity: [0.25, 0.45, 0.25], scaleX: [1, 1.08, 1] }}
+          transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
           aria-hidden
         />
-        <div className="relative h-full w-full drop-shadow-[0_12px_32px_rgba(210,35,42,0.25)]">
-          <Image
-            src="/brand/sfic-mascot.png"
-            alt={label}
-            width={dims.img}
-            height={dims.img}
-            priority={priority}
-            className="h-full w-full object-contain object-bottom"
-          />
-        </div>
+
+        {/* Body bob (feet stay grounded) */}
+        <motion.div
+          className="relative h-full w-full"
+          style={{ transformOrigin: "50% 92%" }}
+          animate={
+            pose === "sad"
+              ? { y: 0, rotate: -3 }
+              : {
+                  y: pose === "celebrate" ? [0, -14, -8, -12, 0] : [0, -5, 0],
+                  rotate:
+                    pose === "celebrate"
+                      ? [0, -2, 2, -2, 0]
+                      : pose === "think"
+                        ? [0, 1.5, -1.5, 0]
+                        : 0,
+                }
+          }
+          transition={{
+            repeat: pose === "sad" ? 0 : Infinity,
+            duration: pose === "celebrate" ? 1.4 : 2.6,
+            ease: "easeInOut",
+          }}
+        >
+          {/* Upper-body / arm wave */}
+          <motion.div
+            className="relative h-full w-full"
+            style={{
+              transformOrigin: isWaving ? "38% 72%" : "50% 88%",
+            }}
+            animate={
+              isWaving
+                ? pose === "peek"
+                  ? { x: [0, 4, 0], rotate: WAVE_ROTATE }
+                  : { rotate: WAVE_ROTATE }
+                : pose === "celebrate"
+                  ? { rotate: [0, -5, 5, -4, 0] }
+                  : {}
+            }
+            transition={
+              isWaving
+                ? {
+                    rotate: {
+                      repeat: Infinity,
+                      duration: 1.35,
+                      ease: "easeInOut",
+                      times: WAVE_TIMES,
+                    },
+                    x:
+                      pose === "peek"
+                        ? { repeat: Infinity, duration: 3, ease: "easeInOut" }
+                        : undefined,
+                  }
+                : pose === "celebrate"
+                  ? {
+                      repeat: Infinity,
+                      duration: 1.4,
+                      ease: "easeInOut",
+                    }
+                  : undefined
+            }
+          >
+            <Image
+              src="/brand/sfic-mascot.png"
+              alt={label}
+              width={dims.img}
+              height={dims.img}
+              priority={priority}
+              className="h-full w-full object-contain object-bottom drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]"
+            />
+          </motion.div>
+        </motion.div>
       </motion.div>
     </div>
   );
