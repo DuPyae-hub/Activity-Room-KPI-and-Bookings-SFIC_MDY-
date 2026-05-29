@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { MascotMessage } from "@/components/animated/mascot-message";
 import { formatInAppTz } from "@/lib/timezone";
 import { GlassCard } from "@/components/ui/glass-card";
 import type { BookingWithRelations } from "@/lib/types";
@@ -8,11 +9,13 @@ import type { BookingWithRelations } from "@/lib/types";
 export function TimelineView({ bookings }: { bookings: BookingWithRelations[] }) {
   if (bookings.length === 0) {
     return (
-      <GlassCard className="p-10 text-center">
-        <p className="text-white/55">No approved sessions on this day.</p>
-        <p className="mt-1 text-sm text-white/40">
-          Approved bookings appear here after admin review.
-        </p>
+      <GlassCard className="py-8">
+        <MascotMessage
+          pose="float"
+          size="sm"
+          title="No sessions this day"
+          description="Approved club bookings will show on the timeline and calendar."
+        />
       </GlassCard>
     );
   }

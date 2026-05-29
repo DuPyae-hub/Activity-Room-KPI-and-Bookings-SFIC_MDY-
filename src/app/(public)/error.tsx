@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { MascotMessage } from "@/components/animated/mascot-message";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 
@@ -44,10 +45,15 @@ export default function PublicError({
 
   return (
     <div className="flex min-h-[50vh] items-center justify-center py-12">
-      <GlassCard className="max-w-lg p-8 text-center">
-        <h2 className="text-xl font-semibold text-brand-red">Something went wrong</h2>
-        <p className="mt-3 text-sm text-white/55">{message}</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
+      <GlassCard className="max-w-lg p-8 sm:p-10">
+        <MascotMessage
+          pose="sad"
+          size="md"
+          title="Something went wrong"
+          bubble="Don't worry — let's try again."
+          description={message}
+        />
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button variant="gold" onClick={() => reset()}>
             Try again
           </Button>

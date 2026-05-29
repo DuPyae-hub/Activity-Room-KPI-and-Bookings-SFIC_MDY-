@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AnimatedStatusCharacter } from "@/components/animated/animated-status-character";
+import { MascotMessage } from "@/components/animated/mascot-message";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { getBookingById } from "@/data/queries";
@@ -26,11 +26,13 @@ export default async function BookingSuccessPage({
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center">
-      <GlassCard gradient className="w-full max-w-lg p-10 text-center">
-        <AnimatedStatusCharacter
-          status="SUCCESS"
-          title="Booking request sent"
-          description={`${booking.room.name} is pending admin approval. Save your email (${booking.bookerEmail}) to check status later.`}
+      <GlassCard gradient className="w-full max-w-lg p-8 sm:p-10">
+        <MascotMessage
+          pose="celebrate"
+          size="lg"
+          title="Booking request sent!"
+          bubble="Nice one — admin will review soon."
+          description={`${booking.room.name} is pending approval. Save your email (${booking.bookerEmail}) to check status in My Bookings.`}
         />
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link href={lookupHref}>

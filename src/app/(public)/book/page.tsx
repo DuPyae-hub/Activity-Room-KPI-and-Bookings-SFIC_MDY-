@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BookingMascotHint } from "@/components/booking/booking-mascot-hint";
 import { BookRoomClient } from "@/components/booking/book-room-client";
 import { HowItWorks } from "@/components/layout/how-it-works";
 import { DbErrorBanner } from "@/components/layout/db-error-banner";
@@ -63,6 +64,8 @@ export default async function BookPage({
       />
 
       {dbError && <DbErrorBanner />}
+
+      {!dbError && <BookingMascotHint />}
 
       {!dbError && (
         <BookRoomClient

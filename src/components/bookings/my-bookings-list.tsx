@@ -5,7 +5,7 @@ import { formatInAppTz } from "@/lib/timezone";
 import { useOptimistic, useTransition } from "react";
 import { BookingStatus } from "@prisma/client";
 import { cancelBookingAction } from "@/actions/bookings";
-import { AnimatedStatusCharacter } from "@/components/animated/animated-status-character";
+import { MascotMessage } from "@/components/animated/mascot-message";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -33,11 +33,13 @@ export function MyBookingsList({
 
   if (!bookerEmail) {
     return (
-      <GlassCard className="flex flex-col items-center py-16">
-        <AnimatedStatusCharacter
-          status="EMPTY"
+      <GlassCard className="flex flex-col items-center py-12 sm:py-16">
+        <MascotMessage
+          pose="wave"
+          size="md"
           title="Look up your bookings"
-          description="Enter the email address you used when submitting a room request."
+          bubble="Enter the email you used when booking."
+          description="We'll show pending, approved, and past requests for that address."
         />
       </GlassCard>
     );
@@ -45,11 +47,13 @@ export function MyBookingsList({
 
   if (bookings.length === 0) {
     return (
-      <GlassCard className="flex flex-col items-center py-16">
-        <AnimatedStatusCharacter
-          status="EMPTY"
+      <GlassCard className="flex flex-col items-center py-12 sm:py-16">
+        <MascotMessage
+          pose="think"
+          size="md"
           title="No bookings found"
-          description="No requests match this email. Double-check the address or book a new room."
+          bubble="Hmm, nothing here yet."
+          description="Double-check the email spelling, or book a new room for your club."
         />
       </GlassCard>
     );
