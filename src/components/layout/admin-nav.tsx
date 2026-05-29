@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { CalendarDays, LayoutDashboard, LogOut, Shield, Users } from "lucide-react";
 import { logoutAction } from "@/actions/auth";
 import { BrandLogo } from "@/components/layout/brand-logo";
+import { getPublicDashboardHref } from "@/lib/public-site-url";
 import { cn } from "@/lib/utils";
 import type { UserWithClub } from "@/lib/types";
 
@@ -58,7 +59,7 @@ export function AdminNav({ admin }: { admin: UserWithClub }) {
             );
           })}
           <Link
-            href="/dashboard"
+            href={getPublicDashboardHref()}
             className="relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-white/50 hover:text-white"
           >
             <LayoutDashboard className="h-4 w-4" />

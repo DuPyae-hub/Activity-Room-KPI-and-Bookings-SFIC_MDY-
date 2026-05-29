@@ -78,8 +78,62 @@ After admin login you land on `/admin`. Password: `ADMIN_PASSWORD` in `.env`.
 
 ## Vercel deploy
 
-- Add **`DATABASE_URL`** in project Environment Variables (Supabase pooled URI if you use PgBouncer).
-- Build command: `npm run build` (runs `prisma generate` automatically).
+### 1. One project, env vars
+
+In **Vercel → Project → Settings → Environment Variables** (Production):
+
+| Variable | Required | Notes |
+|----------|----------|--------|
+| `DATABASE_URL` | Yes | Supabase **Session pooler** URI + `?sslmode=require` |
+| `DIRECT_URL` | Yes | Same as `DATABASE_URL` |
+| `ADMIN_PASSWORD` | Yes | Admin login at `/sfic/manage` |
+| `ADMIN_EMAIL` | Yes | e.g. `admin@sfic.edu` |
+| `ADMIN_SESSION_SECRET` | Optional | Long random string |
+
+Build: `npm run build` (default). After first deploy, run locally once:
+
+```bash
+DATABASE_URL="your-production-url" npx prisma db push
+DATABASE_URL="your-production-url" npm run db:seed
+```
+
+### 2. Split admin vs public (recommended for production)
+
+Use **two domains** on the **same** Vercel project:
+
+| Role | Example hostname | Who uses it |
+|------|------------------|-------------|
+| **Public (users)** | `rooms.sfic.edu` or `your-app.vercel.app` | Students, clubs |
+| **Admin** | `admin-rooms.sfic.edu` or `admin-your-app.vercel.app` | Staff only |
+
+**Vercel → Settings → Domains:** add both domains to the project.
+
+**Environment variables** (Production):
+
+```env
+ADMIN_HOST=admin-your-app.vercel.app
+PUBLIC_HOST=your-app.vercel.app
+NEXT_PUBLIC_PUBLIC_SITE_URL=https://your-app.vercel.app
+```
+
+**Behavior:**
+
+- On the **public** host, `/admin` and `/sfic/manage` redirect to the **admin** host.
+- On the **admin** host, `/dashboard`, `/book`, `/clubs`, etc. redirect to the **public** host.
+- Admin session cookies stay on the admin domain (users cannot open admin from the public URL).
+
+**URLs to share:**
+
+| Audience | URL |
+|----------|-----|
+| Everyone | `https://your-app.vercel.app/dashboard` |
+| Staff only | `https://admin-your-app.vercel.app/sfic/manage` |
+
+Local dev: leave `ADMIN_HOST` / `PUBLIC_HOST` unset — everything works on `localhost:3000`.
+
+### 3. Single domain (simpler)
+
+Skip `ADMIN_HOST` / `PUBLIC_HOST`. Use one Vercel URL; admin stays at `/sfic/manage` (not linked in public nav). Middleware still requires a password for `/admin`.
 
 ## Features
 
