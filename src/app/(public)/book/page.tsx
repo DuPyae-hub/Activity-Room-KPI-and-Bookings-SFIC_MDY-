@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { BookRoomClient } from "@/components/booking/book-room-client";
 import { HowItWorks } from "@/components/layout/how-it-works";
+import { DbErrorBanner } from "@/components/layout/db-error-banner";
 import { PageHeader } from "@/components/layout/page-header";
 import { TimezoneNotice } from "@/components/layout/timezone-notice";
-import { todayInAppTz } from "@/lib/timezone";
 import { Button } from "@/components/ui/button";
 import { getClubs, getOccupiedHoursByDate, getRooms } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
+import { isDbConnectionError } from "@/lib/safe-query";
+import { parseBookingDateParam } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -19,16 +21,26 @@ export default async function BookPage({
   await ensureDynamicPage();
 
   const params = await searchParams;
-  const date = params.date ?? todayInAppTz();
+  const date = parseBookingDateParam(params.date);
 
-  const [rooms, clubs] = await Promise.all([getRooms(), getClubs()]);
-  const occupiedByRoom = await getOccupiedHoursByDate(
-    date,
-    rooms.map((r) => r.id),
-  );
-  const allAmenities = Array.from(
-    new Set(rooms.flatMap((r) => r.amenities)),
-  ).sort();
+  let rooms: Awaited<ReturnType<typeof getRooms>> = [];
+  let clubs: Awaited<ReturnType<typeof getClubs>> = [];
+  let occupiedByRoom: Record<string, number[]> = {};
+  let dbError = false;
+
+  try {
+    rooms = await getRooms();
+    clubs = await getClubs();
+    occupiedByRoom = await getOccupiedHoursByDate(
+      date,
+      rooms.map((r) => r.id),
+    );
+  } catch (error) {
+    if (isDbConnectionError(error)) dbError = true;
+    else throw error;
+  }
+
+  const allAmenities = Array.from(new Set(rooms.flatMap((r) => r.amenities))).sort();
 
   return (
     <div>
@@ -50,13 +62,17 @@ export default async function BookPage({
         }
       />
 
-      <BookRoomClient
-        rooms={rooms}
-        clubs={clubs}
-        allAmenities={allAmenities}
-        date={date}
-        occupiedByRoom={occupiedByRoom}
-      />
+      {dbError && <DbErrorBanner />}
+
+      {!dbError && (
+        <BookRoomClient
+          rooms={rooms}
+          clubs={clubs}
+          allAmenities={allAmenities}
+          date={date}
+          occupiedByRoom={occupiedByRoom}
+        />
+      )}
 
       <HowItWorks className="mt-16" />
     </div>

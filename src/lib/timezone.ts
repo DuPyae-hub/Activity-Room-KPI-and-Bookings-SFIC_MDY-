@@ -5,6 +5,20 @@ export const APP_TIMEZONE = "Asia/Yangon";
 
 export const APP_TIMEZONE_LABEL = "Myanmar Time (MMT)";
 
+const DATE_ONLY_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+export function isDateOnlyString(value: string): boolean {
+  if (!DATE_ONLY_RE.test(value)) return false;
+  const d = fromZonedTime(`${value}T12:00:00`, APP_TIMEZONE);
+  return !Number.isNaN(d.getTime());
+}
+
+/** Safe yyyy-MM-dd for booking URLs — falls back to today in Myanmar. */
+export function parseBookingDateParam(value: string | undefined): string {
+  if (value && isDateOnlyString(value)) return value;
+  return todayInAppTz();
+}
+
 export function nowUtc(): Date {
   return new Date();
 }
@@ -28,38 +42,57 @@ export function buildSlotDateTime(date: string, hour: number): Date {
 export function startOfDayInAppTz(date: Date | string): Date {
   const day =
     typeof date === "string"
-      ? date.slice(0, 10)
-      : formatInTimeZone(date, APP_TIMEZONE, "yyyy-MM-dd");
+      ? parseBookingDateParam(date)
+      : safeFormatInAppTz(date, "yyyy-MM-dd");
   return fromZonedTime(`${day}T00:00:00`, APP_TIMEZONE);
 }
 
 export function endOfDayInAppTz(date: Date | string): Date {
   const day =
     typeof date === "string"
-      ? date.slice(0, 10)
-      : formatInTimeZone(date, APP_TIMEZONE, "yyyy-MM-dd");
+      ? parseBookingDateParam(date)
+      : safeFormatInAppTz(date, "yyyy-MM-dd");
   return fromZonedTime(`${day}T23:59:59.999`, APP_TIMEZONE);
 }
 
+function safeFormatInAppTz(date: Date, pattern: string): string {
+  if (Number.isNaN(date.getTime())) return todayInAppTz();
+  try {
+    return formatInTimeZone(date, APP_TIMEZONE, pattern);
+  } catch {
+    return todayInAppTz();
+  }
+}
+
 export function formatInAppTz(date: Date, pattern: string): string {
-  return formatInTimeZone(date, APP_TIMEZONE, pattern);
+  return safeFormatInAppTz(date, pattern);
 }
 
 /** Format a yyyy-MM-dd string in Myanmar (avoids UTC midnight shifting the calendar day). */
 export function formatDateOnlyInAppTz(dateStr: string, pattern: string): string {
-  return formatInTimeZone(
-    fromZonedTime(`${dateStr}T12:00:00`, APP_TIMEZONE),
-    APP_TIMEZONE,
-    pattern,
-  );
+  const day = parseBookingDateParam(dateStr);
+  try {
+    return formatInTimeZone(
+      fromZonedTime(`${day}T12:00:00`, APP_TIMEZONE),
+      APP_TIMEZONE,
+      pattern,
+    );
+  } catch {
+    return day;
+  }
 }
 
 export function getHourInAppTz(date: Date): number {
-  return Number(formatInTimeZone(date, APP_TIMEZONE, "H"));
+  if (Number.isNaN(date.getTime())) return 8;
+  try {
+    return Number(formatInTimeZone(date, APP_TIMEZONE, "H"));
+  } catch {
+    return 8;
+  }
 }
 
 export function getDateStringInAppTz(date: Date): string {
-  return formatInTimeZone(date, APP_TIMEZONE, "yyyy-MM-dd");
+  return safeFormatInAppTz(date, "yyyy-MM-dd");
 }
 
 export function isSameCalendarDayInAppTz(a: Date, b: Date): boolean {

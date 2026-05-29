@@ -30,7 +30,12 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(target);
     }
 
-    if (onAdminSite && publicHost && isPublicAppPath(pathname)) {
+    if (
+      onAdminSite &&
+      publicHost &&
+      publicHost !== adminHost &&
+      isPublicAppPath(pathname)
+    ) {
       const target = new URL(pathname + request.nextUrl.search, originForHost(publicHost, request.nextUrl.protocol));
       return NextResponse.redirect(target);
     }

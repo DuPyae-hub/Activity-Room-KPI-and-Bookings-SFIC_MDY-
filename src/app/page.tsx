@@ -3,12 +3,17 @@ import { LandingHero } from "@/components/home/landing-hero";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { PublicNav } from "@/components/layout/public-nav";
 import { getSessionAdmin } from "@/lib/auth";
+import { isDbConnectionError } from "@/lib/safe-query";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const admin = await getSessionAdmin();
-  if (admin) redirect("/admin");
+  try {
+    const admin = await getSessionAdmin();
+    if (admin) redirect("/admin");
+  } catch (error) {
+    if (!isDbConnectionError(error)) throw error;
+  }
 
   return (
     <div className="min-h-screen pb-16 pt-28">

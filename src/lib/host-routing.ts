@@ -15,7 +15,12 @@ export function getPublicHost(): string | null {
 }
 
 export function isHostSplitEnabled(): boolean {
-  return Boolean(getAdminHost());
+  const admin = getAdminHost();
+  const pub = getPublicHost();
+  if (!admin) return false;
+  // Same hostname for both — treat as single-site (avoids redirect loops).
+  if (pub && admin === pub) return false;
+  return true;
 }
 
 export function isAdminPath(pathname: string): boolean {

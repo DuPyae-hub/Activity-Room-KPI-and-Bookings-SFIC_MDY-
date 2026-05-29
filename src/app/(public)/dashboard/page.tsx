@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { endOfMonth, isValid, parseISO, startOfMonth } from "date-fns";
+import { endOfMonth, format, isValid, parseISO } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { RoomKpiCalendar } from "@/components/dashboard/room-kpi-calendar";
 import { RoomScheduleGrid } from "@/components/dashboard/room-schedule-grid";
 import { TimelineView } from "@/components/dashboard/timeline-view";
+import { DbErrorBanner } from "@/components/layout/db-error-banner";
 import { PageHeader } from "@/components/layout/page-header";
 import { TimezoneNotice } from "@/components/layout/timezone-notice";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,9 @@ import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 import { isDbConnectionError } from "@/lib/safe-query";
 import {
   currentMonthInAppTz,
+  endOfDayInAppTz,
   formatDateOnlyInAppTz,
+  startOfDayInAppTz,
   todayInAppTz,
 } from "@/lib/timezone";
 
@@ -49,8 +52,10 @@ export default async function DashboardPage({
   const params = await searchParams;
   const month = parseMonthParam(params.month);
   const selectedDay = parseDayParam(params.day, month);
-  const monthStart = startOfMonth(parseISO(`${month}-01`));
-  const monthEnd = endOfMonth(monthStart);
+  const monthStart = startOfDayInAppTz(`${month}-01`);
+  const monthEnd = endOfDayInAppTz(
+    format(endOfMonth(parseISO(`${month}-01`)), "yyyy-MM-dd"),
+  );
   const selectedDate = parseISO(selectedDay);
 
   let monthBookings: Awaited<ReturnType<typeof getApprovedBookingsBetween>> = [];
@@ -92,23 +97,7 @@ export default async function DashboardPage({
         }
       />
 
-      {dbError && (
-        <GlassCard className="mb-6 border-brand-red/30 bg-brand-red/10 p-4 text-sm text-brand-red-light">
-          {process.env.VERCEL ? (
-            <>
-              Database unreachable. In Vercel → <strong className="text-white">Settings → Environment Variables</strong>,
-              add <code className="text-white">DATABASE_URL</code> and{" "}
-              <code className="text-white">DIRECT_URL</code> (Supabase Session pooler URI with{" "}
-              <code className="text-white">?sslmode=require</code>), then <strong className="text-white">Redeploy</strong>.
-            </>
-          ) : (
-            <>
-              Database unreachable. Run <code className="text-white">npm run db:check</code> then{" "}
-              <code className="text-white">npm run fresh</code>.
-            </>
-          )}
-        </GlassCard>
-      )}
+      {dbError && <DbErrorBanner />}
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <GlassCard className="p-5">
@@ -136,6 +125,8 @@ export default async function DashboardPage({
         </GlassCard>
       </div>
 
+      {!dbError && (
+      <>
       <div className="mb-8">
         <RoomKpiCalendar
           month={month}
@@ -154,6 +145,8 @@ export default async function DashboardPage({
 
       <h2 className="mb-4 text-lg font-semibold">Day timeline</h2>
       <TimelineView bookings={dayTimeline} />
+      </>
+      )}
     </div>
   );
 }
