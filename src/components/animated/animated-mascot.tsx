@@ -4,10 +4,10 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const sizeMap = {
-  sm: { box: "h-24 w-24", img: 96 },
-  md: { box: "h-36 w-36", img: 144 },
-  lg: { box: "h-48 w-48 sm:h-56 sm:w-56", img: 220 },
-  xl: { box: "h-64 w-64 sm:h-72 sm:w-72", img: 288 },
+  sm: { box: "h-28 w-28", img: 112 },
+  md: { box: "h-36 w-36 sm:h-40 sm:w-40", img: 160 },
+  lg: { box: "h-44 w-44 sm:h-52 sm:w-52", img: 208 },
+  xl: { box: "h-52 w-52 sm:h-60 sm:w-60", img: 240 },
 };
 
 type AnimatedMascotProps = {
@@ -17,7 +17,7 @@ type AnimatedMascotProps = {
   label?: string;
 };
 
-/** Static SFIC mascot image (no motion on the character). */
+/** Static mascot in a minimal rounded frame */
 export function AnimatedMascot({
   size = "md",
   className,
@@ -27,19 +27,20 @@ export function AnimatedMascot({
   const dims = sizeMap[size];
 
   return (
-    <div className={cn("relative inline-flex flex-col items-center", className)}>
-      <div className={cn("relative", dims.box)}>
-        <span
-          className="pointer-events-none absolute bottom-0 left-1/2 h-[18%] w-[55%] -translate-x-1/2 rounded-[100%] bg-brand-red/20 blur-2xl"
-          aria-hidden
-        />
+    <div className={cn("relative inline-flex shrink-0", className)}>
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-2xl bg-white/[0.03] ring-1 ring-white/[0.08]",
+          dims.box,
+        )}
+      >
         <Image
           src="/brand/sfic-mascot.png"
           alt={label}
           width={dims.img}
           height={dims.img}
           priority={priority}
-          className="relative h-full w-full object-contain object-bottom drop-shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+          className="h-full w-full object-cover object-top"
         />
       </div>
     </div>

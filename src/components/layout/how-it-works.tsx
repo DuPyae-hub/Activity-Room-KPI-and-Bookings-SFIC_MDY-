@@ -23,18 +23,20 @@ const steps = [
 export function HowItWorks({ className }: { className?: string }) {
   return (
     <section className={className}>
-      <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white/40">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
         How booking works
       </h2>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3">
         {steps.map(({ icon: Icon, title, description }, i) => (
-          <GlassCard key={title} className="p-5">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-red/15 ring-1 ring-brand-red/30">
-              <Icon className="h-5 w-5 text-brand-red-light" />
+          <GlassCard key={title} className="border-white/[0.06] bg-white/[0.02] p-5">
+            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-red/12 ring-1 ring-brand-red/20">
+              <Icon className="h-[18px] w-[18px] text-brand-red-light" />
             </div>
-            <p className="mb-1 text-xs font-medium text-brand-red">Step {i + 1}</p>
-            <h3 className="font-semibold text-white">{title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-white/50">{description}</p>
+            <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-red-light/80">
+              Step {i + 1}
+            </p>
+            <h3 className="font-medium text-white">{title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-white/45">{description}</p>
           </GlassCard>
         ))}
       </div>

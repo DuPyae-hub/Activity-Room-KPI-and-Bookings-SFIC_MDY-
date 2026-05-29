@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, LayoutDashboard, Ticket } from "lucide-react";
 import { motion } from "framer-motion";
-import { AnimatedMascot } from "@/components/animated/animated-mascot";
-import { MascotSpeechBubble } from "@/components/animated/mascot-animated-text";
+import { AnimatedStickers } from "@/components/animated/animated-stickers";
+import { MascotSpot } from "@/components/animated/mascot-spot";
 import { HowItWorks } from "@/components/layout/how-it-works";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { Button } from "@/components/ui/button";
@@ -37,24 +37,26 @@ const quickLinks = [
 export function LandingHero() {
   return (
     <div>
-      <section className="relative mb-16 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] px-6 py-12 sm:px-10 sm:py-16">
+      <section className="relative mb-14 overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-10 sm:px-10 sm:py-14">
+        <AnimatedStickers density="normal" />
         <div
-          className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-red/20 blur-3xl"
+          className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-brand-red/10 blur-3xl"
           aria-hidden
         />
-        <div className="relative grid items-center gap-10 lg:grid-cols-[1fr_auto] lg:gap-6">
+
+        <div className="relative grid items-center gap-10 lg:grid-cols-[1fr_auto] lg:gap-12">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <BrandLogo height={64} className="mb-6" />
+            <BrandLogo height={56} className="mb-5" />
             <p className="brand-subheading">Strategy First International College</p>
-            <h1 className="mt-2 max-w-2xl text-4xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-[2.5rem] lg:leading-tight">
               Activity room booking,{" "}
               <span className="text-gradient-brand">made simple</span>
             </h1>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/55">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-white/50">
               Reserve SFIC MDY activity rooms for your club — no login required. Pick a slot,
               submit your request, and track approval online.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+            <div className="mt-7 flex flex-wrap justify-center gap-2.5 lg:justify-start">
               <Link href="/book">
                 <Button variant="gold" size="lg">
                   Book a room
@@ -70,46 +72,45 @@ export function LandingHero() {
           </div>
 
           <div className="relative flex justify-center lg:justify-end">
-            <div className="relative">
-              <div className="absolute -top-2 right-0 z-10 max-w-[10rem] text-center sm:-left-4 sm:right-auto sm:max-w-[11rem]">
-                <MascotSpeechBubble className="border-brand-red/35 bg-surface-elevated/95 text-center">
-                  Hi! Ready to book a room for your club?
-                </MascotSpeechBubble>
-              </div>
-              <AnimatedMascot size="xl" priority />
-            </div>
+            <MascotSpot
+              layout="card"
+              size="xl"
+              priority
+              captionLabel="Welcome"
+              caption="Ready to book a room for your club? Start with Book a room."
+            />
           </div>
         </div>
       </section>
 
-      <section className="mb-16 grid gap-4 sm:grid-cols-3">
+      <section className="mb-14 grid gap-3 sm:grid-cols-3">
         {quickLinks.map(({ href, label, description, icon: Icon, primary }, i) => (
           <motion.div
             key={href}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + i * 0.08 }}
+            transition={{ delay: 0.08 + i * 0.06, duration: 0.35 }}
           >
             <Link href={href} className="group block h-full">
               <GlassCard
                 gradient={primary}
-                className="flex h-full flex-col p-6 transition group-hover:bg-white/[0.08]"
+                className="flex h-full flex-col p-5 transition-colors hover:bg-white/[0.05]"
               >
                 <div
-                  className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${
+                  className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
                     primary
-                      ? "bg-brand-red/25 ring-1 ring-brand-red/40"
-                      : "bg-white/5 ring-1 ring-white/10"
+                      ? "bg-brand-red/15 ring-1 ring-brand-red/25"
+                      : "bg-white/[0.04] ring-1 ring-white/[0.08]"
                   }`}
                 >
                   <Icon
-                    className={`h-5 w-5 ${primary ? "text-brand-red-light" : "text-white/70"}`}
+                    className={`h-[18px] w-[18px] ${primary ? "text-brand-red-light" : "text-white/60"}`}
                   />
                 </div>
-                <h2 className="text-lg font-semibold text-white">{label}</h2>
-                <p className="mt-2 flex-1 text-sm text-white/50">{description}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-red-light transition-all group-hover:gap-2">
-                  Open <ArrowRight className="h-4 w-4" />
+                <h2 className="font-medium text-white">{label}</h2>
+                <p className="mt-1.5 flex-1 text-sm text-white/45">{description}</p>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm text-brand-red-light/90 transition-all group-hover:gap-1.5">
+                  Open <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </GlassCard>
             </Link>

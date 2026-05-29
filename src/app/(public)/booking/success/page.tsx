@@ -29,8 +29,9 @@ export default async function BookingSuccessPage({
       <GlassCard gradient className="w-full max-w-lg p-8 sm:p-10">
         <MascotMessage
           size="lg"
-          title="Booking request sent!"
-          bubble="Nice one — admin will review soon."
+          captionLabel="Submitted"
+          title="Booking request sent"
+          bubble="Admin will review your request shortly."
           description={`${booking.room.name} is pending approval. Save your email (${booking.bookerEmail}) to check status in My Bookings.`}
         />
         <div className="mt-8 flex flex-wrap justify-center gap-3">

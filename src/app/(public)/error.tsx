@@ -48,8 +48,9 @@ export default function PublicError({
       <GlassCard className="max-w-lg p-8 sm:p-10">
         <MascotMessage
           size="md"
+          captionLabel="Error"
           title="Something went wrong"
-          bubble="Don't worry — let's try again."
+          bubble="You can try again or return to booking."
           description={message}
         />
         <div className="mt-8 flex flex-wrap justify-center gap-3">
