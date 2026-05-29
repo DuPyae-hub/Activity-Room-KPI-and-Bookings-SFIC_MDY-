@@ -9,6 +9,7 @@ Premium college club activity room booking for **Strategy First** — dark cyber
 - **Framer Motion** — `layoutId` room morph, fluid time-slot picker, nav pills
 - **Recharts** — admin peak-hour analytics
 - **Zod** — server action validation
+- **Myanmar Time (Asia/Yangon, UTC+6:30)** — all booking slots and schedules use MMT (correct on Vercel UTC servers)
 
 ## Quick start
 
