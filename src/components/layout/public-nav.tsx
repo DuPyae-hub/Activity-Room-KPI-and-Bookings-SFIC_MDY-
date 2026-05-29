@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { CalendarDays, LayoutDashboard, Ticket } from "lucide-react";
+import { CalendarDays, LayoutDashboard, Ticket, Users } from "lucide-react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/clubs", label: "Clubs", icon: Users },
   { href: "/book", label: "Book Room", icon: CalendarDays },
   { href: "/my-bookings", label: "My Bookings", icon: Ticket },
 ];

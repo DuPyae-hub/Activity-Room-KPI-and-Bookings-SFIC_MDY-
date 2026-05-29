@@ -1,101 +1,38 @@
 import { PrismaClient, Role, RoomStatus } from "@prisma/client";
+import { SFIC_MANDALAY_CLUBS } from "../src/lib/sfic-clubs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const clubs = await Promise.all([
-    prisma.club.upsert({
-      where: { name: "Music Club" },
-      update: {},
-      create: {
-        name: "Music Club",
-        description: "Rehearsals, jam sessions, and live performances",
-        logo: "🎵",
-      },
-    }),
-    prisma.club.upsert({
-      where: { name: "Esports Club" },
-      update: {},
-      create: {
-        name: "Esports Club",
-        description: "Competitive gaming and LAN tournaments",
-        logo: "🎮",
-      },
-    }),
-    prisma.club.upsert({
-      where: { name: "Debate Society" },
-      update: {},
-      create: {
-        name: "Debate Society",
-        description: "Public speaking and parliamentary debate",
-        logo: "🎤",
-      },
-    }),
-    prisma.club.upsert({
-      where: { name: "Photography Club" },
-      update: {},
-      create: {
-        name: "Photography Club",
-        description: "Studio shoots and portfolio reviews",
-        logo: "📷",
-      },
-    }),
-  ]);
+  const clubs = await Promise.all(
+    SFIC_MANDALAY_CLUBS.map((club) =>
+      prisma.club.upsert({
+        where: { name: club.name },
+        update: {
+          logo: club.logo,
+          description: club.description,
+        },
+        create: {
+          name: club.name,
+          logo: club.logo,
+          description: club.description,
+        },
+      }),
+    ),
+  );
 
-  const [music, esports, debate, photo] = clubs;
+  const itClub = clubs[0];
 
-  await Promise.all([
-    prisma.user.upsert({
-      where: { email: "admin@sfic.edu" },
-      update: {},
-      create: {
-        name: "SFIC Admin",
-        email: "admin@sfic.edu",
-        role: Role.ADMIN,
-        clubId: music.id,
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: "leader@musicclub.edu" },
-      update: {},
-      create: {
-        name: "Aria Chen",
-        email: "leader@musicclub.edu",
-        role: Role.USER,
-        clubId: music.id,
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: "captain@esports.edu" },
-      update: {},
-      create: {
-        name: "Marcus Lee",
-        email: "captain@esports.edu",
-        role: Role.USER,
-        clubId: esports.id,
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: "president@debate.edu" },
-      update: {},
-      create: {
-        name: "Priya Nair",
-        email: "president@debate.edu",
-        role: Role.USER,
-        clubId: debate.id,
-      },
-    }),
-    prisma.user.upsert({
-      where: { email: "lead@photo.edu" },
-      update: {},
-      create: {
-        name: "Jordan Kim",
-        email: "lead@photo.edu",
-        role: Role.USER,
-        clubId: photo.id,
-      },
-    }),
-  ]);
+  await prisma.user.upsert({
+    where: { email: "admin@sfic.edu" },
+    update: { clubId: itClub.id },
+    create: {
+      name: "SFIC Admin",
+      email: "admin@sfic.edu",
+      role: Role.ADMIN,
+      clubId: itClub.id,
+    },
+  });
 
   const rooms = [
     {
@@ -138,7 +75,7 @@ async function main() {
     });
   }
 
-  console.log("Seed completed: clubs, users, and rooms ready.");
+  console.log(`Seed completed: ${clubs.length} clubs, admin user, and rooms ready.`);
 }
 
 main()

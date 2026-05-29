@@ -71,6 +71,7 @@ npm run dev
 | Page | URL |
 |------|-----|
 | Public site | [http://localhost:3000/dashboard](http://localhost:3000/dashboard) |
+| Clubs | [http://localhost:3000/clubs](http://localhost:3000/clubs) |
 | Admin login | [http://localhost:3000/sfic/manage](http://localhost:3000/sfic/manage) |
 
 After admin login you land on `/admin`. Password: `ADMIN_PASSWORD` in `.env`.
@@ -84,8 +85,8 @@ After admin login you land on `/admin`. Password: `ADMIN_PASSWORD` in `.env`.
 
 | Area | Highlights |
 |------|------------|
-| **Public (no login)** | Today timeline, book rooms with name/email/club, lookup My Bookings by email |
-| **Admin (`/sfic/manage`)** | Password-gated + signed session; `/admin` blocked by middleware — not linked from public nav |
+| **Public (no login)** | Today timeline, **Clubs** directory, book rooms (2 or 3 hr blocks), My Bookings by email |
+| **Admin (`/sfic/manage`)** | Password-gated + signed session; KPI, **club CRUD**, rooms, approvals |
 | **UX** | Strategy First brand — black `#000000`, red `#D2232A`, white; official logo in nav; glass cards |
 
 ## Project structure

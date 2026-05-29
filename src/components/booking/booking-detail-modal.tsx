@@ -5,7 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useState, useTransition } from "react";
 import { createBookingAction } from "@/actions/bookings";
-import { TimeSlotPicker } from "@/components/booking/time-slot-picker";
+import { DurationTimePicker } from "@/components/booking/duration-time-picker";
+import type { BookingDurationHours } from "@/lib/sfic-clubs";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { StatusBadge } from "@/components/ui/badge";
@@ -36,7 +37,7 @@ export function BookingDetailModal({
 }: BookingDetailModalProps) {
   const router = useRouter();
   const [startHour, setStartHour] = useState<number | null>(null);
-  const [endHour, setEndHour] = useState<number | null>(null);
+  const [durationHours, setDurationHours] = useState<BookingDurationHours>(2);
   const [bookerName, setBookerName] = useState("");
   const [bookerEmail, setBookerEmail] = useState("");
   const [clubId, setClubId] = useState(clubs[0]?.id ?? "");
@@ -49,11 +50,10 @@ export function BookingDetailModal({
     bookerEmail.trim() &&
     clubId &&
     purpose.trim() &&
-    startHour !== null &&
-    endHour !== null;
+    startHour !== null;
 
   const handleSubmit = () => {
-    if (!room || !canSubmit || startHour === null || endHour === null) return;
+    if (!room || !canSubmit || startHour === null) return;
     setError(null);
     startTransition(async () => {
       const result = await createBookingAction({
@@ -62,7 +62,7 @@ export function BookingDetailModal({
         bookerName: bookerName.trim(),
         bookerEmail: bookerEmail.trim(),
         startHour,
-        endHour,
+        durationHours,
         purpose,
         date,
       });
@@ -146,14 +146,15 @@ export function BookingDetailModal({
                   </label>
                 </div>
 
-                <TimeSlotPicker
+                <DurationTimePicker
                   selectedStart={startHour}
-                  selectedEnd={endHour}
+                  durationHours={durationHours}
                   occupiedHours={occupiedHours}
-                  onSelect={(s, e) => {
-                    setStartHour(s);
-                    setEndHour(e);
+                  onDurationChange={(d) => {
+                    setDurationHours(d);
+                    setStartHour(null);
                   }}
+                  onSelectStart={setStartHour}
                 />
 
                 <label className="mt-6 block">

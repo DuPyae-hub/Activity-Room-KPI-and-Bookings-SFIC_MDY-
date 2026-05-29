@@ -25,7 +25,8 @@ export default async function BookPage({
         <p className="text-sm text-brand-red">Smart booking</p>
         <h1 className="text-3xl font-bold">Book an Activity Room</h1>
         <p className="mt-1 text-white/50">
-          No account needed — enter your details when you submit a request.
+          No account needed — pick your club, choose a <strong className="text-white">2</strong> or{" "}
+          <strong className="text-white">3</strong> hour slot, and submit a request.
         </p>
       </header>
       <BookRoomClient

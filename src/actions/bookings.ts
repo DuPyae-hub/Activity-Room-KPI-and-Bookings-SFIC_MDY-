@@ -30,10 +30,11 @@ export async function createBookingAction(
     bookerName,
     bookerEmail,
     startHour,
-    endHour,
+    durationHours,
     purpose,
     date,
   } = parsed.data;
+  const endHour = startHour + durationHours;
   const startTime = buildSlotDateTime(date, startHour);
   const endTime = buildSlotDateTime(date, endHour);
 
