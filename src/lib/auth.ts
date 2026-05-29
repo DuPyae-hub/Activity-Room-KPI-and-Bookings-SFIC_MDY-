@@ -2,6 +2,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Role } from "@prisma/client";
 import { getAdminLoginPath } from "@/lib/admin-auth";
+import {
+  createAdminSessionToken,
+  verifyAdminSessionToken,
+} from "@/lib/admin-session";
 import { prisma } from "@/lib/db";
 import type { UserWithClub } from "@/lib/types";
 
@@ -9,15 +13,19 @@ const SESSION_COOKIE = "sfic_admin_session";
 
 export async function getSessionAdmin(): Promise<UserWithClub | null> {
   const cookieStore = await cookies();
-  const userId = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!userId) return null;
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  const session = await verifyAdminSessionToken(token);
+  if (!session) return null;
 
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: session.userId },
     include: { club: true },
   });
 
-  if (!user || user.role !== "ADMIN") return null;
+  if (!user || user.role !== "ADMIN") {
+    return null;
+  }
+
   return user;
 }
 
@@ -36,12 +44,13 @@ export async function requireRole(roles: Role[]): Promise<UserWithClub> {
 
 export async function setSessionAdmin(userId: string): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE, userId, {
+  const token = await createAdminSessionToken(userId);
+  cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "strict",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 8,
   });
 }
 

@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { CalendarDays, LayoutDashboard, LogOut, Shield, Ticket } from "lucide-react";
-import { logoutAction } from "@/actions/auth";
+import { CalendarDays, LayoutDashboard, Ticket } from "lucide-react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { cn } from "@/lib/utils";
-import type { UserWithClub } from "@/lib/types";
 
 const links = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -15,11 +13,7 @@ const links = [
   { href: "/my-bookings", label: "My Bookings", icon: Ticket },
 ];
 
-type PublicNavProps = {
-  admin: UserWithClub | null;
-};
-
-export function PublicNav({ admin }: PublicNavProps) {
+export function PublicNav() {
   const pathname = usePathname();
 
   return (
@@ -61,39 +55,7 @@ export function PublicNav({ admin }: PublicNavProps) {
               </Link>
             );
           })}
-          {admin && (
-            <Link
-              href="/admin"
-              className={cn(
-                "relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-colors",
-                pathname.startsWith("/admin")
-                  ? "text-brand-red"
-                  : "text-brand-red-light hover:text-brand-red",
-              )}
-            >
-              <Shield className="relative h-4 w-4" />
-              <span className="relative hidden md:inline">Admin console</span>
-            </Link>
-          )}
         </div>
-
-        {admin && (
-          <div className="flex shrink-0 items-center gap-2 border-l border-white/10 pl-3">
-            <div className="hidden text-right sm:block">
-              <p className="max-w-[8rem] truncate text-xs font-medium">{admin.name}</p>
-              <p className="text-[10px] text-white/45">Administrator</p>
-            </div>
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="rounded-lg p-2 text-white/50 transition hover:bg-white/5 hover:text-brand-red"
-                aria-label="Sign out"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </form>
-          </div>
-        )}
       </div>
     </motion.nav>
   );

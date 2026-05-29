@@ -5,9 +5,18 @@ import { getSessionAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminManageLoginPage() {
+export default async function AdminManageLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const params = await searchParams;
   const admin = await getSessionAdmin();
-  if (admin) redirect("/admin");
+  if (admin) {
+    const next =
+      params.next && params.next.startsWith("/admin") ? params.next : "/admin";
+    redirect(next);
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
@@ -19,7 +28,7 @@ export default async function AdminManageLoginPage() {
           Authorized personnel only — enter your admin password below
         </p>
       </div>
-      <AdminLoginForm />
+      <AdminLoginForm next={params.next} />
     </div>
   );
 }

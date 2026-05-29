@@ -85,7 +85,7 @@ After admin login you land on `/admin`. Password: `ADMIN_PASSWORD` in `.env`.
 | Area | Highlights |
 |------|------------|
 | **Public (no login)** | Today timeline, book rooms with name/email/club, lookup My Bookings by email |
-| **Admin (`/sfic/manage`)** | Password-gated; KPI, approvals, room CRUD — not linked from public nav |
+| **Admin (`/sfic/manage`)** | Password-gated + signed session; `/admin` blocked by middleware — not linked from public nav |
 | **UX** | Strategy First brand — black `#000000`, red `#D2232A`, white; official logo in nav; glass cards |
 
 ## Project structure

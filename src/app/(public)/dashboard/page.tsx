@@ -1,27 +1,19 @@
 import Link from "next/link";
 import { format } from "date-fns";
-import { CalendarPlus, Shield } from "lucide-react";
+import { CalendarPlus } from "lucide-react";
 import { TimelineView } from "@/components/dashboard/timeline-view";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
-import { getAdminKpis, getTodayTimeline } from "@/data/queries";
-import { getSessionAdmin } from "@/lib/auth";
+import { getTodayTimeline } from "@/data/queries";
 import { isDbConnectionError } from "@/lib/safe-query";
 
 export default async function DashboardPage() {
   const today = new Date();
-  const admin = await getSessionAdmin();
   let timeline: Awaited<ReturnType<typeof getTodayTimeline>> = [];
   let dbError = false;
-  let pendingCount = 0;
 
   try {
-    const [timelineResult, kpis] = await Promise.all([
-      getTodayTimeline(today),
-      admin ? getAdminKpis() : Promise.resolve(null),
-    ]);
-    timeline = timelineResult;
-    if (kpis) pendingCount = kpis.pendingCount;
+    timeline = await getTodayTimeline(today);
   } catch (error) {
     if (isDbConnectionError(error)) dbError = true;
     else throw error;
@@ -29,30 +21,6 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      {admin && (
-        <GlassCard className="mb-6 flex flex-col gap-4 border-brand-red/25 bg-brand-red/5 p-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-red/40">
-              <Shield className="h-5 w-5 text-brand-red" />
-            </span>
-            <div>
-              <p className="font-medium">Administrator session</p>
-              <p className="text-sm text-white/50">
-                Signed in as {admin.name}
-                {pendingCount > 0
-                  ? ` · ${pendingCount} booking${pendingCount === 1 ? "" : "s"} awaiting approval`
-                  : ""}
-              </p>
-            </div>
-          </div>
-          <Link href="/admin" className="shrink-0">
-            <Button variant="gold" size="sm">
-              Open admin console
-            </Button>
-          </Link>
-        </GlassCard>
-      )}
-
       <header className="mb-8">
         <p className="text-sm text-brand-red">Club activity rooms</p>
         <h1 className="text-3xl font-bold tracking-tight">Today&apos;s schedule</h1>

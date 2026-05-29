@@ -8,8 +8,14 @@ import { GlassCard } from "@/components/ui/glass-card";
 
 const initialState: AuthActionState = {};
 
-export function AdminLoginForm() {
+type AdminLoginFormProps = {
+  next?: string;
+};
+
+export function AdminLoginForm({ next }: AdminLoginFormProps) {
   const [state, formAction, pending] = useActionState(adminLoginAction, initialState);
+  const safeNext =
+    next && next.startsWith("/admin") ? next : undefined;
 
   return (
     <motion.div
@@ -19,6 +25,7 @@ export function AdminLoginForm() {
     >
       <GlassCard gradient className="p-6">
         <form action={formAction} className="space-y-4">
+          {safeNext && <input type="hidden" name="next" value={safeNext} />}
           <label className="block">
             <span className="text-sm font-medium text-white/80">Admin password</span>
             <input

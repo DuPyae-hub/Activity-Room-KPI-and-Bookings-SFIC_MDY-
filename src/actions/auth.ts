@@ -39,7 +39,11 @@ export async function adminLoginAction(
 
   await setSessionAdmin(admin.id);
   revalidatePath("/", "layout");
-  redirect("/admin");
+
+  const next = formData.get("next");
+  const safeNext =
+    typeof next === "string" && next.startsWith("/admin") ? next : "/admin";
+  redirect(safeNext);
 }
 
 export async function logoutAction(): Promise<void> {
