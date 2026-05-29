@@ -3,10 +3,42 @@ import { SFIC_MANDALAY_CLUBS } from "../src/lib/sfic-clubs";
 
 const prisma = new PrismaClient();
 
+const OFFICIAL_CLUB_NAMES = new Set(SFIC_MANDALAY_CLUBS.map((c) => c.name));
+
+async function removeLegacyClubs(keepClubId: string) {
+  const allClubs = await prisma.club.findMany();
+
+  for (const club of allClubs) {
+    if (OFFICIAL_CLUB_NAMES.has(club.name)) continue;
+
+    const bookingCount = await prisma.booking.count({ where: { clubId: club.id } });
+    if (bookingCount > 0) {
+      console.warn(`Skipping legacy club "${club.name}" — has ${bookingCount} booking(s).`);
+      continue;
+    }
+
+    const users = await prisma.user.findMany({ where: { clubId: club.id } });
+    for (const user of users) {
+      if (user.role === Role.ADMIN) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { clubId: keepClubId },
+        });
+      } else {
+        await prisma.user.delete({ where: { id: user.id } });
+      }
+    }
+
+    await prisma.club.delete({ where: { id: club.id } });
+    console.log(`Removed legacy demo club: ${club.name}`);
+  }
+}
+
 async function main() {
-  const clubs = await Promise.all(
-    SFIC_MANDALAY_CLUBS.map((club) =>
-      prisma.club.upsert({
+  const clubs = [];
+  for (const club of SFIC_MANDALAY_CLUBS) {
+    clubs.push(
+      await prisma.club.upsert({
         where: { name: club.name },
         update: {
           logo: club.logo,
@@ -18,10 +50,11 @@ async function main() {
           description: club.description,
         },
       }),
-    ),
-  );
+    );
+  }
 
-  const itClub = clubs[0];
+  const itClub = clubs[0]!;
+  await removeLegacyClubs(itClub.id);
 
   await prisma.user.upsert({
     where: { email: "admin@sfic.edu" },
@@ -75,7 +108,8 @@ async function main() {
     });
   }
 
-  console.log(`Seed completed: ${clubs.length} clubs, admin user, and rooms ready.`);
+  const totalClubs = await prisma.club.count();
+  console.log(`Seed completed: ${totalClubs} clubs in database (official SFIC MDY list).`);
 }
 
 main()

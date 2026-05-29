@@ -3,8 +3,9 @@
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { createBookingAction } from "@/actions/bookings";
+import { ClubSelect } from "@/components/booking/club-select";
 import { DurationTimePicker } from "@/components/booking/duration-time-picker";
 import type { BookingDurationHours } from "@/lib/sfic-clubs";
 import { Button } from "@/components/ui/button";
@@ -12,15 +13,9 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { StatusBadge } from "@/components/ui/badge";
 import type { RoomWithAmenities } from "@/lib/types";
 
-type ClubOption = {
-  id: string;
-  name: string;
-  logo: string | null;
-};
-
 type BookingDetailModalProps = {
   room: RoomWithAmenities | null;
-  clubs: ClubOption[];
+  clubs: { id: string; name: string; logo: string | null; description?: string | null }[];
   layoutId: string;
   date: string;
   occupiedHours: number[];
@@ -40,10 +35,20 @@ export function BookingDetailModal({
   const [durationHours, setDurationHours] = useState<BookingDurationHours>(2);
   const [bookerName, setBookerName] = useState("");
   const [bookerEmail, setBookerEmail] = useState("");
-  const [clubId, setClubId] = useState(clubs[0]?.id ?? "");
+  const [clubId, setClubId] = useState("");
   const [purpose, setPurpose] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (clubs.length === 0) {
+      setClubId("");
+      return;
+    }
+    if (!clubId || !clubs.some((c) => c.id === clubId)) {
+      setClubId(clubs[0].id);
+    }
+  }, [clubs, clubId]);
 
   const canSubmit =
     bookerName.trim() &&
@@ -129,21 +134,13 @@ export function BookingDetailModal({
                       placeholder="you@club.edu"
                     />
                   </label>
-                  <label className="block sm:col-span-2">
-                    <span className="text-sm text-white/60">Club</span>
-                    <select
-                      value={clubId}
-                      onChange={(e) => setClubId(e.target.value)}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
-                    >
-                      {clubs.map((club) => (
-                        <option key={club.id} value={club.id}>
-                          {club.logo ? `${club.logo} ` : ""}
-                          {club.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  <div className="sm:col-span-2">
+                    <span className="text-sm font-medium text-white/80">Club</span>
+                    <p className="mt-0.5 text-xs text-white/45">
+                      Strategy First MDY — select your registered club
+                    </p>
+                    <ClubSelect clubs={clubs} value={clubId} onChange={setClubId} />
+                  </div>
                 </div>
 
                 <DurationTimePicker
