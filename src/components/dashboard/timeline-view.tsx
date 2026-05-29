@@ -11,7 +11,6 @@ export function TimelineView({ bookings }: { bookings: BookingWithRelations[] })
     return (
       <GlassCard className="py-8">
         <MascotMessage
-          pose="float"
           size="sm"
           title="No sessions this day"
           description="Approved club bookings will show on the timeline and calendar."

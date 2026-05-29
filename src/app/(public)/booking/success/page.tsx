@@ -28,7 +28,6 @@ export default async function BookingSuccessPage({
     <div className="flex min-h-[60vh] flex-col items-center justify-center">
       <GlassCard gradient className="w-full max-w-lg p-8 sm:p-10">
         <MascotMessage
-          pose="celebrate"
           size="lg"
           title="Booking request sent!"
           bubble="Nice one — admin will review soon."

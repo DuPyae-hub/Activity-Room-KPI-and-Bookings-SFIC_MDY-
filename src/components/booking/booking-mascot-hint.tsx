@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatedMascot } from "@/components/animated/animated-mascot";
+import { MascotSpeechBubble } from "@/components/animated/mascot-animated-text";
 import { GlassCard } from "@/components/ui/glass-card";
 
 export function BookingMascotHint() {
@@ -8,10 +9,12 @@ export function BookingMascotHint() {
     <GlassCard className="mb-8 p-4 sm:p-6">
       <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
         <div className="relative shrink-0">
-          <p className="absolute -top-1 left-1/2 z-10 max-w-[11rem] -translate-x-1/2 -translate-y-full rounded-2xl border border-brand-red/30 bg-surface-elevated px-3 py-2 text-center text-xs font-medium text-white shadow-md sm:text-sm">
-            Tap a room to start your booking!
-          </p>
-          <AnimatedMascot pose="peek" size="md" />
+          <div className="absolute -top-1 left-1/2 z-10 max-w-[11rem] -translate-x-1/2 -translate-y-full text-center">
+            <MascotSpeechBubble className="text-center">
+              Tap a room to start your booking!
+            </MascotSpeechBubble>
+          </div>
+          <AnimatedMascot size="md" />
         </div>
         <div className="text-center sm:text-left">
           <p className="text-sm font-medium text-brand-red">How it works</p>

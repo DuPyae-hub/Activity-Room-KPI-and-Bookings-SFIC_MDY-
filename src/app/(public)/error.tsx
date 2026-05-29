@@ -47,7 +47,6 @@ export default function PublicError({
     <div className="flex min-h-[50vh] items-center justify-center py-12">
       <GlassCard className="max-w-lg p-8 sm:p-10">
         <MascotMessage
-          pose="sad"
           size="md"
           title="Something went wrong"
           bubble="Don't worry — let's try again."

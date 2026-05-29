@@ -35,7 +35,6 @@ export function MyBookingsList({
     return (
       <GlassCard className="flex flex-col items-center py-12 sm:py-16">
         <MascotMessage
-          pose="wave"
           size="md"
           title="Look up your bookings"
           bubble="Enter the email you used when booking."
@@ -49,7 +48,6 @@ export function MyBookingsList({
     return (
       <GlassCard className="flex flex-col items-center py-12 sm:py-16">
         <MascotMessage
-          pose="think"
           size="md"
           title="No bookings found"
           bubble="Hmm, nothing here yet."

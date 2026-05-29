@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays, LayoutDashboard, Ticket } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedMascot } from "@/components/animated/animated-mascot";
+import { MascotSpeechBubble } from "@/components/animated/mascot-animated-text";
 import { HowItWorks } from "@/components/layout/how-it-works";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { Button } from "@/components/ui/button";
@@ -69,22 +70,14 @@ export function LandingHero() {
           </div>
 
           <div className="relative flex justify-center lg:justify-end">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 22 }}
-              className="relative"
-            >
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45 }}
-                className="absolute -top-2 right-0 z-10 max-w-[10rem] rounded-2xl border border-brand-red/35 bg-surface-elevated/95 px-3 py-2 text-center text-xs font-medium text-white shadow-lg sm:-left-4 sm:right-auto sm:max-w-[11rem] sm:text-sm"
-              >
-                Hi! Ready to book a room for your club?
-              </motion.p>
-              <AnimatedMascot pose="wave" size="xl" priority />
-            </motion.div>
+            <div className="relative">
+              <div className="absolute -top-2 right-0 z-10 max-w-[10rem] text-center sm:-left-4 sm:right-auto sm:max-w-[11rem]">
+                <MascotSpeechBubble className="border-brand-red/35 bg-surface-elevated/95 text-center">
+                  Hi! Ready to book a room for your club?
+                </MascotSpeechBubble>
+              </div>
+              <AnimatedMascot size="xl" priority />
+            </div>
           </div>
         </div>
       </section>
