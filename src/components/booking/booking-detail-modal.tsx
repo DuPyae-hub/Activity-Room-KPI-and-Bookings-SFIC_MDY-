@@ -100,10 +100,16 @@ export function BookingDetailModal({
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <GlassCard gradient className="max-h-[90vh] overflow-y-auto p-6">
-                <div className="mb-4 flex items-start justify-between">
+                <div className="mb-4 flex items-start justify-between gap-4">
                   <div>
-                    <h2 className="text-2xl font-bold">{room.name}</h2>
+                    <p className="text-xs font-medium uppercase tracking-wider text-brand-red">
+                      Booking request
+                    </p>
+                    <h2 className="mt-1 text-2xl font-bold">{room.name}</h2>
                     <StatusBadge status={room.status} type="room" className="mt-2" />
+                    <p className="mt-2 text-sm text-white/45">
+                      Date: {date} · Admin approval required
+                    </p>
                   </div>
                   <button
                     type="button"
@@ -116,21 +122,21 @@ export function BookingDetailModal({
 
                 <div className="mb-6 grid gap-3 sm:grid-cols-2">
                   <label className="block sm:col-span-2">
-                    <span className="text-sm text-white/60">Your name</span>
+                    <span className="field-label">Your name</span>
                     <input
                       value={bookerName}
                       onChange={(e) => setBookerName(e.target.value)}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                      className="field-input mt-2"
                       placeholder="Club leader name"
                     />
                   </label>
                   <label className="block sm:col-span-2">
-                    <span className="text-sm text-white/60">Email (to track your booking)</span>
+                    <span className="field-label">Email (to track your booking)</span>
                     <input
                       type="email"
                       value={bookerEmail}
                       onChange={(e) => setBookerEmail(e.target.value)}
-                      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                      className="field-input mt-2"
                       placeholder="you@club.edu"
                     />
                   </label>
@@ -155,12 +161,12 @@ export function BookingDetailModal({
                 />
 
                 <label className="mt-6 block">
-                  <span className="text-sm text-white/60">Purpose of booking</span>
+                  <span className="field-label">Purpose of booking</span>
                   <textarea
                     value={purpose}
                     onChange={(e) => setPurpose(e.target.value)}
                     rows={3}
-                    className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none focus:border-brand-red/50 focus:ring-1 focus:ring-brand-red/30"
+                    className="field-input mt-2 min-h-[5rem] resize-y"
                     placeholder="e.g. Weekly band rehearsal"
                   />
                 </label>

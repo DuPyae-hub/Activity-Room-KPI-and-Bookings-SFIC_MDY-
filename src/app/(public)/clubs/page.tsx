@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ClubsGrid } from "@/components/clubs/clubs-grid";
+import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { getClubs } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
@@ -14,18 +15,22 @@ export default async function ClubsPage() {
 
   return (
     <div>
-      <header className="mb-8">
-        <p className="brand-subheading">Strategy First · Mandalay</p>
-        <h1 className="text-3xl font-bold tracking-tight">Student clubs</h1>
-        <p className="mt-2 max-w-2xl text-white/50">
-          Official SFIC MDY clubs. Select your club when booking an activity room —
-          sessions are available in <strong className="text-white">2-hour</strong> or{" "}
-          <strong className="text-white">3-hour</strong> blocks.
-        </p>
-        <Link href="/book" className="mt-4 inline-block">
-          <Button variant="gold">Book an activity room</Button>
-        </Link>
-      </header>
+      <PageHeader
+        eyebrow="Strategy First · Mandalay"
+        title="Student clubs"
+        description={
+          <>
+            Official SFIC MDY clubs. When you book a room, select your club from this list.
+            Sessions are booked in <strong className="text-white">2-hour</strong> or{" "}
+            <strong className="text-white">3-hour</strong> blocks.
+          </>
+        }
+        actions={
+          <Link href="/book">
+            <Button variant="gold">Book an activity room</Button>
+          </Link>
+        }
+      />
 
       <ClubsGrid clubs={clubs} />
     </div>

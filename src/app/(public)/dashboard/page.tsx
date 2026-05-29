@@ -10,6 +10,7 @@ import { CalendarPlus } from "lucide-react";
 import { RoomKpiCalendar } from "@/components/dashboard/room-kpi-calendar";
 import { RoomScheduleGrid } from "@/components/dashboard/room-schedule-grid";
 import { TimelineView } from "@/components/dashboard/timeline-view";
+import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import {
@@ -72,13 +73,19 @@ export default async function DashboardPage({
 
   return (
     <div>
-      <header className="mb-8">
-        <p className="text-sm text-brand-red">Club activity rooms</p>
-        <h1 className="text-3xl font-bold tracking-tight">Room KPI</h1>
-        <p className="mt-1 text-white/50">
-          Approved room allocations — calendar overview and per-room schedule
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Live schedule"
+        title="Room KPI"
+        description="See approved club sessions across all activity rooms. Pick a day on the calendar for the room-by-room schedule."
+        actions={
+          <Link href="/book">
+            <Button variant="gold">
+              <CalendarPlus className="h-4 w-4" />
+              Book a room
+            </Button>
+          </Link>
+        }
+      />
 
       {dbError && (
         <GlassCard className="mb-6 border-brand-red/30 bg-brand-red/10 p-4 text-sm text-brand-red-light">

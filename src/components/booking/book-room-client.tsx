@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { addDays, format, parseISO, subDays } from "date-fns";
 import { motion } from "framer-motion";
-import { Filter, Search } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, Filter, Search } from "lucide-react";
 import { BookingDetailModal } from "@/components/booking/booking-detail-modal";
 import { RoomCard } from "@/components/rooms/room-card";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -29,9 +31,17 @@ export function BookRoomClient({
   date,
   occupiedByRoom,
 }: BookRoomClientProps) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<string[]>([]);
   const [selected, setSelected] = useState<RoomWithAmenities | null>(null);
+
+  const dateLabel = format(parseISO(date), "EEEE, MMMM d, yyyy");
+  const today = format(new Date(), "yyyy-MM-dd");
+
+  const setBookingDate = (next: string) => {
+    router.push(`/book?date=${next}`);
+  };
 
   const filtered = useMemo(() => {
     return rooms.filter((room) => {
@@ -45,6 +55,8 @@ export function BookRoomClient({
     });
   }, [rooms, query, filters]);
 
+  const availableCount = filtered.filter((r) => r.status === "AVAILABLE").length;
+
   const toggleFilter = (tag: string) => {
     setFilters((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
@@ -53,35 +65,94 @@ export function BookRoomClient({
 
   return (
     <>
-      <GlassCard className="mb-8 p-4">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-          <div className="relative flex-1">
+      <GlassCard className="mb-8 p-5">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="field-label flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-brand-red" />
+              Booking date
+            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setBookingDate(format(subDays(parseISO(date), 1), "yyyy-MM-dd"))}
+                className="rounded-lg border border-white/10 p-2 text-white/60 transition hover:border-brand-red/40 hover:text-white"
+                aria-label="Previous day"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <input
+                type="date"
+                value={date}
+                min={today}
+                onChange={(e) => e.target.value && setBookingDate(e.target.value)}
+                className="field-input max-w-[11rem]"
+              />
+              <button
+                type="button"
+                onClick={() => setBookingDate(format(addDays(parseISO(date), 1), "yyyy-MM-dd"))}
+                className="rounded-lg border border-white/10 p-2 text-white/60 transition hover:border-brand-red/40 hover:text-white"
+                aria-label="Next day"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+              {date !== today && (
+                <button
+                  type="button"
+                  onClick={() => setBookingDate(today)}
+                  className="rounded-lg px-3 py-2 text-xs font-medium text-brand-red-light ring-1 ring-brand-red/30 transition hover:bg-brand-red/10"
+                >
+                  Today
+                </button>
+              )}
+            </div>
+            <p className="field-hint">{dateLabel}</p>
+          </div>
+          <div className="rounded-xl bg-brand-red/10 px-4 py-3 ring-1 ring-brand-red/25">
+            <p className="text-2xl font-bold text-brand-red">{availableCount}</p>
+            <p className="text-xs text-white/50">rooms available to book</p>
+          </div>
+        </div>
+
+        <div className="mt-5 border-t border-white/10 pt-5">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search rooms or amenities (Sound System, LAN…)"
-              className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm outline-none focus:border-brand-red/40"
+              placeholder="Search by room name or amenity…"
+              className="field-input pl-10"
             />
           </div>
-          <p className="text-sm text-white/50">Booking date: {date}</p>
-        </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Filter className="h-4 w-4 text-brand-red" />
-          {allAmenities.map((tag) => (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => toggleFilter(tag)}
-              className={`rounded-full border px-3 py-1 text-xs transition ${
-                filters.includes(tag)
-                  ? "border-brand-red bg-brand-red/20 text-brand-red"
-                  : "border-white/15 text-white/60 hover:border-brand-red/40"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
+          {allAmenities.length > 0 && (
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <Filter className="h-4 w-4 shrink-0 text-brand-red" />
+              <span className="text-xs text-white/40">Amenities:</span>
+              {allAmenities.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => toggleFilter(tag)}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                    filters.includes(tag)
+                      ? "border-brand-red bg-brand-red/20 text-brand-red-light"
+                      : "border-white/15 text-white/55 hover:border-brand-red/35"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+              {filters.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setFilters([])}
+                  className="text-xs text-white/40 underline hover:text-white"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </GlassCard>
 
@@ -98,7 +169,10 @@ export function BookRoomClient({
       </motion.div>
 
       {filtered.length === 0 && (
-        <p className="text-center text-white/50">No rooms match your filters.</p>
+        <GlassCard className="p-10 text-center">
+          <p className="text-white/60">No rooms match your search.</p>
+          <p className="mt-1 text-sm text-white/40">Try clearing filters or another date.</p>
+        </GlassCard>
       )}
 
       <BookingDetailModal

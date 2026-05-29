@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { MyBookingsLookup } from "@/components/bookings/my-bookings-lookup";
+import { PageHeader } from "@/components/layout/page-header";
+import { Button } from "@/components/ui/button";
 import { getBookingsByEmail } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 import { bookingLookupSchema } from "@/lib/validations";
@@ -29,13 +32,16 @@ export default async function MyBookingsPage({
 
   return (
     <div>
-      <header className="mb-8">
-        <p className="text-sm text-brand-red">Track your requests</p>
-        <h1 className="text-3xl font-bold">My Bookings</h1>
-        <p className="mt-1 text-white/50">
-          Enter the email you used when booking — no login required.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Your requests"
+        title="My bookings"
+        description="Enter the email you used when booking. No password required — you can cancel pending or approved requests here."
+        actions={
+          <Link href="/book">
+            <Button variant="gold">New booking</Button>
+          </Link>
+        }
+      />
       <MyBookingsLookup initialEmail={emailParam} bookings={bookings} lookupEmail={lookupEmail} />
     </div>
   );

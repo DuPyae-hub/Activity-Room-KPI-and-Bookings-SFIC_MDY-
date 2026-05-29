@@ -1,5 +1,9 @@
+import Link from "next/link";
 import { format } from "date-fns";
 import { BookRoomClient } from "@/components/booking/book-room-client";
+import { HowItWorks } from "@/components/layout/how-it-works";
+import { PageHeader } from "@/components/layout/page-header";
+import { Button } from "@/components/ui/button";
 import { getClubs, getOccupiedHoursByDate, getRooms } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 
@@ -27,14 +31,23 @@ export default async function BookPage({
 
   return (
     <div>
-      <header className="mb-8">
-        <p className="text-sm text-brand-red">Smart booking</p>
-        <h1 className="text-3xl font-bold">Book an Activity Room</h1>
-        <p className="mt-1 text-white/50">
-          No account needed — pick your club, choose a <strong className="text-white">2</strong> or{" "}
-          <strong className="text-white">3</strong> hour slot, and submit a request.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Reserve a space"
+        title="Book an activity room"
+        description={
+          <>
+            Choose a room and time for your club. Sessions are{" "}
+            <strong className="text-white">2 or 3 hours</strong> (8 AM – 10 PM). No account
+            needed — admin approval is required before your booking is confirmed.
+          </>
+        }
+        actions={
+          <Link href="/my-bookings">
+            <Button variant="secondary">Track my bookings</Button>
+          </Link>
+        }
+      />
+
       <BookRoomClient
         rooms={rooms}
         clubs={clubs}
@@ -42,6 +55,8 @@ export default async function BookPage({
         date={date}
         occupiedByRoom={occupiedByRoom}
       />
+
+      <HowItWorks className="mt-16" />
     </div>
   );
 }

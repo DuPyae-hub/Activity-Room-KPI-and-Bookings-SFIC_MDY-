@@ -13,9 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SFIC Activity Rooms | Strategy First International College",
+  title: {
+    default: "SFIC Activity Rooms | Strategy First Mandalay",
+    template: "%s | SFIC Activity Rooms",
+  },
   description:
-    "Strategy First International College Mandalay — activity room booking, KPI dashboards, and admin approvals.",
+    "Book Strategy First International College Mandalay activity rooms for your club. View schedules, track approvals, and manage room KPI — no login required for students.",
   icons: { icon: "/brand/sfic-logo.png" },
 };
 

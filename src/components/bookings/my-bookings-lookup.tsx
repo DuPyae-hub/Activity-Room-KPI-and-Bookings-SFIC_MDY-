@@ -30,20 +30,21 @@ export function MyBookingsLookup({
 
   return (
     <>
-      <GlassCard className="mb-8 p-4">
-        <form onSubmit={handleLookup} className="flex flex-col gap-3 sm:flex-row sm:items-end">
+      <GlassCard className="mb-8 p-5">
+        <form onSubmit={handleLookup} className="flex flex-col gap-4 sm:flex-row sm:items-end">
           <label className="flex-1">
-            <span className="text-sm text-white/60">Your booking email</span>
+            <span className="field-label">Your booking email</span>
+            <p className="field-hint">Use the same address you entered when submitting a request.</p>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@club.edu"
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+              className="field-input mt-2"
             />
           </label>
-          <Button type="submit" variant="gold">
+          <Button type="submit" variant="gold" className="sm:mb-0 sm:self-end">
             Find bookings
           </Button>
         </form>

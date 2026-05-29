@@ -8,8 +8,11 @@ import type { BookingWithRelations } from "@/lib/types";
 export function TimelineView({ bookings }: { bookings: BookingWithRelations[] }) {
   if (bookings.length === 0) {
     return (
-      <GlassCard className="p-8 text-center text-white/50">
-        No approved allocations for today yet.
+      <GlassCard className="p-10 text-center">
+        <p className="text-white/55">No approved sessions on this day.</p>
+        <p className="mt-1 text-sm text-white/40">
+          Approved bookings appear here after admin review.
+        </p>
       </GlassCard>
     );
   }

@@ -84,4 +84,16 @@
   .brand-subheading {
     @apply text-sm font-medium text-brand-red;
   }
+
+  .field-input {
+    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-brand-red/50 focus:ring-2 focus:ring-brand-red/15;
+  }
+
+  .field-label {
+    @apply text-sm font-medium text-white/70;
+  }
+
+  .field-hint {
+    @apply mt-1 text-xs text-white/40;
+  }
 }

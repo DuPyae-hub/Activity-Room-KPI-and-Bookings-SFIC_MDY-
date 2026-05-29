@@ -5,34 +5,36 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { CalendarDays, LayoutDashboard, Ticket, Users } from "lucide-react";
 import { BrandLogo } from "@/components/layout/brand-logo";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/dashboard", label: "Room KPI", icon: LayoutDashboard },
   { href: "/clubs", label: "Clubs", icon: Users },
-  { href: "/book", label: "Book Room", icon: CalendarDays },
   { href: "/my-bookings", label: "My Bookings", icon: Ticket },
 ];
 
 export function PublicNav() {
   const pathname = usePathname();
+  const onBook = pathname === "/book" || pathname.startsWith("/book/");
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed left-1/2 top-4 z-50 w-[min(100%,56rem)] -translate-x-1/2"
+      className="fixed left-1/2 top-4 z-50 w-[min(100%,60rem)] -translate-x-1/2 px-4"
+      aria-label="Main navigation"
     >
-      <div className="glass-card gradient-border flex items-center justify-between gap-4 px-4 py-3">
-        <Link href="/dashboard" className="flex items-center gap-3">
+      <div className="glass-card gradient-border flex items-center justify-between gap-3 px-3 py-2.5 sm:gap-4 sm:px-4 sm:py-3">
+        <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
           <BrandLogo height={36} />
-          <div className="hidden sm:block">
-            <p className="brand-heading text-xs leading-tight">Strategy First</p>
-            <p className="text-xs text-white/50">Activity Rooms · Mandalay</p>
+          <div className="hidden min-w-0 sm:block">
+            <p className="brand-heading truncate text-xs leading-tight">Strategy First</p>
+            <p className="truncate text-xs text-white/50">Activity Rooms</p>
           </div>
         </Link>
 
-        <div className="flex items-center gap-1 overflow-x-auto">
+        <div className="flex items-center gap-0.5 sm:gap-1">
           {links.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
@@ -40,8 +42,8 @@ export function PublicNav() {
                 key={href}
                 href={href}
                 className={cn(
-                  "relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-colors",
-                  active ? "text-brand-red" : "text-white/60 hover:text-brand-red/80",
+                  "relative flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm transition-colors sm:px-3",
+                  active ? "text-brand-red" : "text-white/60 hover:text-white",
                 )}
               >
                 {active && (
@@ -51,12 +53,23 @@ export function PublicNav() {
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                <Icon className="relative h-4 w-4" />
-                <span className="relative hidden md:inline">{label}</span>
+                <Icon className="relative h-4 w-4 shrink-0" />
+                <span className="relative hidden lg:inline">{label}</span>
               </Link>
             );
           })}
         </div>
+
+        <Link href="/book" className="shrink-0">
+          <Button
+            variant="gold"
+            size="sm"
+            className={cn(onBook && "ring-2 ring-white/30")}
+          >
+            <CalendarDays className="h-4 w-4" />
+            <span className="sr-only sm:not-sr-only sm:ml-0">Book</span>
+          </Button>
+        </Link>
       </div>
     </motion.nav>
   );
