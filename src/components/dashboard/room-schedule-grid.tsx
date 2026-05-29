@@ -1,8 +1,13 @@
 "use client";
 
-import { format, isSameDay, parseISO } from "date-fns";
 import { GlassCard } from "@/components/ui/glass-card";
 import { BOOKING_END_HOUR, BOOKING_START_HOUR, formatHourLabel } from "@/lib/booking-hours";
+import {
+  formatDateOnlyInAppTz,
+  formatInAppTz,
+  getDateStringInAppTz,
+  getHourInAppTz,
+} from "@/lib/timezone";
 import { cn } from "@/lib/utils";
 import type { BookingWithRelations } from "@/lib/types";
 
@@ -13,11 +18,15 @@ const HOURS = Array.from(
   (_, i) => BOOKING_START_HOUR + i,
 );
 
-function bookingCoversHour(booking: BookingWithRelations, hour: number, day: Date): boolean {
-  const start = new Date(booking.startTime);
-  const end = new Date(booking.endTime);
-  if (!isSameDay(start, day)) return false;
-  return hour >= start.getHours() && hour < end.getHours();
+function bookingCoversHour(
+  booking: BookingWithRelations,
+  hour: number,
+  dayKey: string,
+): boolean {
+  if (getDateStringInAppTz(new Date(booking.startTime)) !== dayKey) return false;
+  const startH = getHourInAppTz(new Date(booking.startTime));
+  const endH = getHourInAppTz(new Date(booking.endTime));
+  return hour >= startH && hour < endH;
 }
 
 export function RoomScheduleGrid({
@@ -29,8 +38,9 @@ export function RoomScheduleGrid({
   rooms: RoomRow[];
   bookings: BookingWithRelations[];
 }) {
-  const dayDate = parseISO(day);
-  const dayBookings = bookings.filter((b) => isSameDay(new Date(b.startTime), dayDate));
+  const dayBookings = bookings.filter(
+    (b) => getDateStringInAppTz(new Date(b.startTime)) === day,
+  );
 
   if (rooms.length === 0) {
     return (
@@ -41,7 +51,7 @@ export function RoomScheduleGrid({
   return (
     <GlassCard className="overflow-x-auto p-4">
       <h3 className="mb-4 text-lg font-semibold">
-        {format(dayDate, "EEEE, MMMM d")} — room schedule
+        {formatDateOnlyInAppTz(day, "EEEE, MMMM d")} — room schedule
       </h3>
       <div className="min-w-[640px]">
         <div
@@ -68,12 +78,9 @@ export function RoomScheduleGrid({
                   {room.name}
                 </div>
                 {HOURS.map((hour) => {
-                  const booking = roomBookings.find((b) =>
-                    bookingCoversHour(b, hour, dayDate),
-                  );
+                  const booking = roomBookings.find((b) => bookingCoversHour(b, hour, day));
                   const isStart =
-                    booking &&
-                    new Date(booking.startTime).getHours() === hour;
+                    booking && getHourInAppTz(new Date(booking.startTime)) === hour;
 
                   return (
                     <div
@@ -94,8 +101,8 @@ export function RoomScheduleGrid({
                             {booking.club.logo} {booking.club.name}
                           </p>
                           <p className="truncate text-[9px] text-white/55">
-                            {format(new Date(booking.startTime), "h:mm")}–
-                            {format(new Date(booking.endTime), "h:mm a")}
+                            {formatInAppTz(new Date(booking.startTime), "h:mm")}–
+                            {formatInAppTz(new Date(booking.endTime), "h:mm a")}
                           </p>
                         </div>
                       )}

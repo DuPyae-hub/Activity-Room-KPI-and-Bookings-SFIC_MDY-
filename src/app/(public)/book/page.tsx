@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { format } from "date-fns";
 import { BookRoomClient } from "@/components/booking/book-room-client";
 import { HowItWorks } from "@/components/layout/how-it-works";
 import { PageHeader } from "@/components/layout/page-header";
+import { TimezoneNotice } from "@/components/layout/timezone-notice";
+import { todayInAppTz } from "@/lib/timezone";
 import { Button } from "@/components/ui/button";
 import { getClubs, getOccupiedHoursByDate, getRooms } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
@@ -18,7 +19,7 @@ export default async function BookPage({
   await ensureDynamicPage();
 
   const params = await searchParams;
-  const date = params.date ?? format(new Date(), "yyyy-MM-dd");
+  const date = params.date ?? todayInAppTz();
 
   const [rooms, clubs] = await Promise.all([getRooms(), getClubs()]);
   const occupiedByRoom = await getOccupiedHoursByDate(
@@ -38,7 +39,8 @@ export default async function BookPage({
           <>
             Choose a room and time for your club. Sessions are{" "}
             <strong className="text-white">2 or 3 hours</strong> (8 AM – 10 PM). No account
-            needed — admin approval is required before your booking is confirmed.
+            needed — admin approval is required before your booking is confirmed.{" "}
+            <TimezoneNotice className="mt-2 block" />
           </>
         }
         actions={

@@ -1,7 +1,7 @@
 "use client";
 
-import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { formatInAppTz } from "@/lib/timezone";
 import { useOptimistic, useTransition } from "react";
 import { BookingStatus } from "@prisma/client";
 import { cancelBookingAction } from "@/actions/bookings";
@@ -80,9 +80,9 @@ export function MyBookingsList({
                 <h3 className="font-semibold">{booking.room.name}</h3>
                 <p className="text-sm text-white/50">
                   {booking.club.logo} {booking.club.name} ·{" "}
-                  {format(booking.startTime, "MMM d, yyyy")} ·{" "}
-                  {format(booking.startTime, "h:mm a")} —{" "}
-                  {format(booking.endTime, "h:mm a")}
+                  {formatInAppTz(booking.startTime, "MMM d, yyyy")} ·{" "}
+                  {formatInAppTz(booking.startTime, "h:mm a")} —{" "}
+                  {formatInAppTz(booking.endTime, "h:mm a")}
                 </p>
               </div>
               <StatusBadge status={booking.status} />

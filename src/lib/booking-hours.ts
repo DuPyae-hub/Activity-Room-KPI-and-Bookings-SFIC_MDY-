@@ -14,10 +14,7 @@ export function formatHourLabel(hour: number): string {
   return `${h}:00 ${period}`;
 }
 
-export function buildSlotDateTime(date: string, hour: number): Date {
-  const [y, m, d] = date.split("-").map(Number);
-  return new Date(y, m - 1, d, hour, 0, 0, 0);
-}
+export { buildSlotDateTime } from "@/lib/timezone";
 
 export function maxStartHourForDuration(durationHours: BookingDurationHours): number {
   return BOOKING_END_HOUR - durationHours;

@@ -7,7 +7,6 @@ import {
   endOfMonth,
   endOfWeek,
   format,
-  isSameDay,
   isSameMonth,
   parseISO,
   startOfMonth,
@@ -16,6 +15,7 @@ import {
 } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
+import { getDateStringInAppTz, todayInAppTz } from "@/lib/timezone";
 import { cn } from "@/lib/utils";
 import type { BookingWithRelations } from "@/lib/types";
 
@@ -27,14 +27,13 @@ type Props = {
 
 export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
   const monthDate = parseISO(`${month}-01`);
-  const selected = parseISO(selectedDay);
   const gridStart = startOfWeek(startOfMonth(monthDate), { weekStartsOn: 0 });
   const gridEnd = endOfWeek(endOfMonth(monthDate), { weekStartsOn: 0 });
   const days = eachDayOfInterval({ start: gridStart, end: gridEnd });
 
   const bookingsByDay = new Map<string, BookingWithRelations[]>();
   for (const b of bookings) {
-    const key = format(new Date(b.startTime), "yyyy-MM-dd");
+    const key = getDateStringInAppTz(new Date(b.startTime));
     const list = bookingsByDay.get(key) ?? [];
     list.push(b);
     bookingsByDay.set(key, list);
@@ -42,7 +41,7 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
 
   const prevMonth = format(subMonths(monthDate, 1), "yyyy-MM");
   const nextMonth = format(addMonths(monthDate, 1), "yyyy-MM");
-  const today = format(new Date(), "yyyy-MM-dd");
+  const today = todayInAppTz();
 
   const dayHref = (day: Date) => {
     const d = format(day, "yyyy-MM-dd");
@@ -92,8 +91,8 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
           const key = format(day, "yyyy-MM-dd");
           const count = bookingsByDay.get(key)?.length ?? 0;
           const inMonth = isSameMonth(day, monthDate);
-          const isSelected = isSameDay(day, selected);
-          const isToday = isSameDay(day, new Date());
+          const isSelected = key === selectedDay;
+          const isToday = key === today;
 
           return (
             <Link

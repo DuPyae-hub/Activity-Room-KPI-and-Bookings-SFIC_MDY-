@@ -1,7 +1,7 @@
 "use client";
 
-import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { formatInAppTz } from "@/lib/timezone";
 import { GlassCard } from "@/components/ui/glass-card";
 import type { BookingWithRelations } from "@/lib/types";
 
@@ -38,7 +38,8 @@ export function TimelineView({ bookings }: { bookings: BookingWithRelations[] })
                 </p>
               </div>
               <p className="text-sm text-white/55">
-                {format(booking.startTime, "h:mm a")} — {format(booking.endTime, "h:mm a")}
+                {formatInAppTz(booking.startTime, "h:mm a")} —{" "}
+                {formatInAppTz(booking.endTime, "h:mm a")}
               </p>
             </div>
             <p className="mt-2 text-sm text-white/50">{booking.purpose}</p>

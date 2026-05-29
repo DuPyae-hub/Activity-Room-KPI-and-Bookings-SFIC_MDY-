@@ -1,6 +1,10 @@
 import { BookingStatus } from "@prisma/client";
-import { endOfDay, startOfDay } from "date-fns";
 import { prisma } from "@/lib/db";
+import {
+  endOfDayInAppTz,
+  hoursFromBookingInAppTz,
+  startOfDayInAppTz,
+} from "@/lib/timezone";
 import { parseAmenities, type BookingWithRelations, type RoomWithAmenities } from "@/lib/types";
 
 const bookingInclude = {
@@ -33,7 +37,7 @@ export async function getClubs() {
 }
 
 export async function getTodayTimeline(date: Date) {
-  return getApprovedBookingsBetween(startOfDay(date), endOfDay(date));
+  return getApprovedBookingsBetween(startOfDayInAppTz(date), endOfDayInAppTz(date));
 }
 
 export async function getApprovedBookingsBetween(start: Date, end: Date) {
@@ -120,14 +124,6 @@ export async function getAdminKpis() {
   };
 }
 
-function hoursFromBooking(startTime: Date, endTime: Date): number[] {
-  const hours: number[] = [];
-  const start = Math.max(startTime.getHours(), 8);
-  const end = Math.min(endTime.getHours(), 22);
-  for (let h = start; h < end; h++) hours.push(h);
-  return hours;
-}
-
 /** One DB round-trip for all rooms on a date (avoids N+1 queries on /book). */
 export async function getOccupiedHoursByDate(
   date: string,
@@ -136,9 +132,8 @@ export async function getOccupiedHoursByDate(
   const result = Object.fromEntries(roomIds.map((id) => [id, [] as number[]]));
   if (roomIds.length === 0) return result;
 
-  const [y, m, d] = date.split("-").map(Number);
-  const dayStart = new Date(y, m - 1, d, 0, 0, 0);
-  const dayEnd = new Date(y, m - 1, d, 23, 59, 59);
+  const dayStart = startOfDayInAppTz(date);
+  const dayEnd = endOfDayInAppTz(date);
 
   const bookings = await prisma.booking.findMany({
     where: {
@@ -157,7 +152,7 @@ export async function getOccupiedHoursByDate(
       set = new Set();
       byRoom.set(b.roomId, set);
     }
-    for (const h of hoursFromBooking(b.startTime, b.endTime)) set.add(h);
+    for (const h of hoursFromBookingInAppTz(b.startTime, b.endTime)) set.add(h);
   }
 
   for (const [roomId, hours] of byRoom) {

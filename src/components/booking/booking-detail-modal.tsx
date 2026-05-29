@@ -108,7 +108,7 @@ export function BookingDetailModal({
                     <h2 className="mt-1 text-2xl font-bold">{room.name}</h2>
                     <StatusBadge status={room.status} type="room" className="mt-2" />
                     <p className="mt-2 text-sm text-white/45">
-                      Date: {date} · Admin approval required
+                      Date: {date} (Myanmar Time) · Admin approval required
                     </p>
                   </div>
                   <button

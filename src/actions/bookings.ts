@@ -4,7 +4,7 @@ import { BookingStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/auth";
-import { buildSlotDateTime } from "@/lib/booking-hours";
+import { buildSlotDateTime } from "@/lib/timezone";
 import {
   bookingAdminUpdateSchema,
   bookingCancelSchema,

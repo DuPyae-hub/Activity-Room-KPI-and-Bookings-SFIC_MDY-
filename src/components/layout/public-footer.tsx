@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/layout/brand-logo";
+import { TimezoneNotice } from "@/components/layout/timezone-notice";
 
 const links = [
   { href: "/dashboard", label: "Room KPI" },
@@ -20,6 +21,7 @@ export function PublicFooter() {
             <p className="mt-2 max-w-xs text-xs leading-relaxed text-white/35">
               Official room reservations for SFIC MDY student clubs. Sessions are subject to admin approval.
             </p>
+            <TimezoneNotice className="mt-3" />
           </div>
         </div>
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">

@@ -8,6 +8,7 @@ import { Calendar, ChevronLeft, ChevronRight, Filter, Search } from "lucide-reac
 import { BookingDetailModal } from "@/components/booking/booking-detail-modal";
 import { RoomCard } from "@/components/rooms/room-card";
 import { GlassCard } from "@/components/ui/glass-card";
+import { formatDateOnlyInAppTz, todayInAppTz } from "@/lib/timezone";
 import type { RoomWithAmenities } from "@/lib/types";
 
 type ClubOption = {
@@ -36,8 +37,8 @@ export function BookRoomClient({
   const [filters, setFilters] = useState<string[]>([]);
   const [selected, setSelected] = useState<RoomWithAmenities | null>(null);
 
-  const dateLabel = format(parseISO(date), "EEEE, MMMM d, yyyy");
-  const today = format(new Date(), "yyyy-MM-dd");
+  const dateLabel = formatDateOnlyInAppTz(date, "EEEE, MMMM d, yyyy");
+  const today = todayInAppTz();
 
   const setBookingDate = (next: string) => {
     router.push(`/book?date=${next}`);

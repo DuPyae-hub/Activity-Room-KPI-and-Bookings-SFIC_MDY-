@@ -1,16 +1,11 @@
 import Link from "next/link";
-import {
-  endOfMonth,
-  format,
-  isValid,
-  parseISO,
-  startOfMonth,
-} from "date-fns";
+import { endOfMonth, isValid, parseISO, startOfMonth } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { RoomKpiCalendar } from "@/components/dashboard/room-kpi-calendar";
 import { RoomScheduleGrid } from "@/components/dashboard/room-schedule-grid";
 import { TimelineView } from "@/components/dashboard/timeline-view";
 import { PageHeader } from "@/components/layout/page-header";
+import { TimezoneNotice } from "@/components/layout/timezone-notice";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import {
@@ -20,13 +15,18 @@ import {
 } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 import { isDbConnectionError } from "@/lib/safe-query";
+import {
+  currentMonthInAppTz,
+  formatDateOnlyInAppTz,
+  todayInAppTz,
+} from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 function parseMonthParam(value: string | undefined): string {
   if (value && /^\d{4}-\d{2}$/.test(value)) return value;
-  return format(new Date(), "yyyy-MM");
+  return currentMonthInAppTz();
 }
 
 function parseDayParam(value: string | undefined, month: string): string {
@@ -34,7 +34,7 @@ function parseDayParam(value: string | undefined, month: string): string {
     const d = parseISO(value);
     if (isValid(d)) return value;
   }
-  const today = format(new Date(), "yyyy-MM-dd");
+  const today = todayInAppTz();
   if (today.startsWith(month)) return today;
   return `${month}-01`;
 }
@@ -76,7 +76,12 @@ export default async function DashboardPage({
       <PageHeader
         eyebrow="Live schedule"
         title="Room KPI"
-        description="See approved club sessions across all activity rooms. Pick a day on the calendar for the room-by-room schedule."
+        description={
+          <>
+            See approved club sessions across all activity rooms. Pick a day on the calendar for
+            the room-by-room schedule. <TimezoneNotice className="mt-2" />
+          </>
+        }
         actions={
           <Link href="/book">
             <Button variant="gold">
@@ -113,7 +118,9 @@ export default async function DashboardPage({
         <GlassCard className="p-5">
           <p className="text-sm text-white/50">Selected day</p>
           <p className="mt-1 text-3xl font-bold text-brand-red">{sessionsOnSelectedDay}</p>
-          <p className="mt-1 text-xs text-white/40">{format(selectedDate, "MMM d, yyyy")}</p>
+          <p className="mt-1 text-xs text-white/40">
+            {formatDateOnlyInAppTz(selectedDay, "MMM d, yyyy")}
+          </p>
         </GlassCard>
         <GlassCard className="flex items-center justify-between p-5">
           <div>

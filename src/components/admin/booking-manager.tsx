@@ -1,7 +1,7 @@
 "use client";
 
-import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { bookingLocalPartsInAppTz, formatInAppTz } from "@/lib/timezone";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo, useState, useTransition } from "react";
 import { BookingStatus } from "@prisma/client";
@@ -38,17 +38,19 @@ type FormState = {
 };
 
 function bookingToForm(booking: BookingWithRelations): FormState {
-  const start = new Date(booking.startTime);
-  const end = new Date(booking.endTime);
+  const local = bookingLocalPartsInAppTz(
+    new Date(booking.startTime),
+    new Date(booking.endTime),
+  );
   return {
     id: booking.id,
     roomId: booking.roomId,
     clubId: booking.clubId,
     bookerName: booking.bookerName,
     bookerEmail: booking.bookerEmail,
-    date: format(start, "yyyy-MM-dd"),
-    startHour: start.getHours(),
-    durationHours: (end.getHours() - start.getHours()) as FormState["durationHours"],
+    date: local.date,
+    startHour: local.startHour,
+    durationHours: local.durationHours as FormState["durationHours"],
     purpose: booking.purpose,
     status: booking.status,
   };
@@ -165,8 +167,8 @@ export function BookingManager({
                           {booker.name} · {booker.email}
                         </p>
                         <p className="mt-1 text-sm text-white/55">
-                          {format(booking.startTime, "MMM d, yyyy · h:mm a")} —{" "}
-                          {format(booking.endTime, "h:mm a")}
+                          {formatInAppTz(new Date(booking.startTime), "MMM d, yyyy · h:mm a")} —{" "}
+                          {formatInAppTz(new Date(booking.endTime), "h:mm a")}
                         </p>
                         <p className="mt-1 text-sm text-white/60">{booking.purpose}</p>
                       </div>
