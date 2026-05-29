@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  /* Strategy First International College — logo palette */
+  --color-brand-black: #000000;
+  --color-brand-red: #d2232a;
+  --color-brand-red-light: #e8454b;
+  --color-brand-red-dark: #a91c23;
+  --color-brand-white: #ffffff;
+  /* Semantic aliases (used across components) */
+  --color-brand-crimson: #d2232a;
+  --color-brand-crimson-light: #e8454b;
+  --color-brand-gold: #d2232a;
+  --color-brand-amber: #d2232a;
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #141414;
+  --color-surface-glass: rgb(255 255 255 / 0.06);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    @apply border-white/10;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-surface text-white min-h-screen;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(210 35 42 / 0.18), transparent),
+      radial-gradient(ellipse 55% 45% at 0% 80%, rgb(0 0 0 / 0.5), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgb(210 35 42 / 0.06), transparent);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-xl;
+  }
+
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgb(0 0 0 / 0.9),
+      rgb(210 35 42 / 0.85),
+      rgb(255 255 255 / 0.25)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-brand-red to-brand-red-light bg-clip-text text-transparent;
+  }
+
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-brand-white via-brand-red to-brand-red-light bg-clip-text text-transparent;
+  }
+
+  .brand-heading {
+    @apply font-semibold uppercase tracking-[0.12em] text-white;
+  }
+
+  .brand-subheading {
+    @apply text-sm font-medium text-brand-red;
+  }
+}

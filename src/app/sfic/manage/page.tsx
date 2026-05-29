@@ -1,0 +1,25 @@
+import { redirect } from "next/navigation";
+import { AdminLoginForm } from "@/components/auth/admin-login-form";
+import { BrandLogo } from "@/components/layout/brand-logo";
+import { getSessionAdmin } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminManageLoginPage() {
+  const admin = await getSessionAdmin();
+  if (admin) redirect("/admin");
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center px-4">
+      <div className="mb-10 text-center">
+        <BrandLogo className="mx-auto mb-4" height={56} />
+        <h1 className="text-2xl font-bold tracking-tight text-white">Management access</h1>
+        <p className="brand-subheading mt-1">Strategy First International College</p>
+        <p className="mt-2 text-sm text-white/45">
+          Authorized personnel only — enter your admin password below
+        </p>
+      </div>
+      <AdminLoginForm />
+    </div>
+  );
+}

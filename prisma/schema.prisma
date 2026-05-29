@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum RoomStatus {
+  AVAILABLE
+  MAINTENANCE
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id       String    @id @default(cuid())
+  name     String
+  email    String    @unique
+  role     Role      @default(USER)
+  clubId   String
+  club     Club      @relation(fields: [clubId], references: [id], onDelete: Restrict)
+  bookings Booking[]
+}
+
+model Club {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  logo        String?
+  description String?
+  users       User[]
+  bookings    Booking[]
+}
+
+model Room {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  capacity  Int
+  amenities Json
+  status    RoomStatus @default(AVAILABLE)
+  bookings  Booking[]
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String?
+  bookerName  String
+  bookerEmail String
+  roomId      String
+  clubId      String
+  startTime   DateTime
+  endTime     DateTime
+  purpose     String
+  status      BookingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  room Room  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  club Club  @relation(fields: [clubId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, startTime, endTime])
+  @@index([clubId, createdAt])
+  @@index([status, createdAt])
+  @@index([bookerEmail, createdAt])
+}
