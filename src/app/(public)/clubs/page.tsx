@@ -3,8 +3,6 @@ import { ClubsGrid } from "@/components/clubs/clubs-grid";
 import { Button } from "@/components/ui/button";
 import { getClubs } from "@/data/queries";
 
-export const dynamic = "force-dynamic";
-
 export default async function ClubsPage() {
   const clubs = await getClubs();
 
