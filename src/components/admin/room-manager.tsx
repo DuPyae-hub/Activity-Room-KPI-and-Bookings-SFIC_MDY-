@@ -59,25 +59,25 @@ export function RoomManager({ rooms }: { rooms: RoomWithAmenities[] }) {
             placeholder="Room name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+            className="w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
           />
           <input
             type="number"
             placeholder="Capacity"
             value={form.capacity}
             onChange={(e) => setForm({ ...form, capacity: Number(e.target.value) })}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+            className="w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
           />
           <input
             placeholder="Amenities (comma-separated)"
             value={form.amenities}
             onChange={(e) => setForm({ ...form, amenities: e.target.value })}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+            className="w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
           />
           <select
             value={form.status}
             onChange={(e) => setForm({ ...form, status: e.target.value as RoomStatus })}
-            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none"
+            className="w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none"
           >
             <option value={RoomStatus.AVAILABLE}>AVAILABLE</option>
             <option value={RoomStatus.MAINTENANCE}>MAINTENANCE</option>
@@ -111,7 +111,7 @@ export function RoomManager({ rooms }: { rooms: RoomWithAmenities[] }) {
                   <p className="font-semibold">{room.name}</p>
                   <StatusBadge status={room.status} type="room" />
                 </div>
-                <p className="text-sm text-white/50">Capacity {room.capacity}</p>
+                <p className="text-sm text-foreground-muted">Capacity {room.capacity}</p>
                 <p className="mt-1 text-xs text-brand-red/80">
                   {room.amenities.join(" · ")}
                 </p>

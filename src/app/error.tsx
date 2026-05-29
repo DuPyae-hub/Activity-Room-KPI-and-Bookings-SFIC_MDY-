@@ -28,7 +28,7 @@ export default function RootError({
     <div className="flex min-h-screen items-center justify-center bg-surface px-4 py-12">
       <GlassCard className="max-w-lg p-8 text-center">
         <h2 className="text-xl font-semibold text-brand-red">Something went wrong</h2>
-        <p className="mt-3 text-sm text-white/55">
+        <p className="mt-3 text-sm text-foreground-muted">
           {isChunkLoad || isBuildCache
             ? "The app was updated while this tab was open. Hard-refresh the page (Cmd+Shift+R), or stop the server and run npm run dev:clean."
             : "We could not load this page. Try again or return to the dashboard."}

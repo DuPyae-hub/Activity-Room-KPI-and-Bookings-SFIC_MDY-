@@ -23,20 +23,20 @@ const steps = [
 export function HowItWorks({ className }: { className?: string }) {
   return (
     <section className={className}>
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-foreground-subtle">
         How booking works
       </h2>
       <div className="grid gap-3 sm:grid-cols-3">
         {steps.map(({ icon: Icon, title, description }, i) => (
-          <GlassCard key={title} className="border-white/[0.06] bg-white/[0.02] p-5">
+          <GlassCard key={title} className="border-border bg-surface-elevated/60 p-5">
             <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-red/12 ring-1 ring-brand-red/20">
               <Icon className="h-[18px] w-[18px] text-brand-red-light" />
             </div>
             <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-red-light/80">
               Step {i + 1}
             </p>
-            <h3 className="font-medium text-white">{title}</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-white/45">{description}</p>
+            <h3 className="font-medium text-foreground">{title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-foreground-muted">{description}</p>
           </GlassCard>
         ))}
       </div>

@@ -31,7 +31,7 @@ export function AdminNav({ admin }: { admin: UserWithClub }) {
           <BrandLogo height={36} />
           <div className="hidden sm:block">
             <p className="brand-heading text-xs leading-tight">Admin Console</p>
-            <p className="text-xs text-white/50">Strategy First · Mandalay</p>
+            <p className="text-xs text-foreground-muted">Strategy First · Mandalay</p>
           </div>
         </Link>
 
@@ -44,7 +44,7 @@ export function AdminNav({ admin }: { admin: UserWithClub }) {
                 href={href}
                 className={cn(
                   "relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-colors",
-                  active ? "text-brand-red" : "text-white/60 hover:text-brand-red/80",
+                  active ? "text-brand-red" : "text-foreground-muted hover:text-brand-red/80",
                 )}
               >
                 {active && (
@@ -61,7 +61,7 @@ export function AdminNav({ admin }: { admin: UserWithClub }) {
           })}
           <Link
             href={getPublicDashboardHref()}
-            className="relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-white/50 hover:text-white"
+            className="relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-foreground-muted hover:text-foreground"
           >
             <LayoutDashboard className="h-4 w-4" />
             <span className="hidden md:inline">Public site</span>
@@ -71,12 +71,12 @@ export function AdminNav({ admin }: { admin: UserWithClub }) {
         <div className="flex items-center gap-3">
           <div className="hidden text-right lg:block">
             <p className="text-sm font-medium">{admin.name}</p>
-            <p className="text-xs text-white/50">Administrator</p>
+            <p className="text-xs text-foreground-muted">Administrator</p>
           </div>
           <form action={logoutAction}>
             <button
               type="submit"
-              className="rounded-lg p-2 text-white/50 transition hover:bg-white/5 hover:text-brand-red"
+              className="rounded-lg p-2 text-foreground-muted transition hover:bg-stone-50 hover:text-brand-red"
               aria-label="Sign out"
             >
               <LogOut className="h-4 w-4" />

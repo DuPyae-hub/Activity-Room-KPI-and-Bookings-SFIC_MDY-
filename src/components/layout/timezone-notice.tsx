@@ -6,7 +6,7 @@ export function TimezoneNotice({ className }: { className?: string }) {
   return (
     <p
       className={cn(
-        "inline-flex items-center gap-1.5 text-xs text-white/40",
+        "inline-flex items-center gap-1.5 text-xs text-foreground-subtle",
         className,
       )}
     >

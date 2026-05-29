@@ -37,7 +37,7 @@ export function ApprovalsQueue({ bookings }: { bookings: BookingWithRelations[] 
 
   if (bookings.length === 0) {
     return (
-      <GlassCard className="p-8 text-center text-white/50">
+      <GlassCard className="p-8 text-center text-foreground-muted">
         No pending requests — you&apos;re all caught up.
       </GlassCard>
     );
@@ -63,12 +63,12 @@ export function ApprovalsQueue({ bookings }: { bookings: BookingWithRelations[] 
               <p className="text-sm text-brand-red">
                 {booking.club.name} · {getBookerDisplay(booking).name}
               </p>
-              <p className="text-xs text-white/40">{getBookerDisplay(booking).email}</p>
-              <p className="text-sm text-white/50">
+              <p className="text-xs text-foreground-subtle">{getBookerDisplay(booking).email}</p>
+              <p className="text-sm text-foreground-muted">
                 {formatInAppTz(booking.startTime, "MMM d · h:mm a")} —{" "}
                 {formatInAppTz(booking.endTime, "h:mm a")}
               </p>
-              <p className="mt-1 text-sm text-white/60">{booking.purpose}</p>
+              <p className="mt-1 text-sm text-foreground-muted">{booking.purpose}</p>
             </div>
             <div className="flex shrink-0 gap-2">
               <Button

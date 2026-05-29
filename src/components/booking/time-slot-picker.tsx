@@ -48,7 +48,7 @@ export function TimeSlotPicker({
 
   return (
     <div className="relative">
-      <p className="mb-3 text-sm text-white/60">
+      <p className="mb-3 text-sm text-foreground-muted">
         Tap start hour, then end hour — highlight flows across your range.
       </p>
       <div className="relative grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-7">
@@ -85,9 +85,9 @@ export function TimeSlotPicker({
               whileTap={occupied ? undefined : { scale: 0.97 }}
               className={cn(
                 "relative z-10 rounded-xl border px-2 py-3 text-sm font-medium transition-colors",
-                occupied && "cursor-not-allowed border-white/5 bg-white/5 text-white/25 line-through",
-                !occupied && !inRange && "border-white/10 bg-white/5 hover:border-brand-red/50",
-                inRange && "border-brand-red/60 bg-brand-red/35 text-white",
+                occupied && "cursor-not-allowed border-white/5 bg-stone-50 text-foreground-subtle line-through",
+                !occupied && !inRange && "border-border bg-stone-50 hover:border-brand-red/50",
+                inRange && "border-brand-red/60 bg-brand-red/35 text-foreground",
                 (isStart || isEnd) && "ring-2 ring-brand-red",
               )}
             >

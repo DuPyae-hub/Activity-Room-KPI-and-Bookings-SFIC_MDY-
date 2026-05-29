@@ -40,12 +40,12 @@ export function TimelineView({ bookings }: { bookings: BookingWithRelations[] })
                   {booking.club.logo} {booking.club.name}
                 </p>
               </div>
-              <p className="text-sm text-white/55">
+              <p className="text-sm text-foreground-muted">
                 {formatInAppTz(booking.startTime, "h:mm a")} —{" "}
                 {formatInAppTz(booking.endTime, "h:mm a")}
               </p>
             </div>
-            <p className="mt-2 text-sm text-white/50">{booking.purpose}</p>
+            <p className="mt-2 text-sm text-foreground-muted">{booking.purpose}</p>
           </GlassCard>
         </motion.div>
       ))}

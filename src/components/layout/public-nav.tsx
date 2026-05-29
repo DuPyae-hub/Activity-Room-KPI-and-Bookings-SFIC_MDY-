@@ -30,7 +30,7 @@ export function PublicNav() {
           <BrandLogo height={36} />
           <div className="hidden min-w-0 sm:block">
             <p className="brand-heading truncate text-xs leading-tight">Strategy First</p>
-            <p className="truncate text-xs text-white/50">Activity Rooms</p>
+            <p className="truncate text-xs text-foreground-muted">Activity Rooms</p>
           </div>
         </Link>
 
@@ -43,7 +43,7 @@ export function PublicNav() {
                 href={href}
                 className={cn(
                   "relative flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm transition-colors sm:px-3",
-                  active ? "text-brand-red" : "text-white/60 hover:text-white",
+                  active ? "text-brand-red" : "text-foreground-muted hover:text-foreground",
                 )}
               >
                 {active && (
@@ -64,7 +64,7 @@ export function PublicNav() {
           <Button
             variant="gold"
             size="sm"
-            className={cn(onBook && "ring-2 ring-white/30")}
+            className={cn(onBook && "ring-2 ring-stone-300")}
           >
             <CalendarDays className="h-4 w-4" />
             <span className="sr-only sm:not-sr-only sm:ml-0">Book</span>

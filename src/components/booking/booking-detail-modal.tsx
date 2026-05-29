@@ -107,14 +107,14 @@ export function BookingDetailModal({
                     </p>
                     <h2 className="mt-1 text-2xl font-bold">{room.name}</h2>
                     <StatusBadge status={room.status} type="room" className="mt-2" />
-                    <p className="mt-2 text-sm text-white/45">
+                    <p className="mt-2 text-sm text-foreground-muted">
                       Date: {date} (Myanmar Time) · Admin approval required
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-lg p-2 text-white/50 hover:bg-white/10 hover:text-white"
+                    className="rounded-lg p-2 text-foreground-muted hover:bg-stone-100 hover:text-foreground"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -141,8 +141,8 @@ export function BookingDetailModal({
                     />
                   </label>
                   <div className="sm:col-span-2">
-                    <span className="text-sm font-medium text-white/80">Club</span>
-                    <p className="mt-0.5 text-xs text-white/45">
+                    <span className="text-sm font-medium text-foreground/80">Club</span>
+                    <p className="mt-0.5 text-xs text-foreground-muted">
                       Strategy First MDY — select your registered club
                     </p>
                     <ClubSelect clubs={clubs} value={clubId} onChange={setClubId} />

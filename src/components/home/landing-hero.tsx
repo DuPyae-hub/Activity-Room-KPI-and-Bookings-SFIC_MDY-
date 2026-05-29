@@ -37,7 +37,7 @@ const quickLinks = [
 export function LandingHero() {
   return (
     <div>
-      <section className="relative mb-14 overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-10 sm:px-10 sm:py-14">
+      <section className="relative mb-14 overflow-hidden rounded-2xl border border-border bg-surface-elevated/60 px-6 py-10 sm:px-10 sm:py-14">
         <AnimatedStickers density="normal" />
         <div
           className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-brand-red/10 blur-3xl"
@@ -48,11 +48,11 @@ export function LandingHero() {
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <BrandLogo height={56} className="mb-5" />
             <p className="brand-subheading">Strategy First International College</p>
-            <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-[2.5rem] lg:leading-tight">
+            <h1 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-[2.5rem] lg:leading-tight">
               Activity room booking,{" "}
               <span className="text-gradient-brand">made simple</span>
             </h1>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-white/50">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-foreground-muted">
               Reserve SFIC MDY activity rooms for your club — no login required. Pick a slot,
               submit your request, and track approval online.
             </p>
@@ -94,21 +94,21 @@ export function LandingHero() {
             <Link href={href} className="group block h-full">
               <GlassCard
                 gradient={primary}
-                className="flex h-full flex-col p-5 transition-colors hover:bg-white/[0.05]"
+                className="flex h-full flex-col p-5 transition-colors hover:bg-stone-50"
               >
                 <div
                   className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
                     primary
                       ? "bg-brand-red/15 ring-1 ring-brand-red/25"
-                      : "bg-white/[0.04] ring-1 ring-white/[0.08]"
+                      : "bg-stone-50 ring-1 ring-border"
                   }`}
                 >
                   <Icon
-                    className={`h-[18px] w-[18px] ${primary ? "text-brand-red-light" : "text-white/60"}`}
+                    className={`h-[18px] w-[18px] ${primary ? "text-brand-red-light" : "text-foreground-muted"}`}
                   />
                 </div>
-                <h2 className="font-medium text-white">{label}</h2>
-                <p className="mt-1.5 flex-1 text-sm text-white/45">{description}</p>
+                <h2 className="font-medium text-foreground">{label}</h2>
+                <p className="mt-1.5 flex-1 text-sm text-foreground-muted">{description}</p>
                 <span className="mt-3 inline-flex items-center gap-1 text-sm text-brand-red-light/90 transition-all group-hover:gap-1.5">
                   Open <ArrowRight className="h-3.5 w-3.5" />
                 </span>

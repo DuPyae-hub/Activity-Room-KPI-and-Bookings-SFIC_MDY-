@@ -27,14 +27,14 @@ export function AdminLoginForm({ next }: AdminLoginFormProps) {
         <form action={formAction} className="space-y-4">
           {safeNext && <input type="hidden" name="next" value={safeNext} />}
           <label className="block">
-            <span className="text-sm font-medium text-white/80">Admin password</span>
+            <span className="text-sm font-medium text-foreground/80">Admin password</span>
             <input
               id="admin-password"
               type="password"
               name="password"
               required
               autoComplete="current-password"
-              className="mt-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/45 outline-none transition focus:border-brand-red/60 focus:ring-2 focus:ring-brand-red/25"
+              className="mt-2 w-full rounded-xl border border-border bg-stone-100 px-4 py-3 text-sm text-foreground placeholder:text-foreground-muted outline-none transition focus:border-brand-red/60 focus:ring-2 focus:ring-brand-red/25"
               placeholder="Enter your admin password"
             />
           </label>

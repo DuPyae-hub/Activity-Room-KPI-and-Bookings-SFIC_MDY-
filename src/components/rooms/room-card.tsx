@@ -36,7 +36,7 @@ export function RoomCard({ room, index, layoutId, onSelect }: RoomCardProps) {
             <h3 className="text-lg font-semibold">{room.name}</h3>
             <StatusBadge status={room.status} type="room" />
           </div>
-          <p className="mb-4 flex items-center gap-2 text-sm text-white/55">
+          <p className="mb-4 flex items-center gap-2 text-sm text-foreground-muted">
             <Users className="h-4 w-4 text-brand-red" />
             Capacity {room.capacity}
           </p>

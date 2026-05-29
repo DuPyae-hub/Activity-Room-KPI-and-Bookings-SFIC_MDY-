@@ -7,24 +7,32 @@
   --color-brand-red-light: #e8454b;
   --color-brand-red-dark: #a91c23;
   --color-brand-white: #ffffff;
-  /* Semantic aliases (used across components) */
+  --color-brand-orange: #e85d24;
+  --color-brand-orange-light: #f07840;
+  /* Mascot-aligned warm surfaces (sampled from mascot studio background) */
+  --color-surface: #f5f1ef;
+  --color-surface-elevated: #ffffff;
+  --color-surface-muted: #ece4e1;
+  --color-surface-glass: rgb(255 255 255 / 0.72);
+  --color-mascot-bg: #ece4e1;
+  --color-mascot-bg-muted: #ddd4d1;
+  --color-foreground: #1c1917;
+  --color-foreground-muted: #57534e;
+  --color-foreground-subtle: #a8a29e;
+  --color-border: #e7e0dd;
+  --color-border-strong: #d6cdc9;
+  /* Semantic aliases */
   --color-brand-crimson: #d2232a;
   --color-brand-crimson-light: #e8454b;
   --color-brand-gold: #d2232a;
   --color-brand-amber: #d2232a;
-  --color-surface: #0a0a0a;
-  --color-surface-elevated: #141414;
-  --color-surface-glass: rgb(255 255 255 / 0.06);
-  /* Sampled from sfic-mascot.png edges — seamless frame on dark UI */
-  --color-mascot-bg: #ece4e1;
-  --color-mascot-bg-muted: #e4dbd8;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 @layer base {
   * {
-    @apply border-white/10;
+    @apply border-border;
   }
 
   html {
@@ -32,16 +40,17 @@
   }
 
   body {
-    @apply bg-surface text-white min-h-screen;
+    @apply min-h-screen bg-surface text-foreground;
     background-image:
-      radial-gradient(ellipse 70% 45% at 50% -15%, rgb(210 35 42 / 0.1), transparent),
-      radial-gradient(ellipse 50% 40% at 100% 100%, rgb(210 35 42 / 0.04), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(232 93 36 / 0.08), transparent),
+      radial-gradient(ellipse 55% 45% at 100% 100%, rgb(210 35 42 / 0.05), transparent),
+      radial-gradient(ellipse 50% 40% at 0% 80%, rgb(236 228 225 / 0.9), transparent);
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm;
+    @apply rounded-2xl border border-border bg-surface-elevated/90 shadow-sm shadow-stone-900/5 backdrop-blur-sm;
   }
 
   .gradient-border {
@@ -56,9 +65,9 @@
     padding: 1px;
     background: linear-gradient(
       135deg,
-      rgb(0 0 0 / 0.9),
-      rgb(210 35 42 / 0.85),
-      rgb(255 255 255 / 0.25)
+      rgb(232 93 36 / 0.35),
+      rgb(210 35 42 / 0.55),
+      rgb(231 224 221 / 0.9)
     );
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
@@ -72,15 +81,15 @@
   }
 
   .text-gradient-gold {
-    @apply bg-gradient-to-r from-brand-red to-brand-red-light bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-red to-brand-orange bg-clip-text text-transparent;
   }
 
   .text-gradient-brand {
-    @apply bg-gradient-to-r from-brand-white via-brand-red to-brand-red-light bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-red via-brand-orange to-brand-red-light bg-clip-text text-transparent;
   }
 
   .brand-heading {
-    @apply font-semibold uppercase tracking-[0.12em] text-white;
+    @apply font-semibold uppercase tracking-[0.12em] text-foreground;
   }
 
   .brand-subheading {
@@ -88,18 +97,26 @@
   }
 
   .field-input {
-    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-brand-red/50 focus:ring-2 focus:ring-brand-red/15;
+    @apply w-full rounded-xl border border-border bg-surface-elevated px-4 py-2.5 text-sm text-foreground outline-none transition placeholder:text-foreground-subtle focus:border-brand-red/40 focus:ring-2 focus:ring-brand-red/10;
   }
 
   .field-label {
-    @apply text-sm font-medium text-white/70;
+    @apply text-sm font-medium text-foreground-muted;
   }
 
   .field-hint {
-    @apply mt-1 text-xs text-white/40;
+    @apply mt-1 text-xs text-foreground-subtle;
   }
 
   .mascot-frame {
-    @apply overflow-hidden rounded-2xl bg-mascot-bg ring-1 ring-mascot-bg-muted;
+    @apply overflow-hidden rounded-2xl bg-mascot-bg shadow-sm ring-1 ring-mascot-bg-muted;
+  }
+
+  .text-muted {
+    @apply text-foreground-muted;
+  }
+
+  .text-subtle {
+    @apply text-foreground-subtle;
   }
 }

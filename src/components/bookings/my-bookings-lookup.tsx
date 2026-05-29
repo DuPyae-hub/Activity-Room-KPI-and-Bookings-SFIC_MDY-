@@ -51,7 +51,7 @@ export function MyBookingsLookup({
       </GlassCard>
 
       {lookupEmail && (
-        <p className="mb-4 text-sm text-white/50">
+        <p className="mb-4 text-sm text-foreground-muted">
           Showing results for <span className="text-brand-red">{lookupEmail}</span>
         </p>
       )}

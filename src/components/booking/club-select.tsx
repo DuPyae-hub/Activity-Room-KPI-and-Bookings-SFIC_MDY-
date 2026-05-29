@@ -31,12 +31,12 @@ export function ClubSelect({ clubs, value, onChange }: ClubSelectProps) {
 
   if (clubs.length === 0) {
     return (
-      <div className="mt-2 rounded-xl border border-brand-red/30 bg-brand-red/10 px-4 py-3 text-sm text-white/70">
+      <div className="mt-2 rounded-xl border border-brand-red/30 bg-brand-red/10 px-4 py-3 text-sm text-stone-700">
         No clubs in the system yet. An administrator must add clubs at{" "}
         <Link href="/sfic/manage" className="text-brand-red underline">
           admin login
         </Link>{" "}
-        → Clubs, or run <code className="text-white">npm run db:seed</code> locally.
+        → Clubs, or run <code className="text-foreground">npm run db:seed</code> locally.
       </div>
     );
   }
@@ -44,13 +44,13 @@ export function ClubSelect({ clubs, value, onChange }: ClubSelectProps) {
   return (
     <div className="mt-2 space-y-2">
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-subtle" />
         <input
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search clubs…"
-          className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-9 pr-4 text-sm outline-none focus:border-brand-red/50 focus:ring-1 focus:ring-brand-red/25"
+          className="w-full rounded-xl border border-border bg-stone-50 py-2.5 pl-9 pr-4 text-sm outline-none focus:border-brand-red/50 focus:ring-1 focus:ring-brand-red/25"
         />
       </div>
 
@@ -60,7 +60,7 @@ export function ClubSelect({ clubs, value, onChange }: ClubSelectProps) {
           onChange={(e) => onChange(e.target.value)}
           className={cn(
             "w-full appearance-none rounded-xl border border-brand-red/35 bg-gradient-to-b from-white/10 to-white/5",
-            "px-4 py-3 pr-10 text-sm text-white outline-none",
+            "px-4 py-3 pr-10 text-sm text-foreground outline-none",
             "focus:border-brand-red focus:ring-2 focus:ring-brand-red/25",
           )}
         >
@@ -68,7 +68,7 @@ export function ClubSelect({ clubs, value, onChange }: ClubSelectProps) {
             <option value="">No clubs match your search</option>
           ) : (
             filtered.map((club) => (
-              <option key={club.id} value={club.id} className="bg-surface text-white">
+              <option key={club.id} value={club.id} className="bg-surface text-foreground">
                 {club.logo ? `${club.logo} ` : ""}
                 {club.name}
               </option>
@@ -76,20 +76,20 @@ export function ClubSelect({ clubs, value, onChange }: ClubSelectProps) {
           )}
         </select>
         <ChevronDown
-          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50"
+          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted"
           aria-hidden
         />
       </div>
 
       {selected && (
-        <p className="text-xs text-white/45">
+        <p className="text-xs text-foreground-muted">
           Booking as{" "}
           <span className="text-brand-red-light">
             {selected.logo ? `${selected.logo} ` : ""}
             {selected.name}
           </span>
           {" · "}
-          <Link href="/clubs" className="underline hover:text-white">
+          <Link href="/clubs" className="underline hover:text-foreground">
             View all clubs
           </Link>
         </p>

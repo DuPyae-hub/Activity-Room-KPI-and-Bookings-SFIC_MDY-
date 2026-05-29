@@ -51,7 +51,7 @@ export default async function BookPage({
         description={
           <>
             Choose a room and time for your club. Sessions are{" "}
-            <strong className="text-white">2 or 3 hours</strong> (8 AM – 10 PM). No account
+            <strong className="text-foreground">2 or 3 hours</strong> (8 AM – 10 PM). No account
             needed — admin approval is required before your booking is confirmed.{" "}
             <TimezoneNotice className="mt-2 block" />
           </>

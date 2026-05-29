@@ -101,19 +101,19 @@ export default async function DashboardPage({
 
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
         <GlassCard className="p-5">
-          <p className="text-sm text-white/50">This month (approved)</p>
+          <p className="text-sm text-foreground-muted">This month (approved)</p>
           <p className="mt-1 text-3xl font-bold text-brand-red">{monthBookings.length}</p>
         </GlassCard>
         <GlassCard className="p-5">
-          <p className="text-sm text-white/50">Selected day</p>
+          <p className="text-sm text-foreground-muted">Selected day</p>
           <p className="mt-1 text-3xl font-bold text-brand-red">{sessionsOnSelectedDay}</p>
-          <p className="mt-1 text-xs text-white/40">
+          <p className="mt-1 text-xs text-foreground-subtle">
             {formatDateOnlyInAppTz(selectedDay, "MMM d, yyyy")}
           </p>
         </GlassCard>
         <GlassCard className="flex items-center justify-between p-5">
           <div>
-            <p className="text-sm text-white/50">No login required</p>
+            <p className="text-sm text-foreground-muted">No login required</p>
             <p className="font-medium">Reserve a room</p>
           </div>
           <Link href="/book">

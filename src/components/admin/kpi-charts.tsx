@@ -30,10 +30,10 @@ export function KpiCharts({ topClubs, peakHours, pendingCount }: KpiChartsProps)
     <div className="grid gap-6 lg:grid-cols-2">
       <GlassCard gradient className="p-6">
         <h3 className="mb-1 text-lg font-semibold">Top Active Clubs</h3>
-        <p className="mb-6 text-sm text-white/50">Approved bookings by club</p>
+        <p className="mb-6 text-sm text-foreground-muted">Approved bookings by club</p>
         <div className="space-y-4">
           {topClubs.length === 0 && (
-            <p className="text-sm text-white/40">No approved data yet.</p>
+            <p className="text-sm text-foreground-subtle">No approved data yet.</p>
           )}
           {topClubs.map((club, i) => (
             <div key={club.name}>
@@ -41,7 +41,7 @@ export function KpiCharts({ topClubs, peakHours, pendingCount }: KpiChartsProps)
                 <span>{club.name}</span>
                 <span className="text-brand-red">{club.count}</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+              <div className="h-2 overflow-hidden rounded-full bg-stone-100">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${(club.count / maxClub) * 100}%` }}
@@ -56,7 +56,7 @@ export function KpiCharts({ topClubs, peakHours, pendingCount }: KpiChartsProps)
 
       <GlassCard gradient className="p-6">
         <h3 className="mb-1 text-lg font-semibold">Peak Booking Hours</h3>
-        <p className="mb-4 text-sm text-white/50">When clubs book most often</p>
+        <p className="mb-4 text-sm text-foreground-muted">When clubs book most often</p>
         <div className="h-56">
           {hourData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
@@ -75,14 +75,14 @@ export function KpiCharts({ topClubs, peakHours, pendingCount }: KpiChartsProps)
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-sm text-white/40">No peak hour data yet.</p>
+            <p className="text-sm text-foreground-subtle">No peak hour data yet.</p>
           )}
         </div>
       </GlassCard>
 
       <GlassCard className="col-span-full flex items-center justify-between p-6 lg:col-span-2">
         <div>
-          <p className="text-sm text-white/50">Pending approvals</p>
+          <p className="text-sm text-foreground-muted">Pending approvals</p>
           <motion.p
             key={pendingCount}
             initial={{ scale: 0.8, opacity: 0 }}
@@ -92,7 +92,7 @@ export function KpiCharts({ topClubs, peakHours, pendingCount }: KpiChartsProps)
             {pendingCount}
           </motion.p>
         </div>
-        <p className="max-w-xs text-sm text-white/45">
+        <p className="max-w-xs text-sm text-foreground-muted">
           Use the queue below for one-click approve/reject with instant optimistic UI.
         </p>
       </GlassCard>

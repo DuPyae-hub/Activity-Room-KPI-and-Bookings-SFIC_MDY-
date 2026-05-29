@@ -83,7 +83,7 @@ export function AnimatedStatusCharacter({
       </div>
       <p className="text-lg font-semibold">{title ?? label}</p>
       {description && (
-        <p className="mt-1 max-w-sm text-sm text-white/55">{description}</p>
+        <p className="mt-1 max-w-sm text-sm text-foreground-muted">{description}</p>
       )}
     </motion.div>
   );

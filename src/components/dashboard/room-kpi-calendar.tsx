@@ -59,20 +59,20 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
         <div className="flex items-center gap-1">
           <Link
             href={`/dashboard?month=${prevMonth}&day=${selectedDay}`}
-            className="rounded-lg p-2 text-white/50 transition hover:bg-white/5 hover:text-white"
+            className="rounded-lg p-2 text-foreground-muted transition hover:bg-stone-50 hover:text-foreground"
             aria-label="Previous month"
           >
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <Link
             href={`/dashboard?month=${month}&day=${today}`}
-            className="rounded-lg px-3 py-1.5 text-xs font-medium text-white/60 ring-1 ring-white/15 transition hover:text-brand-red"
+            className="rounded-lg px-3 py-1.5 text-xs font-medium text-foreground-muted ring-1 ring-white/15 transition hover:text-brand-red"
           >
             Today
           </Link>
           <Link
             href={`/dashboard?month=${nextMonth}&day=${selectedDay}`}
-            className="rounded-lg p-2 text-white/50 transition hover:bg-white/5 hover:text-white"
+            className="rounded-lg p-2 text-foreground-muted transition hover:bg-stone-50 hover:text-foreground"
             aria-label="Next month"
           >
             <ChevronRight className="h-5 w-5" />
@@ -80,7 +80,7 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
         </div>
       </div>
 
-      <div className="mb-2 grid grid-cols-7 gap-1 text-center text-xs font-medium text-white/40">
+      <div className="mb-2 grid grid-cols-7 gap-1 text-center text-xs font-medium text-foreground-subtle">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
           <span key={d}>{d}</span>
         ))}
@@ -100,15 +100,15 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
               href={dayHref(day)}
               className={cn(
                 "flex min-h-[4.25rem] flex-col rounded-xl border p-1.5 text-left transition",
-                inMonth ? "border-white/10 bg-white/[0.03]" : "border-transparent opacity-35",
+                inMonth ? "border-border bg-stone-50/80" : "border-transparent opacity-35",
                 isSelected && "border-brand-red/50 bg-brand-red/10 ring-1 ring-brand-red/30",
-                !isSelected && inMonth && "hover:border-brand-red/30 hover:bg-white/[0.06]",
+                !isSelected && inMonth && "hover:border-brand-red/30 hover:bg-stone-50",
               )}
             >
               <span
                 className={cn(
                   "text-xs font-medium",
-                  isToday ? "text-brand-red" : "text-white/70",
+                  isToday ? "text-brand-red" : "text-stone-700",
                 )}
               >
                 {format(day, "d")}

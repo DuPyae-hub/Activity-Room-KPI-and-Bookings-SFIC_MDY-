@@ -82,7 +82,7 @@ export function MyBookingsList({
             <div className="mb-3 flex items-start justify-between gap-2">
               <div>
                 <h3 className="font-semibold">{booking.room.name}</h3>
-                <p className="text-sm text-white/50">
+                <p className="text-sm text-foreground-muted">
                   {booking.club.logo} {booking.club.name} ·{" "}
                   {formatInAppTz(booking.startTime, "MMM d, yyyy")} ·{" "}
                   {formatInAppTz(booking.startTime, "h:mm a")} —{" "}
@@ -91,7 +91,7 @@ export function MyBookingsList({
               </div>
               <StatusBadge status={booking.status} />
             </div>
-            <p className="text-sm text-white/60">{booking.purpose}</p>
+            <p className="text-sm text-foreground-muted">{booking.purpose}</p>
             {(booking.status === "PENDING" || booking.status === "APPROVED") &&
               !booking.pendingCancel && (
                 <Button

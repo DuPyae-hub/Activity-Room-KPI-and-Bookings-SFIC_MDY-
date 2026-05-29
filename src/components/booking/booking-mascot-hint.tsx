@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 
 export function BookingMascotHint() {
   return (
-    <GlassCard className="mb-6 border-white/[0.06] bg-white/[0.02] p-5 sm:p-6">
+    <GlassCard className="mb-6 border-border bg-surface-elevated/60 p-5 sm:p-6">
       <MascotSpot
         layout="inline"
         size="md"

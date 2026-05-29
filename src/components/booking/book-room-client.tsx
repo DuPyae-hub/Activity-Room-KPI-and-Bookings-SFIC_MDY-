@@ -77,7 +77,7 @@ export function BookRoomClient({
               <button
                 type="button"
                 onClick={() => setBookingDate(format(subDays(parseISO(date), 1), "yyyy-MM-dd"))}
-                className="rounded-lg border border-white/10 p-2 text-white/60 transition hover:border-brand-red/40 hover:text-white"
+                className="rounded-lg border border-border p-2 text-foreground-muted transition hover:border-brand-red/40 hover:text-foreground"
                 aria-label="Previous day"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -92,7 +92,7 @@ export function BookRoomClient({
               <button
                 type="button"
                 onClick={() => setBookingDate(format(addDays(parseISO(date), 1), "yyyy-MM-dd"))}
-                className="rounded-lg border border-white/10 p-2 text-white/60 transition hover:border-brand-red/40 hover:text-white"
+                className="rounded-lg border border-border p-2 text-foreground-muted transition hover:border-brand-red/40 hover:text-foreground"
                 aria-label="Next day"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -111,13 +111,13 @@ export function BookRoomClient({
           </div>
           <div className="rounded-xl bg-brand-red/10 px-4 py-3 ring-1 ring-brand-red/25">
             <p className="text-2xl font-bold text-brand-red">{availableCount}</p>
-            <p className="text-xs text-white/50">rooms available to book</p>
+            <p className="text-xs text-foreground-muted">rooms available to book</p>
           </div>
         </div>
 
-        <div className="mt-5 border-t border-white/10 pt-5">
+        <div className="mt-5 border-t border-border pt-5">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-subtle" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -128,7 +128,7 @@ export function BookRoomClient({
           {allAmenities.length > 0 && (
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <Filter className="h-4 w-4 shrink-0 text-brand-red" />
-              <span className="text-xs text-white/40">Amenities:</span>
+              <span className="text-xs text-foreground-subtle">Amenities:</span>
               {allAmenities.map((tag) => (
                 <button
                   key={tag}
@@ -137,7 +137,7 @@ export function BookRoomClient({
                   className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
                     filters.includes(tag)
                       ? "border-brand-red bg-brand-red/20 text-brand-red-light"
-                      : "border-white/15 text-white/55 hover:border-brand-red/35"
+                      : "border-border-strong text-foreground-muted hover:border-brand-red/35"
                   }`}
                 >
                   {tag}
@@ -147,7 +147,7 @@ export function BookRoomClient({
                 <button
                   type="button"
                   onClick={() => setFilters([])}
-                  className="text-xs text-white/40 underline hover:text-white"
+                  className="text-xs text-foreground-subtle underline hover:text-foreground"
                 >
                   Clear filters
                 </button>
@@ -171,8 +171,8 @@ export function BookRoomClient({
 
       {filtered.length === 0 && (
         <GlassCard className="p-10 text-center">
-          <p className="text-white/60">No rooms match your search.</p>
-          <p className="mt-1 text-sm text-white/40">Try clearing filters or another date.</p>
+          <p className="text-foreground-muted">No rooms match your search.</p>
+          <p className="mt-1 text-sm text-foreground-subtle">Try clearing filters or another date.</p>
         </GlassCard>
       )}
 

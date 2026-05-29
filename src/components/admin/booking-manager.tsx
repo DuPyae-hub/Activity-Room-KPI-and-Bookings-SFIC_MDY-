@@ -128,7 +128,7 @@ export function BookingManager({
                 className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
                   filter === key
                     ? "border-brand-red/50 bg-brand-red/15 text-brand-red-light"
-                    : "border-white/15 text-white/50 hover:border-white/30"
+                    : "border-border-strong text-foreground-muted hover:border-white/30"
                 }`}
               >
                 {key === "ALL" ? "All" : key}
@@ -139,7 +139,7 @@ export function BookingManager({
 
         <div className="max-h-[70vh] space-y-3 overflow-y-auto pr-1">
           {filtered.length === 0 ? (
-            <GlassCard className="p-6 text-center text-white/50">No bookings in this filter.</GlassCard>
+            <GlassCard className="p-6 text-center text-foreground-muted">No bookings in this filter.</GlassCard>
           ) : (
             filtered.map((booking, i) => {
               const booker = getBookerDisplay(booking);
@@ -163,14 +163,14 @@ export function BookingManager({
                         <p className="text-sm text-brand-red">
                           {booking.club.logo} {booking.club.name}
                         </p>
-                        <p className="text-xs text-white/45">
+                        <p className="text-xs text-foreground-muted">
                           {booker.name} · {booker.email}
                         </p>
-                        <p className="mt-1 text-sm text-white/55">
+                        <p className="mt-1 text-sm text-foreground-muted">
                           {formatInAppTz(new Date(booking.startTime), "MMM d, yyyy · h:mm a")} —{" "}
                           {formatInAppTz(new Date(booking.endTime), "h:mm a")}
                         </p>
-                        <p className="mt-1 text-sm text-white/60">{booking.purpose}</p>
+                        <p className="mt-1 text-sm text-foreground-muted">{booking.purpose}</p>
                       </div>
                       <div className="flex shrink-0 flex-wrap gap-2">
                         {booking.status === BookingStatus.PENDING && (
@@ -226,17 +226,17 @@ export function BookingManager({
           {form?.id ? "Edit booking" : "Select a booking to edit"}
         </h3>
         {!form?.id ? (
-          <p className="text-sm text-white/45">
+          <p className="text-sm text-foreground-muted">
             Use Edit on any booking — including approved — or Delete to remove it permanently.
           </p>
         ) : (
           <div className="space-y-3">
             <label className="block">
-              <span className="text-sm text-white/60">Room</span>
+              <span className="text-sm text-foreground-muted">Room</span>
               <select
                 value={form.roomId}
                 onChange={(e) => setForm((f) => f && { ...f, roomId: e.target.value })}
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               >
                 {rooms.map((r) => (
                   <option key={r.id} value={r.id} className="bg-surface">
@@ -246,11 +246,11 @@ export function BookingManager({
               </select>
             </label>
             <label className="block">
-              <span className="text-sm text-white/60">Club</span>
+              <span className="text-sm text-foreground-muted">Club</span>
               <select
                 value={form.clubId}
                 onChange={(e) => setForm((f) => f && { ...f, clubId: e.target.value })}
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               >
                 {clubs.map((c) => (
                   <option key={c.id} value={c.id} className="bg-surface">
@@ -260,34 +260,34 @@ export function BookingManager({
               </select>
             </label>
             <label className="block">
-              <span className="text-sm text-white/60">Booker name</span>
+              <span className="text-sm text-foreground-muted">Booker name</span>
               <input
                 value={form.bookerName}
                 onChange={(e) => setForm((f) => f && { ...f, bookerName: e.target.value })}
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               />
             </label>
             <label className="block">
-              <span className="text-sm text-white/60">Booker email</span>
+              <span className="text-sm text-foreground-muted">Booker email</span>
               <input
                 type="email"
                 value={form.bookerEmail}
                 onChange={(e) => setForm((f) => f && { ...f, bookerEmail: e.target.value })}
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               />
             </label>
             <label className="block">
-              <span className="text-sm text-white/60">Date</span>
+              <span className="text-sm text-foreground-muted">Date</span>
               <input
                 type="date"
                 value={form.date}
                 onChange={(e) => setForm((f) => f && { ...f, date: e.target.value })}
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               />
             </label>
             <div className="grid grid-cols-2 gap-3">
               <label className="block">
-                <span className="text-sm text-white/60">Duration</span>
+                <span className="text-sm text-foreground-muted">Duration</span>
                 <select
                   value={form.durationHours}
                   onChange={(e) =>
@@ -306,7 +306,7 @@ export function BookingManager({
                         : f,
                     )
                   }
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                  className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
                 >
                   {BOOKING_DURATION_OPTIONS.map((d) => (
                     <option key={d} value={d} className="bg-surface">
@@ -316,13 +316,13 @@ export function BookingManager({
                 </select>
               </label>
               <label className="block">
-                <span className="text-sm text-white/60">Start time</span>
+                <span className="text-sm text-foreground-muted">Start time</span>
                 <select
                   value={form.startHour}
                   onChange={(e) =>
                     setForm((f) => f && { ...f, startHour: Number(e.target.value) })
                   }
-                  className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                  className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
                 >
                   {validStarts.map((h) => (
                     <option key={h} value={h} className="bg-surface">
@@ -333,7 +333,7 @@ export function BookingManager({
               </label>
             </div>
             <label className="block">
-              <span className="text-sm text-white/60">Status</span>
+              <span className="text-sm text-foreground-muted">Status</span>
               <select
                 value={form.status}
                 onChange={(e) =>
@@ -341,7 +341,7 @@ export function BookingManager({
                     (f) => f && { ...f, status: e.target.value as BookingStatus },
                   )
                 }
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               >
                 {Object.values(BookingStatus).map((s) => (
                   <option key={s} value={s} className="bg-surface">
@@ -351,12 +351,12 @@ export function BookingManager({
               </select>
             </label>
             <label className="block">
-              <span className="text-sm text-white/60">Purpose</span>
+              <span className="text-sm text-foreground-muted">Purpose</span>
               <textarea
                 value={form.purpose}
                 onChange={(e) => setForm((f) => f && { ...f, purpose: e.target.value })}
                 rows={3}
-                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               />
             </label>
             {error && <p className="text-sm text-red-400">{error}</p>}

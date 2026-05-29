@@ -31,8 +31,8 @@ export default async function ClubsPage() {
         description={
           <>
             Official SFIC MDY clubs. When you book a room, select your club from this list.
-            Sessions are booked in <strong className="text-white">2-hour</strong> or{" "}
-            <strong className="text-white">3-hour</strong> blocks.
+            Sessions are booked in <strong className="text-foreground">2-hour</strong> or{" "}
+            <strong className="text-foreground">3-hour</strong> blocks.
           </>
         }
         actions={

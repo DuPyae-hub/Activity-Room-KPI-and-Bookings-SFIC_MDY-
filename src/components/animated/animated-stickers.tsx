@@ -32,7 +32,7 @@ const defaultStickers: StickerDef[] = [
   },
   {
     Icon: DoorOpen,
-    className: "left-[10%] bottom-[28%] text-white/35",
+    className: "left-[10%] bottom-[28%] text-foreground-subtle",
     delay: 1.1,
     duration: 6.4,
   },
@@ -62,7 +62,7 @@ function FloatingSticker({ Icon, className, delay, duration }: StickerDef) {
         ease: "easeInOut",
       }}
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.04] shadow-sm backdrop-blur-sm sm:h-10 sm:w-10">
+      <span className="flex h-9 w-9 items-center justify-center rounded-2xl border border-border bg-stone-50 shadow-sm backdrop-blur-sm sm:h-10 sm:w-10">
         <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={1.75} />
       </span>
     </motion.div>

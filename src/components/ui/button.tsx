@@ -28,10 +28,10 @@ export function Button({
         variant === "gold" &&
           "bg-brand-red text-white font-semibold hover:bg-brand-red-light shadow-lg shadow-brand-red/25",
         variant === "secondary" &&
-          "border border-white/15 bg-white/5 text-white hover:border-brand-red/50 hover:bg-white/10",
-        variant === "ghost" && "text-white/70 hover:bg-white/5 hover:text-white",
+          "border border-border-strong bg-surface-elevated text-foreground hover:border-brand-red/40 hover:bg-stone-50",
+        variant === "ghost" && "text-foreground-muted hover:bg-stone-100 hover:text-foreground",
         variant === "danger" &&
-          "border border-red-500/30 bg-red-500/10 text-red-300 hover:bg-red-500/20",
+          "border border-red-300 bg-red-50 text-red-700 hover:bg-red-100",
         className,
       )}
       {...props}

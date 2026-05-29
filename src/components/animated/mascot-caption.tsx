@@ -11,7 +11,7 @@ type MascotCaptionProps = {
   align?: "left" | "center";
 };
 
-/** Minimal caption card — no cartoon tail, subtle entrance only */
+/** Minimal caption card — matches warm mascot theme */
 export function MascotCaption({
   children,
   label = "Note",
@@ -25,15 +25,15 @@ export function MascotCaption({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "max-w-[16rem] rounded-xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-2.5 backdrop-blur-sm sm:max-w-xs sm:px-4 sm:py-3",
+        "max-w-[16rem] rounded-xl border border-border bg-surface-elevated px-3.5 py-2.5 shadow-sm sm:max-w-xs sm:px-4 sm:py-3",
         align === "center" && "text-center",
         className,
       )}
     >
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-red-light/90">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-red">
         {label}
       </p>
-      <p className="mt-1 text-sm leading-snug text-white/85">{children}</p>
+      <p className="mt-1 text-sm leading-snug text-foreground">{children}</p>
     </motion.div>
   );
 }
@@ -53,15 +53,15 @@ export function MascotCopy({ title, description, className, delay = 0.1 }: Masco
       transition={{ delay, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className={cn("space-y-1.5", className)}
     >
-      <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">{title}</h2>
+      <h2 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">{title}</h2>
       {description ? (
-        <p className="text-sm leading-relaxed text-white/50">{description}</p>
+        <p className="text-sm leading-relaxed text-foreground-muted">{description}</p>
       ) : null}
     </motion.div>
   );
 }
 
-/** @deprecated Use MascotCaption — kept for gradual migration */
+/** @deprecated Use MascotCaption */
 export function MascotSpeechBubble({
   children,
   className,
@@ -78,7 +78,7 @@ export function MascotSpeechBubble({
   );
 }
 
-/** @deprecated Use MascotCopy — entrance only, no pulse */
+/** @deprecated Use MascotCopy */
 export function MascotAnimatedText({
   children,
   className,

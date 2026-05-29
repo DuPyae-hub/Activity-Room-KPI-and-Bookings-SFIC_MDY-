@@ -16,7 +16,7 @@ export type ClubCard = {
 export function ClubsGrid({ clubs }: { clubs: ClubCard[] }) {
   if (clubs.length === 0) {
     return (
-      <GlassCard className="p-8 text-center text-white/50">
+      <GlassCard className="p-8 text-center text-foreground-muted">
         No clubs listed yet. Check back soon.
       </GlassCard>
     );
@@ -37,7 +37,7 @@ export function ClubsGrid({ clubs }: { clubs: ClubCard[] }) {
             </span>
             <h3 className="mt-3 font-semibold leading-snug">{club.name}</h3>
             {club.description && (
-              <p className="mt-2 flex-1 text-sm text-white/50">{club.description}</p>
+              <p className="mt-2 flex-1 text-sm text-foreground-muted">{club.description}</p>
             )}
             <Link href="/book" className="mt-4">
               <Button variant="gold" size="sm" className="w-full">

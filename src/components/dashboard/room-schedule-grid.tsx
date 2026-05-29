@@ -44,7 +44,7 @@ export function RoomScheduleGrid({
 
   if (rooms.length === 0) {
     return (
-      <GlassCard className="p-8 text-center text-white/50">No rooms configured yet.</GlassCard>
+      <GlassCard className="p-8 text-center text-foreground-muted">No rooms configured yet.</GlassCard>
     );
   }
 
@@ -55,16 +55,16 @@ export function RoomScheduleGrid({
       </h3>
       <div className="min-w-[640px]">
         <div
-          className="grid gap-px rounded-xl bg-white/10"
+          className="grid gap-px rounded-xl bg-stone-100"
           style={{
             gridTemplateColumns: `8rem repeat(${HOURS.length}, minmax(3.5rem, 1fr))`,
           }}
         >
-          <div className="bg-surface/90 p-2 text-xs font-medium text-white/40">Room</div>
+          <div className="bg-surface/90 p-2 text-xs font-medium text-foreground-subtle">Room</div>
           {HOURS.map((h) => (
             <div
               key={h}
-              className="bg-surface/90 p-2 text-center text-[10px] font-medium text-white/40"
+              className="bg-surface/90 p-2 text-center text-[10px] font-medium text-foreground-subtle"
             >
               {formatHourLabel(h).replace(":00", "")}
             </div>
@@ -74,7 +74,7 @@ export function RoomScheduleGrid({
             const roomBookings = dayBookings.filter((b) => b.roomId === room.id);
             return (
               <div key={room.id} className="contents">
-                <div className="flex items-center bg-surface/80 px-2 py-2 text-sm font-medium text-white/80">
+                <div className="flex items-center bg-surface/80 px-2 py-2 text-sm font-medium text-foreground/80">
                   {room.name}
                 </div>
                 {HOURS.map((hour) => {
@@ -97,10 +97,10 @@ export function RoomScheduleGrid({
                     >
                       {isStart && booking && (
                         <div className="absolute inset-0.5 z-10 overflow-hidden rounded-lg border border-brand-red/40 bg-brand-red/20 px-1 py-0.5">
-                          <p className="truncate text-[10px] font-semibold text-white">
+                          <p className="truncate text-[10px] font-semibold text-foreground">
                             {booking.club.logo} {booking.club.name}
                           </p>
-                          <p className="truncate text-[9px] text-white/55">
+                          <p className="truncate text-[9px] text-foreground-muted">
                             {formatInAppTz(new Date(booking.startTime), "h:mm")}–
                             {formatInAppTz(new Date(booking.endTime), "h:mm a")}
                           </p>
@@ -115,7 +115,7 @@ export function RoomScheduleGrid({
         </div>
       </div>
       {dayBookings.length === 0 && (
-        <p className="mt-4 text-center text-sm text-white/45">
+        <p className="mt-4 text-center text-sm text-foreground-muted">
           No approved sessions on this day.
         </p>
       )}

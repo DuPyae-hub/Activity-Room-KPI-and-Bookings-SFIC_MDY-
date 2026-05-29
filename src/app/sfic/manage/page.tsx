@@ -24,9 +24,9 @@ export default async function AdminManageLoginPage({
       <AdminLoginMascot />
       <div className="mb-8 text-center">
         <BrandLogo className="mx-auto mb-4" height={56} />
-        <h1 className="text-2xl font-bold tracking-tight text-white">Management access</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Management access</h1>
         <p className="brand-subheading mt-1">Strategy First International College</p>
-        <p className="mt-2 text-sm text-white/45">
+        <p className="mt-2 text-sm text-foreground-muted">
           Authorized personnel only — enter your admin password below
         </p>
       </div>

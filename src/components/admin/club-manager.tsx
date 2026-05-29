@@ -58,30 +58,30 @@ export function ClubManager({ clubs }: { clubs: ClubRow[] }) {
         </h3>
         <div className="space-y-3">
           <label className="block">
-            <span className="text-sm text-white/60">Club name</span>
+            <span className="text-sm text-foreground-muted">Club name</span>
             <input
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+              className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               placeholder="Strategy First … Club-MDY"
             />
           </label>
           <label className="block">
-            <span className="text-sm text-white/60">Logo (emoji)</span>
+            <span className="text-sm text-foreground-muted">Logo (emoji)</span>
             <input
               value={form.logo}
               onChange={(e) => setForm((f) => ({ ...f, logo: e.target.value }))}
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+              className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               placeholder="🎵"
             />
           </label>
           <label className="block">
-            <span className="text-sm text-white/60">Description</span>
+            <span className="text-sm text-foreground-muted">Description</span>
             <textarea
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               rows={2}
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+              className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
             />
           </label>
           {error && <p className="text-sm text-red-400">{error}</p>}
@@ -114,7 +114,7 @@ export function ClubManager({ clubs }: { clubs: ClubRow[] }) {
                   {club.name}
                 </p>
                 {club.description && (
-                  <p className="mt-1 text-sm text-white/50">{club.description}</p>
+                  <p className="mt-1 text-sm text-foreground-muted">{club.description}</p>
                 )}
               </div>
               <div className="flex shrink-0 gap-2">

@@ -32,7 +32,7 @@ export function DurationTimePicker({
   return (
     <div className="space-y-4">
       <div>
-        <p className="mb-2 text-sm font-medium text-white/80">Session length</p>
+        <p className="mb-2 text-sm font-medium text-foreground/80">Session length</p>
         <div className="flex gap-2">
           {BOOKING_DURATION_OPTIONS.map((hours) => (
             <button
@@ -42,8 +42,8 @@ export function DurationTimePicker({
               className={cn(
                 "flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition",
                 durationHours === hours
-                  ? "border-brand-red bg-brand-red text-white shadow-lg shadow-brand-red/25"
-                  : "border-white/15 bg-white/5 text-white/70 hover:border-brand-red/40",
+                  ? "border-brand-red bg-brand-red text-foreground shadow-lg shadow-brand-red/25"
+                  : "border-border-strong bg-stone-50 text-stone-700 hover:border-brand-red/40",
               )}
             >
               {hours} hours
@@ -53,7 +53,7 @@ export function DurationTimePicker({
       </div>
 
       <div>
-        <p className="mb-2 text-sm text-white/60">
+        <p className="mb-2 text-sm text-foreground-muted">
           Choose a start time — your room is reserved for {durationHours} consecutive hours.
         </p>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-5">
@@ -72,13 +72,13 @@ export function DurationTimePicker({
                 className={cn(
                   "rounded-xl border px-2 py-3 text-sm font-medium transition-colors",
                   !available &&
-                    "cursor-not-allowed border-white/5 bg-white/5 text-white/25 line-through",
+                    "cursor-not-allowed border-white/5 bg-stone-50 text-foreground-subtle line-through",
                   available &&
                     !selected &&
-                    "border-white/10 bg-white/5 hover:border-brand-red/50",
+                    "border-border bg-stone-50 hover:border-brand-red/50",
                   available &&
                     selected &&
-                    "border-brand-red bg-brand-red/35 text-white ring-2 ring-brand-red",
+                    "border-brand-red bg-brand-red/35 text-foreground ring-2 ring-brand-red",
                 )}
               >
                 {formatHourLabel(hour)}
