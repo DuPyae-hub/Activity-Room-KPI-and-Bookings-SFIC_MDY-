@@ -15,6 +15,9 @@
   --color-surface: #0a0a0a;
   --color-surface-elevated: #141414;
   --color-surface-glass: rgb(255 255 255 / 0.06);
+  /* Sampled from sfic-mascot.png edges — seamless frame on dark UI */
+  --color-mascot-bg: #ece4e1;
+  --color-mascot-bg-muted: #e4dbd8;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -94,5 +97,9 @@
 
   .field-hint {
     @apply mt-1 text-xs text-white/40;
+  }
+
+  .mascot-frame {
+    @apply overflow-hidden rounded-2xl bg-mascot-bg ring-1 ring-mascot-bg-muted;
   }
 }

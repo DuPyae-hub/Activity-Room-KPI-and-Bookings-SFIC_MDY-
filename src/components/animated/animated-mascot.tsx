@@ -17,7 +17,7 @@ type AnimatedMascotProps = {
   label?: string;
 };
 
-/** Static mascot in a minimal rounded frame */
+/** Static mascot — frame background matches the image (#ece4e1) */
 export function AnimatedMascot({
   size = "md",
   className,
@@ -28,19 +28,14 @@ export function AnimatedMascot({
 
   return (
     <div className={cn("relative inline-flex shrink-0", className)}>
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-2xl bg-white/[0.03] ring-1 ring-white/[0.08]",
-          dims.box,
-        )}
-      >
+      <div className={cn("mascot-frame relative", dims.box)}>
         <Image
           src="/brand/sfic-mascot.png"
           alt={label}
           width={dims.img}
           height={dims.img}
           priority={priority}
-          className="h-full w-full object-cover object-top"
+          className="h-full w-full object-contain object-bottom"
         />
       </div>
     </div>
