@@ -2,8 +2,14 @@ import Link from "next/link";
 import { ClubsGrid } from "@/components/clubs/clubs-grid";
 import { Button } from "@/components/ui/button";
 import { getClubs } from "@/data/queries";
+import { ensureDynamicPage } from "@/lib/ensure-dynamic";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function ClubsPage() {
+  await ensureDynamicPage();
+
   const clubs = await getClubs();
 
   return (

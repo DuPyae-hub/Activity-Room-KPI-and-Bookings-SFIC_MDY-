@@ -4,12 +4,18 @@ import { AnimatedStatusCharacter } from "@/components/animated/animated-status-c
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { getBookingById } from "@/data/queries";
+import { ensureDynamicPage } from "@/lib/ensure-dynamic";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function BookingSuccessPage({
   searchParams,
 }: {
   searchParams: Promise<{ id?: string }>;
 }) {
+  await ensureDynamicPage();
+
   const { id } = await searchParams;
   if (!id) notFound();
 

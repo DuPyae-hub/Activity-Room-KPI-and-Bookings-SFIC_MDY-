@@ -1,12 +1,18 @@
 import { format } from "date-fns";
 import { BookRoomClient } from "@/components/booking/book-room-client";
 import { getClubs, getOccupiedHoursByDate, getRooms } from "@/data/queries";
+import { ensureDynamicPage } from "@/lib/ensure-dynamic";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function BookPage({
   searchParams,
 }: {
   searchParams: Promise<{ date?: string }>;
 }) {
+  await ensureDynamicPage();
+
   const params = await searchParams;
   const date = params.date ?? format(new Date(), "yyyy-MM-dd");
 

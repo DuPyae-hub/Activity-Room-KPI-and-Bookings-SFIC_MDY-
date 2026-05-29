@@ -5,9 +5,15 @@ import { TimelineView } from "@/components/dashboard/timeline-view";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { getTodayTimeline } from "@/data/queries";
+import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 import { isDbConnectionError } from "@/lib/safe-query";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DashboardPage() {
+  await ensureDynamicPage();
+
   const today = new Date();
   let timeline: Awaited<ReturnType<typeof getTodayTimeline>> = [];
   let dbError = false;

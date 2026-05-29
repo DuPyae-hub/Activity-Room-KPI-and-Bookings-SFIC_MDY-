@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -6,7 +6,10 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient(): PrismaClient {
   if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Prisma.PrismaClientInitializationError(
+      "error: Environment variable not found: DATABASE_URL.",
+      "unknown",
+    );
   }
 
   return new PrismaClient({

@@ -1,12 +1,18 @@
 import { MyBookingsLookup } from "@/components/bookings/my-bookings-lookup";
 import { getBookingsByEmail } from "@/data/queries";
+import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 import { bookingLookupSchema } from "@/lib/validations";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function MyBookingsPage({
   searchParams,
 }: {
   searchParams: Promise<{ email?: string }>;
 }) {
+  await ensureDynamicPage();
+
   const params = await searchParams;
   const emailParam = params.email?.trim() ?? "";
 
