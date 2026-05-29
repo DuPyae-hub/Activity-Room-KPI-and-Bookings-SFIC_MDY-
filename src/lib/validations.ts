@@ -51,6 +51,31 @@ export const bookingStatusSchema = z.object({
   status: z.nativeEnum(BookingStatus),
 });
 
+export const bookingDeleteSchema = z.object({
+  bookingId: z.string().min(1),
+});
+
+export const bookingAdminUpdateSchema = z
+  .object({
+    id: z.string().min(1),
+    roomId: z.string().min(1),
+    clubId: z.string().min(1),
+    bookerName: z.string().min(2).max(120),
+    bookerEmail: z.string().email(),
+    startHour: z.number().int().min(BOOKING_START_HOUR).max(BOOKING_END_HOUR - 1),
+    durationHours: z.union([
+      z.literal(BOOKING_DURATION_OPTIONS[0]),
+      z.literal(BOOKING_DURATION_OPTIONS[1]),
+    ]),
+    purpose: z.string().min(3).max(500),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    status: z.nativeEnum(BookingStatus),
+  })
+  .refine((d) => d.startHour + d.durationHours <= BOOKING_END_HOUR, {
+    message: "Booking must end by 10:00 PM",
+    path: ["startHour"],
+  });
+
 export const roomUpsertSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2).max(80),

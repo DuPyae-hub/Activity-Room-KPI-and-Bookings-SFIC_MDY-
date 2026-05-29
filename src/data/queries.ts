@@ -33,13 +33,25 @@ export async function getClubs() {
 }
 
 export async function getTodayTimeline(date: Date) {
+  return getApprovedBookingsBetween(startOfDay(date), endOfDay(date));
+}
+
+export async function getApprovedBookingsBetween(start: Date, end: Date) {
   return prisma.booking.findMany({
     where: {
       status: BookingStatus.APPROVED,
-      startTime: { gte: startOfDay(date), lte: endOfDay(date) },
+      startTime: { lt: end },
+      endTime: { gt: start },
     },
     include: bookingInclude,
     orderBy: { startTime: "asc" },
+  }) as Promise<BookingWithRelations[]>;
+}
+
+export async function getAllBookingsForAdmin() {
+  return prisma.booking.findMany({
+    include: bookingInclude,
+    orderBy: { startTime: "desc" },
   }) as Promise<BookingWithRelations[]>;
 }
 

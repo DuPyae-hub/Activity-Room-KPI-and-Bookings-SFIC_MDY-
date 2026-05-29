@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { CalendarDays, LayoutDashboard, LogOut, Shield, Users } from "lucide-react";
+import { CalendarDays, ClipboardList, LayoutDashboard, LogOut, Shield, Users } from "lucide-react";
 import { logoutAction } from "@/actions/auth";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { getPublicDashboardHref } from "@/lib/public-site-url";
@@ -12,6 +12,7 @@ import type { UserWithClub } from "@/lib/types";
 
 const adminLinks = [
   { href: "/admin", label: "KPI & Approvals", icon: Shield },
+  { href: "/admin/bookings", label: "Bookings", icon: ClipboardList },
   { href: "/admin/clubs", label: "Clubs", icon: Users },
   { href: "/admin/rooms", label: "Rooms", icon: CalendarDays },
 ];

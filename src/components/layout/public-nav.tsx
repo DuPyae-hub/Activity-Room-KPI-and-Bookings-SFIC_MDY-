@@ -8,7 +8,7 @@ import { BrandLogo } from "@/components/layout/brand-logo";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Room KPI", icon: LayoutDashboard },
   { href: "/clubs", label: "Clubs", icon: Users },
   { href: "/book", label: "Book Room", icon: CalendarDays },
   { href: "/my-bookings", label: "My Bookings", icon: Ticket },
