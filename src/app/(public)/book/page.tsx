@@ -72,8 +72,16 @@ export default async function BookPage({
                 10 PM).
               </>
             )}{" "}
-            No account
-            needed — admin approval is required.{" "}
+            {spaceMeta.param === "classroom" ? (
+              <>
+                Enter your <strong className="text-foreground">name</strong>,{" "}
+                <strong className="text-foreground">email</strong>, and{" "}
+                <strong className="text-foreground">class name</strong> — no club required.
+              </>
+            ) : (
+              <>Select your club and describe the purpose of the session.</>
+            )}{" "}
+            No account needed — admin approval is required.{" "}
             <TimezoneNotice className="mt-2 block" />
           </>
         }

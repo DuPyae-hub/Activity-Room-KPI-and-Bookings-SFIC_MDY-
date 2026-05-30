@@ -1,5 +1,6 @@
 "use client";
 
+import { RoomType } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
@@ -31,37 +32,50 @@ export function BookingDetailModal({
   onClose,
 }: BookingDetailModalProps) {
   const router = useRouter();
+  const isClassroom = room?.roomType === RoomType.CLASSROOM;
+
   const [startHour, setStartHour] = useState<number | null>(null);
   const [durationHours, setDurationHours] = useState(2);
   const [bookerName, setBookerName] = useState("");
   const [bookerEmail, setBookerEmail] = useState("");
   const [clubId, setClubId] = useState("");
+  const [className, setClassName] = useState("");
   const [purpose, setPurpose] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    if (clubs.length === 0) {
+    if (isClassroom || clubs.length === 0) {
       setClubId("");
       return;
     }
     if (!clubId || !clubs.some((c) => c.id === clubId)) {
       setClubId(clubs[0].id);
     }
-  }, [clubs, clubId]);
+  }, [clubs, clubId, isClassroom]);
 
   useEffect(() => {
     if (!room) return;
     setDurationHours(getDefaultDurationHours(room.roomType));
     setStartHour(null);
-  }, [room?.id, room?.roomType]);
+    setClassName("");
+    setPurpose("");
+  }, [room]);
 
-  const canSubmit =
-    bookerName.trim() &&
-    bookerEmail.trim() &&
-    clubId &&
-    purpose.trim() &&
-    startHour !== null;
+  const canSubmit = isClassroom
+    ? Boolean(
+        bookerName.trim() &&
+          bookerEmail.trim() &&
+          className.trim() &&
+          startHour !== null,
+      )
+    : Boolean(
+        bookerName.trim() &&
+          bookerEmail.trim() &&
+          clubId &&
+          purpose.trim() &&
+          startHour !== null,
+      );
 
   const handleSubmit = () => {
     if (!room || !canSubmit || startHour === null) return;
@@ -69,12 +83,13 @@ export function BookingDetailModal({
     startTransition(async () => {
       const result = await createBookingAction({
         roomId: room.id,
-        clubId,
+        clubId: isClassroom ? undefined : clubId,
+        className: isClassroom ? className.trim() : undefined,
         bookerName: bookerName.trim(),
         bookerEmail: bookerEmail.trim(),
         startHour,
         durationHours,
-        purpose,
+        purpose: isClassroom ? purpose.trim() || undefined : purpose,
         date,
       });
       if (!result.success) {
@@ -109,7 +124,7 @@ export function BookingDetailModal({
                 <div className="mb-4 flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wider text-brand-red">
-                      Booking request
+                      {isClassroom ? "Classroom booking" : "Club activity booking"}
                     </p>
                     <h2 className="mt-1 text-2xl font-bold">{room.name}</h2>
                     <StatusBadge status={room.status} type="room" className="mt-2" />
@@ -133,26 +148,68 @@ export function BookingDetailModal({
                       value={bookerName}
                       onChange={(e) => setBookerName(e.target.value)}
                       className="field-input mt-2"
-                      placeholder="Club leader name"
+                      placeholder={
+                        isClassroom ? "Teacher or coordinator name" : "Club leader name"
+                      }
                     />
                   </label>
                   <label className="block sm:col-span-2">
-                    <span className="field-label">Email (to track your booking)</span>
+                    <span className="field-label">Email</span>
                     <input
                       type="email"
                       value={bookerEmail}
                       onChange={(e) => setBookerEmail(e.target.value)}
                       className="field-input mt-2"
-                      placeholder="you@club.edu"
+                      placeholder="you@sfic.edu"
                     />
                   </label>
-                  <div className="sm:col-span-2">
-                    <span className="text-sm font-medium text-foreground/80">Club</span>
-                    <p className="mt-0.5 text-xs text-foreground-muted">
-                      Strategy First MDY — select your registered club
-                    </p>
-                    <ClubSelect clubs={clubs} value={clubId} onChange={setClubId} />
-                  </div>
+
+                  {isClassroom ? (
+                    <>
+                      <label className="block sm:col-span-2">
+                        <span className="field-label">Class name</span>
+                        <p className="field-hint">
+                          Academic class or section (not the room — that is {room.name} above).
+                        </p>
+                        <input
+                          value={className}
+                          onChange={(e) => setClassName(e.target.value)}
+                          className="field-input mt-2"
+                          placeholder="e.g. Diploma Year 2 - English"
+                        />
+                      </label>
+                      <label className="block sm:col-span-2">
+                        <span className="field-label">Notes (optional)</span>
+                        <textarea
+                          value={purpose}
+                          onChange={(e) => setPurpose(e.target.value)}
+                          rows={2}
+                          className="field-input mt-2 resize-y"
+                          placeholder="e.g. Mid-term review session"
+                        />
+                      </label>
+                    </>
+                  ) : (
+                    <>
+                      <div className="sm:col-span-2">
+                        <span className="text-sm font-medium text-foreground/80">Club</span>
+                        <p className="mt-0.5 text-xs text-foreground-muted">
+                          Strategy First MDY — select your registered club
+                        </p>
+                        <ClubSelect clubs={clubs} value={clubId} onChange={setClubId} />
+                      </div>
+                      <label className="block sm:col-span-2">
+                        <span className="field-label">Purpose of booking</span>
+                        <textarea
+                          value={purpose}
+                          onChange={(e) => setPurpose(e.target.value)}
+                          rows={3}
+                          className="field-input mt-2 min-h-[5rem] resize-y"
+                          placeholder="e.g. Weekly band rehearsal"
+                        />
+                      </label>
+                    </>
+                  )}
                 </div>
 
                 <DurationTimePicker
@@ -167,18 +224,7 @@ export function BookingDetailModal({
                   onSelectStart={setStartHour}
                 />
 
-                <label className="mt-6 block">
-                  <span className="field-label">Purpose of booking</span>
-                  <textarea
-                    value={purpose}
-                    onChange={(e) => setPurpose(e.target.value)}
-                    rows={3}
-                    className="field-input mt-2 min-h-[5rem] resize-y"
-                    placeholder="e.g. Weekly band rehearsal"
-                  />
-                </label>
-
-                {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+                {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
                 <div className="mt-6 flex gap-3">
                   <Button variant="secondary" className="flex-1" onClick={onClose}>

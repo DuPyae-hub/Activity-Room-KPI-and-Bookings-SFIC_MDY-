@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { MascotMessage } from "@/components/animated/mascot-message";
 import { formatInAppTz } from "@/lib/timezone";
 import { GlassCard } from "@/components/ui/glass-card";
-import type { BookingWithRelations } from "@/lib/types";
+import { getBookingGroupLabel, type BookingWithRelations } from "@/lib/types";
 
 export function TimelineView({ bookings }: { bookings: BookingWithRelations[] }) {
   if (bookings.length === 0) {
@@ -37,7 +37,7 @@ export function TimelineView({ bookings }: { bookings: BookingWithRelations[] })
               <div>
                 <p className="font-semibold">{booking.room.name}</p>
                 <p className="text-sm text-brand-red">
-                  {booking.club.logo} {booking.club.name}
+                  {getBookingGroupLabel(booking)}
                 </p>
               </div>
               <p className="text-sm text-foreground-muted">

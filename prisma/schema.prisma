@@ -66,7 +66,8 @@ model Booking {
   bookerName  String
   bookerEmail String
   roomId      String
-  clubId      String
+  clubId      String?
+  className   String?
   startTime   DateTime
   endTime     DateTime
   purpose     String
@@ -75,7 +76,7 @@ model Booking {
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
   room Room  @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  club Club  @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  club Club? @relation(fields: [clubId], references: [id], onDelete: SetNull)
 
   @@index([roomId, startTime, endTime])
   @@index([clubId, createdAt])

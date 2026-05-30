@@ -25,8 +25,8 @@ export function BookingMascotHint({ space }: { space: RoomSpaceParam }) {
         title={`How ${meta.label.toLowerCase()} booking works`}
         description={
           isClassroom
-            ? "Pick 2, 3, or 5 hours — or enter a custom length — between 8 AM and 10 PM (Myanmar Time). Admin approves before it appears on Room KPI."
-            : "Pick a 2 or 3 hour slot between 8 AM and 10 PM (Myanmar Time). Admin approves before it appears on Room KPI."
+            ? "Enter your name, email, and class name — then pick 2, 3, 5, or custom hours (8 AM–10 PM MMT). No club booking."
+            : "Select your club, pick a 2 or 3 hour slot (8 AM–10 PM MMT). Admin approves before it appears on Room KPI."
         }
       />
     </GlassCard>

@@ -8,7 +8,7 @@ import { updateBookingStatusAction } from "@/actions/bookings";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
-import { getBookerDisplay, type BookingWithRelations } from "@/lib/types";
+import { getBookerDisplay, getBookingGroupLabel, type BookingWithRelations } from "@/lib/types";
 
 type QueueBooking = BookingWithRelations & {
   optimisticStatus?: BookingStatus;
@@ -61,7 +61,7 @@ export function ApprovalsQueue({ bookings }: { bookings: BookingWithRelations[] 
                 <StatusBadge status={booking.optimisticStatus ?? booking.status} />
               </div>
               <p className="text-sm text-brand-red">
-                {booking.club.name} · {getBookerDisplay(booking).name}
+                {getBookingGroupLabel(booking)} · {getBookerDisplay(booking).name}
               </p>
               <p className="text-xs text-foreground-subtle">{getBookerDisplay(booking).email}</p>
               <p className="text-sm text-foreground-muted">

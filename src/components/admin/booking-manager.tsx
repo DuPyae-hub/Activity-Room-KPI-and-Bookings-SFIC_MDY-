@@ -29,7 +29,7 @@ import {
   isPresetDuration,
   isValidDurationForRoom,
 } from "@/lib/booking-duration";
-import { getBookerDisplay, type BookingWithRelations } from "@/lib/types";
+import { getBookerDisplay, getBookingGroupLabel, type BookingWithRelations } from "@/lib/types";
 
 type RoomOption = { id: string; name: string; roomType: RoomType };
 type ClubOption = { id: string; name: string; logo: string | null };
@@ -38,6 +38,7 @@ type FormState = {
   id: string;
   roomId: string;
   clubId: string;
+  className: string;
   bookerName: string;
   bookerEmail: string;
   date: string;
@@ -55,7 +56,8 @@ function bookingToForm(booking: BookingWithRelations): FormState {
   return {
     id: booking.id,
     roomId: booking.roomId,
-    clubId: booking.clubId,
+    clubId: booking.clubId ?? "",
+    className: booking.className ?? "",
     bookerName: booking.bookerName,
     bookerEmail: booking.bookerEmail,
     date: local.date,
@@ -182,9 +184,7 @@ export function BookingManager({
                           <RoomTypeBadge roomType={booking.room.roomType} />
                           <StatusBadge status={booking.status} />
                         </div>
-                        <p className="text-sm text-brand-red">
-                          {booking.club.logo} {booking.club.name}
-                        </p>
+                        <p className="text-sm text-brand-red">{getBookingGroupLabel(booking)}</p>
                         <p className="text-xs text-foreground-muted">
                           {booker.name} · {booker.email}
                         </p>
@@ -266,10 +266,13 @@ export function BookingManager({
                     if (!isValidDurationForRoom(durationHours, room.roomType)) {
                       durationHours = getDefaultDurationHours(room.roomType);
                     }
+                    const isClass = room.roomType === RoomType.CLASSROOM;
                     return {
                       ...f,
                       roomId,
                       durationHours,
+                      clubId: isClass ? "" : f.clubId,
+                      className: isClass ? f.className : "",
                       startHour: Math.min(
                         f.startHour,
                         maxStartHourForDuration(durationHours),
@@ -286,20 +289,34 @@ export function BookingManager({
                 ))}
               </select>
             </label>
-            <label className="block">
-              <span className="text-sm text-foreground-muted">Club</span>
-              <select
-                value={form.clubId}
-                onChange={(e) => setForm((f) => f && { ...f, clubId: e.target.value })}
-                className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
-              >
-                {clubs.map((c) => (
-                  <option key={c.id} value={c.id} className="bg-surface">
-                    {c.logo} {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {editingRoom?.roomType === RoomType.CLASSROOM ? (
+              <label className="block">
+                <span className="text-sm text-foreground-muted">Class name</span>
+                <input
+                  value={form.className}
+                  onChange={(e) =>
+                    setForm((f) => f && { ...f, className: e.target.value })
+                  }
+                  className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                  placeholder="e.g. Diploma Year 2 - English"
+                />
+              </label>
+            ) : (
+              <label className="block">
+                <span className="text-sm text-foreground-muted">Club</span>
+                <select
+                  value={form.clubId}
+                  onChange={(e) => setForm((f) => f && { ...f, clubId: e.target.value })}
+                  className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
+                >
+                  {clubs.map((c) => (
+                    <option key={c.id} value={c.id} className="bg-surface">
+                      {c.logo} {c.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <label className="block">
               <span className="text-sm text-foreground-muted">Booker name</span>
               <input

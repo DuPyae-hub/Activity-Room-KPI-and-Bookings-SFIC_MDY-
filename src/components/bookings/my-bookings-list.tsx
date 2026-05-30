@@ -9,7 +9,7 @@ import { MascotMessage } from "@/components/animated/mascot-message";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
-import type { BookingWithRelations } from "@/lib/types";
+import { getBookingGroupLabel, type BookingWithRelations } from "@/lib/types";
 
 type MyBookingRow = BookingWithRelations & { pendingCancel?: boolean };
 
@@ -83,7 +83,7 @@ export function MyBookingsList({
               <div>
                 <h3 className="font-semibold">{booking.room.name}</h3>
                 <p className="text-sm text-foreground-muted">
-                  {booking.club.logo} {booking.club.name} ·{" "}
+                  {getBookingGroupLabel(booking)} ·{" "}
                   {formatInAppTz(booking.startTime, "MMM d, yyyy")} ·{" "}
                   {formatInAppTz(booking.startTime, "h:mm a")} —{" "}
                   {formatInAppTz(booking.endTime, "h:mm a")}

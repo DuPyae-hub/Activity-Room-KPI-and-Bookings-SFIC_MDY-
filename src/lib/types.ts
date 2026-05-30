@@ -1,3 +1,4 @@
+import { RoomType } from "@prisma/client";
 import type {
   Booking,
   BookingStatus,
@@ -14,7 +15,7 @@ export type UserWithClub = User & { club: Club };
 
 export type BookingWithRelations = Booking & {
   room: Room;
-  club: Club;
+  club: Club | null;
   user: Pick<User, "id" | "name" | "email"> | null;
 };
 
@@ -30,6 +31,29 @@ export function getBookerDisplay(booking: BookingWithRelations): {
     name: booking.bookerName || booking.user?.name || "Guest",
     email: booking.bookerEmail || booking.user?.email || "",
   };
+}
+
+/** Club (activity) or class name (classroom) shown in lists and KPI */
+export function getBookingGroupLabel(booking: BookingWithRelations): string {
+  if (booking.className?.trim()) {
+    return booking.className.trim();
+  }
+  if (booking.club) {
+    return booking.club.logo
+      ? `${booking.club.logo} ${booking.club.name}`
+      : booking.club.name;
+  }
+  return "—";
+}
+
+export function isClassroomBooking(booking: {
+  className?: string | null;
+  room?: { roomType: RoomType };
+}): boolean {
+  return (
+    booking.room?.roomType === RoomType.CLASSROOM ||
+    Boolean(booking.className?.trim())
+  );
 }
 
 export function parseAmenities(amenities: Room["amenities"]): string[] {

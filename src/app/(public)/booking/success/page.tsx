@@ -32,7 +32,7 @@ export default async function BookingSuccessPage({
           captionLabel="Submitted"
           title="Booking request sent"
           bubble="Admin will review your request shortly."
-          description={`${booking.room.name} is pending approval. Save your email (${booking.bookerEmail}) to check status in My Bookings.`}
+          description={`${booking.room.name}${booking.className ? ` · Class: ${booking.className}` : booking.club ? ` · ${booking.club.name}` : ""} is pending approval. Save your email (${booking.bookerEmail}) to check status in My Bookings.`}
         />
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link href={lookupHref}>

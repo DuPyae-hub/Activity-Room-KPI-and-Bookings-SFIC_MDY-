@@ -4,6 +4,7 @@ import { BookingStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/auth";
+import { validateBookingParty } from "@/lib/booking-party";
 import {
   durationValidationMessage,
   isValidDurationForRoom,
@@ -41,6 +42,7 @@ export async function createBookingAction(
   const {
     roomId,
     clubId,
+    className,
     bookerName,
     bookerEmail,
     startHour,
@@ -52,10 +54,7 @@ export async function createBookingAction(
   const startTime = buildSlotDateTime(date, startHour);
   const endTime = buildSlotDateTime(date, endHour);
 
-  const [room, club] = await Promise.all([
-    prisma.room.findUnique({ where: { id: roomId } }),
-    prisma.club.findUnique({ where: { id: clubId } }),
-  ]);
+  const room = await prisma.room.findUnique({ where: { id: roomId } });
 
   if (!room || room.status !== "AVAILABLE") {
     return { success: false, error: "Room is not available for booking" };
@@ -65,8 +64,16 @@ export async function createBookingAction(
     return { success: false, error: durationValidationMessage(room.roomType) };
   }
 
-  if (!club) {
-    return { success: false, error: "Please select a valid club" };
+  const party = validateBookingParty(room.roomType, { clubId, className, purpose });
+  if (!party.ok) {
+    return { success: false, error: party.error };
+  }
+
+  if (party.clubId) {
+    const club = await prisma.club.findUnique({ where: { id: party.clubId } });
+    if (!club) {
+      return { success: false, error: "Please select a valid club" };
+    }
   }
 
   const conflict = await prisma.booking.findFirst({
@@ -85,12 +92,13 @@ export async function createBookingAction(
   const booking = await prisma.booking.create({
     data: {
       roomId,
-      clubId,
+      clubId: party.clubId,
+      className: party.className,
       bookerName: bookerName.trim(),
       bookerEmail: bookerEmail.trim().toLowerCase(),
       startTime,
       endTime,
-      purpose,
+      purpose: party.purpose,
       status: BookingStatus.PENDING,
     },
   });
@@ -139,6 +147,7 @@ export async function updateBookingAction(
     id,
     roomId,
     clubId,
+    className,
     bookerName,
     bookerEmail,
     startHour,
@@ -157,16 +166,25 @@ export async function updateBookingAction(
     return { success: false, error: "Booking not found" };
   }
 
-  const [room, club] = await Promise.all([
-    prisma.room.findUnique({ where: { id: roomId } }),
-    prisma.club.findUnique({ where: { id: clubId } }),
-  ]);
-
+  const room = await prisma.room.findUnique({ where: { id: roomId } });
   if (!room) return { success: false, error: "Room not found" };
-  if (!club) return { success: false, error: "Club not found" };
 
   if (!isValidDurationForRoom(durationHours, room.roomType)) {
     return { success: false, error: durationValidationMessage(room.roomType) };
+  }
+
+  const party = validateBookingParty(room.roomType, {
+    clubId: clubId ?? undefined,
+    className: className ?? undefined,
+    purpose,
+  });
+  if (!party.ok) {
+    return { success: false, error: party.error };
+  }
+
+  if (party.clubId) {
+    const club = await prisma.club.findUnique({ where: { id: party.clubId } });
+    if (!club) return { success: false, error: "Club not found" };
   }
 
   if (
@@ -195,12 +213,13 @@ export async function updateBookingAction(
     where: { id },
     data: {
       roomId,
-      clubId,
+      clubId: party.clubId,
+      className: party.className,
       bookerName: bookerName.trim(),
       bookerEmail: bookerEmail.trim().toLowerCase(),
       startTime,
       endTime,
-      purpose,
+      purpose: party.purpose,
       status,
     },
   });

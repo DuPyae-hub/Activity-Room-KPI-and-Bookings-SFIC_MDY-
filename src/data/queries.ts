@@ -102,7 +102,7 @@ export async function getAdminKpis() {
   const [clubCountsRaw, hourRows, pendingCount] = await Promise.all([
     prisma.booking.groupBy({
       by: ["clubId"],
-      where: { status: BookingStatus.APPROVED },
+      where: { status: BookingStatus.APPROVED, clubId: { not: null } },
       _count: { _all: true },
     }),
     prisma.$queryRaw<{ hour: number; count: bigint }[]>`
@@ -117,6 +117,7 @@ export async function getAdminKpis() {
   ]);
 
   const clubCounts = [...clubCountsRaw]
+    .filter((row): row is typeof row & { clubId: string } => row.clubId != null)
     .sort((a, b) => b._count._all - a._count._all)
     .slice(0, 5);
 

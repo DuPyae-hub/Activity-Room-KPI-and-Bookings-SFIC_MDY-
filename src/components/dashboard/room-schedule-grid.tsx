@@ -9,7 +9,7 @@ import {
   getHourInAppTz,
 } from "@/lib/timezone";
 import { cn } from "@/lib/utils";
-import type { BookingWithRelations } from "@/lib/types";
+import { getBookingGroupLabel, type BookingWithRelations } from "@/lib/types";
 
 type RoomRow = { id: string; name: string };
 
@@ -91,14 +91,14 @@ export function RoomScheduleGrid({
                       )}
                       title={
                         booking
-                          ? `${booking.club.name}: ${booking.purpose}`
+                          ? `${getBookingGroupLabel(booking)}: ${booking.purpose}`
                           : undefined
                       }
                     >
                       {isStart && booking && (
                         <div className="absolute inset-0.5 z-10 overflow-hidden rounded-lg border border-brand-red/40 bg-brand-red/20 px-1 py-0.5">
                           <p className="truncate text-[10px] font-semibold text-foreground">
-                            {booking.club.logo} {booking.club.name}
+                            {getBookingGroupLabel(booking)}
                           </p>
                           <p className="truncate text-[9px] text-foreground-muted">
                             {formatInAppTz(new Date(booking.startTime), "h:mm")}–
