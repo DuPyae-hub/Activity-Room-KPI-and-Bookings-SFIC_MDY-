@@ -23,7 +23,11 @@ export function BookingMascotHint({ space }: { space: RoomSpaceParam }) {
             : "Select an activity room card below to choose your time slot."
         }
         title={`How ${meta.label.toLowerCase()} booking works`}
-        description="Pick a 2 or 3 hour slot between 8 AM and 10 PM (Myanmar Time). After you submit, admin approves your request before it appears on Room KPI."
+        description={
+          isClassroom
+            ? "Pick 2, 3, or 5 hours — or enter a custom length — between 8 AM and 10 PM (Myanmar Time). Admin approves before it appears on Room KPI."
+            : "Pick a 2 or 3 hour slot between 8 AM and 10 PM (Myanmar Time). Admin approves before it appears on Room KPI."
+        }
       />
     </GlassCard>
   );

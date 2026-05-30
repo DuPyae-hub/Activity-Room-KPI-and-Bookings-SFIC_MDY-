@@ -88,7 +88,7 @@ export function RoomManager({ rooms }: { rooms: RoomWithAmenities[] }) {
             {form.id ? "Edit space" : "Add space"}
           </h3>
           <p className="mb-4 text-sm text-foreground-muted">
-            Activity rooms and classrooms share the same booking rules (2–3 hours, 8 AM–10 PM MMT).
+            Activity rooms: 2 or 3 hours. Classrooms: 2, 3, 5, or custom hours (8 AM–10 PM MMT).
           </p>
           <div className="space-y-3">
             <div>

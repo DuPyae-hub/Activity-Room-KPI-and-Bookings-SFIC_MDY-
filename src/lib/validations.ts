@@ -1,7 +1,13 @@
 import { BookingStatus, RoomStatus, RoomType } from "@prisma/client";
 import { z } from "zod";
 import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-hours";
-import { BOOKING_DURATION_OPTIONS } from "@/lib/sfic-clubs";
+import { CLASSROOM_CUSTOM_MAX_HOURS } from "@/lib/booking-duration";
+
+const durationHoursField = z
+  .number()
+  .int()
+  .min(1)
+  .max(CLASSROOM_CUSTOM_MAX_HOURS);
 
 export const adminLoginSchema = z.object({
   password: z.string().min(1, "Password required"),
@@ -14,20 +20,13 @@ export const bookingCreateSchema = z
     bookerName: z.string().min(2).max(120),
     bookerEmail: z.string().email(),
     startHour: z.number().int().min(BOOKING_START_HOUR).max(BOOKING_END_HOUR - 1),
-    durationHours: z.union([
-      z.literal(BOOKING_DURATION_OPTIONS[0]),
-      z.literal(BOOKING_DURATION_OPTIONS[1]),
-    ]),
+    durationHours: durationHoursField,
     purpose: z.string().min(3).max(500),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   })
   .refine((d) => d.startHour + d.durationHours <= BOOKING_END_HOUR, {
     message: "Booking must end by 10:00 PM",
     path: ["startHour"],
-  })
-  .refine((d) => d.durationHours === 2 || d.durationHours === 3, {
-    message: "Duration must be 2 or 3 hours",
-    path: ["durationHours"],
   });
 
 export const clubUpsertSchema = z.object({
@@ -63,10 +62,7 @@ export const bookingAdminUpdateSchema = z
     bookerName: z.string().min(2).max(120),
     bookerEmail: z.string().email(),
     startHour: z.number().int().min(BOOKING_START_HOUR).max(BOOKING_END_HOUR - 1),
-    durationHours: z.union([
-      z.literal(BOOKING_DURATION_OPTIONS[0]),
-      z.literal(BOOKING_DURATION_OPTIONS[1]),
-    ]),
+    durationHours: durationHoursField,
     purpose: z.string().min(3).max(500),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     status: z.nativeEnum(BookingStatus),

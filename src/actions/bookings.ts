@@ -4,6 +4,10 @@ import { BookingStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/auth";
+import {
+  durationValidationMessage,
+  isValidDurationForRoom,
+} from "@/lib/booking-duration";
 import { buildSlotDateTime } from "@/lib/timezone";
 import {
   bookingAdminUpdateSchema,
@@ -55,6 +59,10 @@ export async function createBookingAction(
 
   if (!room || room.status !== "AVAILABLE") {
     return { success: false, error: "Room is not available for booking" };
+  }
+
+  if (!isValidDurationForRoom(durationHours, room.roomType)) {
+    return { success: false, error: durationValidationMessage(room.roomType) };
   }
 
   if (!club) {
@@ -156,6 +164,10 @@ export async function updateBookingAction(
 
   if (!room) return { success: false, error: "Room not found" };
   if (!club) return { success: false, error: "Club not found" };
+
+  if (!isValidDurationForRoom(durationHours, room.roomType)) {
+    return { success: false, error: durationValidationMessage(room.roomType) };
+  }
 
   if (
     status !== BookingStatus.REJECTED &&

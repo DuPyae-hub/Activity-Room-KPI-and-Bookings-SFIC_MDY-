@@ -19,7 +19,7 @@ export default async function AdminBookingsPage() {
       </header>
       <BookingManager
         bookings={bookings}
-        rooms={rooms.map((r) => ({ id: r.id, name: r.name }))}
+        rooms={rooms.map((r) => ({ id: r.id, name: r.name, roomType: r.roomType }))}
         clubs={clubs}
       />
     </div>

@@ -7,7 +7,7 @@ import { useEffect, useState, useTransition } from "react";
 import { createBookingAction } from "@/actions/bookings";
 import { ClubSelect } from "@/components/booking/club-select";
 import { DurationTimePicker } from "@/components/booking/duration-time-picker";
-import type { BookingDurationHours } from "@/lib/sfic-clubs";
+import { getDefaultDurationHours } from "@/lib/booking-duration";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { StatusBadge } from "@/components/ui/badge";
@@ -32,7 +32,7 @@ export function BookingDetailModal({
 }: BookingDetailModalProps) {
   const router = useRouter();
   const [startHour, setStartHour] = useState<number | null>(null);
-  const [durationHours, setDurationHours] = useState<BookingDurationHours>(2);
+  const [durationHours, setDurationHours] = useState(2);
   const [bookerName, setBookerName] = useState("");
   const [bookerEmail, setBookerEmail] = useState("");
   const [clubId, setClubId] = useState("");
@@ -49,6 +49,12 @@ export function BookingDetailModal({
       setClubId(clubs[0].id);
     }
   }, [clubs, clubId]);
+
+  useEffect(() => {
+    if (!room) return;
+    setDurationHours(getDefaultDurationHours(room.roomType));
+    setStartHour(null);
+  }, [room?.id, room?.roomType]);
 
   const canSubmit =
     bookerName.trim() &&
@@ -150,6 +156,7 @@ export function BookingDetailModal({
                 </div>
 
                 <DurationTimePicker
+                  roomType={room.roomType}
                   selectedStart={startHour}
                   durationHours={durationHours}
                   occupiedHours={occupiedHours}

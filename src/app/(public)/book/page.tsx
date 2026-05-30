@@ -60,8 +60,19 @@ export default async function BookPage({
         title={spaceMeta.param === "classroom" ? "Book a classroom" : "Book an activity room"}
         description={
           <>
-            Choose a {spaceMeta.label.toLowerCase()} and time for your club. Sessions are{" "}
-            <strong className="text-foreground">2 or 3 hours</strong> (8 AM – 10 PM). No account
+            Choose a {spaceMeta.label.toLowerCase()} and time for your club.{" "}
+            {spaceMeta.param === "classroom" ? (
+              <>
+                Classrooms: <strong className="text-foreground">2, 3, or 5 hours</strong>, or a{" "}
+                <strong className="text-foreground">custom</strong> length (8 AM – 10 PM).
+              </>
+            ) : (
+              <>
+                Sessions are <strong className="text-foreground">2 or 3 hours</strong> (8 AM –
+                10 PM).
+              </>
+            )}{" "}
+            No account
             needed — admin approval is required.{" "}
             <TimezoneNotice className="mt-2 block" />
           </>

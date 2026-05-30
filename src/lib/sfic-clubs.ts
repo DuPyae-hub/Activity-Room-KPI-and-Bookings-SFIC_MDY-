@@ -17,5 +17,5 @@ export const SFIC_MANDALAY_CLUBS = [
   { name: "Strategy First Badminton Club-MDY", logo: "🏸", description: "Badminton training and competitions" },
 ] as const;
 
-export const BOOKING_DURATION_OPTIONS = [2, 3] as const;
-export type BookingDurationHours = (typeof BOOKING_DURATION_OPTIONS)[number];
+/** @deprecated Use ACTIVITY_DURATION_OPTIONS from @/lib/booking-duration */
+export { ACTIVITY_DURATION_OPTIONS as BOOKING_DURATION_OPTIONS } from "@/lib/booking-duration";

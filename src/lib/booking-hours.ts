@@ -1,5 +1,3 @@
-import type { BookingDurationHours } from "@/lib/sfic-clubs";
-
 export const BOOKING_START_HOUR = 8;
 export const BOOKING_END_HOUR = 22;
 
@@ -16,18 +14,18 @@ export function formatHourLabel(hour: number): string {
 
 export { buildSlotDateTime } from "@/lib/timezone";
 
-export function maxStartHourForDuration(durationHours: BookingDurationHours): number {
+export function maxStartHourForDuration(durationHours: number): number {
   return BOOKING_END_HOUR - durationHours;
 }
 
-export function getValidStartHours(durationHours: BookingDurationHours): number[] {
+export function getValidStartHours(durationHours: number): number[] {
   const maxStart = maxStartHourForDuration(durationHours);
   return HOUR_SLOTS.filter((h) => h <= maxStart);
 }
 
 export function isSlotRangeAvailable(
   startHour: number,
-  durationHours: BookingDurationHours,
+  durationHours: number,
   occupiedHours: number[],
 ): boolean {
   if (startHour < BOOKING_START_HOUR) return false;

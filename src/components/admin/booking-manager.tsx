@@ -19,10 +19,19 @@ import {
   getValidStartHours,
   maxStartHourForDuration,
 } from "@/lib/booking-hours";
-import { BOOKING_DURATION_OPTIONS } from "@/lib/sfic-clubs";
+import { RoomType } from "@prisma/client";
+import {
+  CLASSROOM_CUSTOM_MAX_HOURS,
+  CLASSROOM_CUSTOM_MIN_HOURS,
+  CLASSROOM_DURATION_PRESETS,
+  ACTIVITY_DURATION_OPTIONS,
+  getDefaultDurationHours,
+  isPresetDuration,
+  isValidDurationForRoom,
+} from "@/lib/booking-duration";
 import { getBookerDisplay, type BookingWithRelations } from "@/lib/types";
 
-type RoomOption = { id: string; name: string };
+type RoomOption = { id: string; name: string; roomType: RoomType };
 type ClubOption = { id: string; name: string; logo: string | null };
 
 type FormState = {
@@ -33,7 +42,7 @@ type FormState = {
   bookerEmail: string;
   date: string;
   startHour: number;
-  durationHours: (typeof BOOKING_DURATION_OPTIONS)[number];
+  durationHours: number;
   purpose: string;
   status: BookingStatus;
 };
@@ -51,7 +60,7 @@ function bookingToForm(booking: BookingWithRelations): FormState {
     bookerEmail: booking.bookerEmail,
     date: local.date,
     startHour: local.startHour,
-    durationHours: local.durationHours as FormState["durationHours"],
+    durationHours: local.durationHours,
     purpose: booking.purpose,
     status: booking.status,
   };
@@ -77,11 +86,22 @@ export function BookingManager({
     [bookings, filter],
   );
 
+  const editingRoom = form ? rooms.find((r) => r.id === form.roomId) : undefined;
+
   const validStarts = form
     ? getValidStartHours(form.durationHours).filter(
         (h) => h <= maxStartHourForDuration(form.durationHours),
       )
     : [];
+
+  const durationOptions =
+    editingRoom?.roomType === RoomType.CLASSROOM
+      ? [...CLASSROOM_DURATION_PRESETS]
+      : [...ACTIVITY_DURATION_OPTIONS];
+
+  const showCustomDuration =
+    editingRoom?.roomType === RoomType.CLASSROOM &&
+    !isPresetDuration(form?.durationHours ?? 0, RoomType.CLASSROOM);
 
   const save = () => {
     if (!form?.id) return;
@@ -237,7 +257,26 @@ export function BookingManager({
               <span className="text-sm text-foreground-muted">Room</span>
               <select
                 value={form.roomId}
-                onChange={(e) => setForm((f) => f && { ...f, roomId: e.target.value })}
+                onChange={(e) => {
+                  const roomId = e.target.value;
+                  const room = rooms.find((r) => r.id === roomId);
+                  setForm((f) => {
+                    if (!f || !room) return f;
+                    let durationHours = f.durationHours;
+                    if (!isValidDurationForRoom(durationHours, room.roomType)) {
+                      durationHours = getDefaultDurationHours(room.roomType);
+                    }
+                    return {
+                      ...f,
+                      roomId,
+                      durationHours,
+                      startHour: Math.min(
+                        f.startHour,
+                        maxStartHourForDuration(durationHours),
+                      ),
+                    };
+                  });
+                }}
                 className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
               >
                 {rooms.map((r) => (
@@ -288,34 +327,90 @@ export function BookingManager({
               />
             </label>
             <div className="grid grid-cols-2 gap-3">
-              <label className="block">
-                <span className="text-sm text-foreground-muted">Duration</span>
-                <select
-                  value={form.durationHours}
-                  onChange={(e) =>
-                    setForm((f) =>
-                      f
-                        ? {
-                            ...f,
-                            durationHours: Number(e.target.value) as FormState["durationHours"],
-                            startHour: Math.min(
-                              f.startHour,
-                              maxStartHourForDuration(
-                                Number(e.target.value) as FormState["durationHours"],
-                              ),
-                            ),
-                          }
-                        : f,
-                    )
-                  }
-                  className="mt-2 w-full rounded-xl border border-border bg-stone-50 px-4 py-2.5 text-sm outline-none focus:border-brand-red/40"
-                >
-                  {BOOKING_DURATION_OPTIONS.map((d) => (
-                    <option key={d} value={d} className="bg-surface">
-                      {d} hours
-                    </option>
+              <label className="block sm:col-span-2">
+                <span className="text-sm text-foreground-muted">Duration (hours)</span>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {durationOptions.map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() =>
+                        setForm((f) =>
+                          f
+                            ? {
+                                ...f,
+                                durationHours: d,
+                                startHour: Math.min(
+                                  f.startHour,
+                                  maxStartHourForDuration(d),
+                                ),
+                              }
+                            : f,
+                        )
+                      }
+                      className={`rounded-lg border px-3 py-1.5 text-sm font-medium ${
+                        !showCustomDuration && form.durationHours === d
+                          ? "border-brand-red bg-brand-red/15 text-brand-red"
+                          : "border-border bg-stone-50"
+                      }`}
+                    >
+                      {d}h
+                    </button>
                   ))}
-                </select>
+                  {editingRoom?.roomType === RoomType.CLASSROOM && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((f) =>
+                          f
+                            ? {
+                                ...f,
+                                durationHours: showCustomDuration
+                                  ? f.durationHours
+                                  : 4,
+                              }
+                            : f,
+                        )
+                      }
+                      className={`rounded-lg border px-3 py-1.5 text-sm font-medium ${
+                        showCustomDuration
+                          ? "border-brand-orange bg-brand-orange/15 text-brand-orange"
+                          : "border-border bg-stone-50"
+                      }`}
+                    >
+                      Custom
+                    </button>
+                  )}
+                </div>
+                {showCustomDuration && (
+                  <input
+                    type="number"
+                    min={CLASSROOM_CUSTOM_MIN_HOURS}
+                    max={CLASSROOM_CUSTOM_MAX_HOURS}
+                    value={form.durationHours}
+                    onChange={(e) => {
+                      const parsed = parseInt(e.target.value, 10);
+                      if (Number.isNaN(parsed)) return;
+                      const durationHours = Math.min(
+                        CLASSROOM_CUSTOM_MAX_HOURS,
+                        Math.max(CLASSROOM_CUSTOM_MIN_HOURS, parsed),
+                      );
+                      setForm((f) =>
+                        f
+                          ? {
+                              ...f,
+                              durationHours,
+                              startHour: Math.min(
+                                f.startHour,
+                                maxStartHourForDuration(durationHours),
+                              ),
+                            }
+                          : f,
+                      );
+                    }}
+                    className="field-input mt-2 w-24"
+                  />
+                )}
               </label>
               <label className="block">
                 <span className="text-sm text-foreground-muted">Start time</span>
