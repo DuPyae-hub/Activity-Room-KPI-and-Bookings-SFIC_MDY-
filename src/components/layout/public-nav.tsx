@@ -30,7 +30,7 @@ export function PublicNav() {
           <BrandLogo height={36} />
           <div className="hidden min-w-0 sm:block">
             <p className="brand-heading truncate text-xs leading-tight">Strategy First</p>
-            <p className="truncate text-xs text-foreground-muted">Activity Rooms</p>
+            <p className="truncate text-xs text-foreground-muted">Rooms & Classrooms</p>
           </div>
         </Link>
 
@@ -60,16 +60,23 @@ export function PublicNav() {
           })}
         </div>
 
-        <Link href="/book" className="shrink-0">
-          <Button
-            variant="gold"
-            size="sm"
-            className={cn(onBook && "ring-2 ring-stone-300")}
-          >
-            <CalendarDays className="h-4 w-4" />
-            <span className="sr-only sm:not-sr-only sm:ml-0">Book</span>
-          </Button>
-        </Link>
+        <div className="flex shrink-0 items-center gap-1">
+          <Link href="/book?space=classroom" className="hidden sm:block">
+            <Button variant="secondary" size="sm">
+              Classroom
+            </Button>
+          </Link>
+          <Link href="/book">
+            <Button
+              variant="gold"
+              size="sm"
+              className={cn(onBook && "ring-2 ring-stone-300")}
+            >
+              <CalendarDays className="h-4 w-4" />
+              <span className="sr-only sm:not-sr-only sm:ml-0">Book</span>
+            </Button>
+          </Link>
+        </div>
       </div>
     </motion.nav>
   );

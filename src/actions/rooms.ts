@@ -15,24 +15,28 @@ export async function upsertRoomAction(input: unknown): Promise<ActionResult<{ i
     return { success: false, error: "Invalid room data" };
   }
 
-  const { id, name, capacity, amenities, status } = parsed.data;
+  const { id, name, capacity, amenities, status, roomType } = parsed.data;
   const payload = {
     name,
     capacity,
     amenities: serializeAmenities(amenities),
     status,
+    roomType,
   };
 
   if (id) {
     await prisma.room.update({ where: { id }, data: payload });
     revalidatePath("/admin/rooms");
     revalidatePath("/book");
+    revalidatePath("/dashboard");
+    revalidatePath("/admin/bookings");
     return { success: true, data: { id } };
   }
 
   const room = await prisma.room.create({ data: payload });
   revalidatePath("/admin/rooms");
   revalidatePath("/book");
+  revalidatePath("/dashboard");
   return { success: true, data: { id: room.id } };
 }
 
@@ -54,6 +58,7 @@ export async function deleteRoomAction(roomId: string): Promise<ActionResult> {
   await prisma.room.delete({ where: { id: roomId } });
   revalidatePath("/admin/rooms");
   revalidatePath("/book");
+  revalidatePath("/dashboard");
 
   return { success: true };
 }

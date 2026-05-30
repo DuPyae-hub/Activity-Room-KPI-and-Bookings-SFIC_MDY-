@@ -1,4 +1,4 @@
-import { PrismaClient, Role, RoomStatus } from "@prisma/client";
+import { PrismaClient, Role, RoomStatus, RoomType } from "@prisma/client";
 import { SFIC_MANDALAY_CLUBS } from "../src/lib/sfic-clubs";
 
 const prisma = new PrismaClient();
@@ -75,37 +75,68 @@ async function main() {
       capacity: 30,
       amenities: ["Sound System", "Stage Lighting", "Microphones"],
       status: RoomStatus.AVAILABLE,
+      roomType: RoomType.ACTIVITY_ROOM,
     },
     {
       name: "LAN Arena",
       capacity: 24,
       amenities: ["High-Speed LAN", "Gaming PCs", "Streaming Setup"],
       status: RoomStatus.AVAILABLE,
+      roomType: RoomType.ACTIVITY_ROOM,
     },
     {
       name: "Forum Hall",
       capacity: 80,
       amenities: ["Projector", "PA System", "Podium"],
       status: RoomStatus.AVAILABLE,
+      roomType: RoomType.ACTIVITY_ROOM,
     },
     {
       name: "Creative Lab",
       capacity: 20,
       amenities: ["Green Screen", "Softbox Lighting", "Editing Stations"],
       status: RoomStatus.AVAILABLE,
+      roomType: RoomType.ACTIVITY_ROOM,
     },
     {
       name: "Workshop Beta",
       capacity: 40,
       amenities: ["Whiteboards", "Flexible Seating", "Wi-Fi"],
       status: RoomStatus.MAINTENANCE,
+      roomType: RoomType.ACTIVITY_ROOM,
+    },
+    {
+      name: "Classroom A101",
+      capacity: 35,
+      amenities: ["Projector", "Whiteboard", "Air Conditioning"],
+      status: RoomStatus.AVAILABLE,
+      roomType: RoomType.CLASSROOM,
+    },
+    {
+      name: "Classroom B203",
+      capacity: 40,
+      amenities: ["Smart Board", "Whiteboard", "Wi-Fi"],
+      status: RoomStatus.AVAILABLE,
+      roomType: RoomType.CLASSROOM,
+    },
+    {
+      name: "Lecture Hall C301",
+      capacity: 60,
+      amenities: ["Projector", "PA System", "Podium", "Air Conditioning"],
+      status: RoomStatus.AVAILABLE,
+      roomType: RoomType.CLASSROOM,
     },
   ];
 
   for (const room of rooms) {
     await prisma.room.upsert({
       where: { name: room.name },
-      update: { amenities: room.amenities, capacity: room.capacity, status: room.status },
+      update: {
+        amenities: room.amenities,
+        capacity: room.capacity,
+        status: room.status,
+        roomType: room.roomType,
+      },
       create: room,
     });
   }

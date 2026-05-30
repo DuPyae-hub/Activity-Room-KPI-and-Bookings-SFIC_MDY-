@@ -6,7 +6,7 @@ const steps = [
     icon: CalendarCheck,
     title: "Choose room & time",
     description:
-      "Pick an activity room, your club, and a 2 or 3 hour slot between 8 AM and 10 PM (Myanmar Time).",
+      "Pick an activity room or classroom, your club, and a 2 or 3 hour slot between 8 AM and 10 PM (Myanmar Time).",
   },
   {
     icon: Mail,

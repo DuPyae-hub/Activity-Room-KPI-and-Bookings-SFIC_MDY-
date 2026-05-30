@@ -73,7 +73,9 @@ npm run dev
 |------|-----|
 | Public site | [http://localhost:3000/dashboard](http://localhost:3000/dashboard) |
 | Clubs | [http://localhost:3000/clubs](http://localhost:3000/clubs) |
+| Book classroom | [http://localhost:3000/book?space=classroom](http://localhost:3000/book?space=classroom) |
 | Admin login | [http://localhost:3000/sfic/manage](http://localhost:3000/sfic/manage) |
+| Admin spaces | [http://localhost:3000/admin/rooms](http://localhost:3000/admin/rooms) |
 
 After admin login you land on `/admin`. Password: `ADMIN_PASSWORD` in `.env`.
 
@@ -91,12 +93,29 @@ In **Vercel → Project → Settings → Environment Variables** (Production):
 | `ADMIN_EMAIL` | Yes | e.g. `admin@sfic.edu` |
 | `ADMIN_SESSION_SECRET` | Optional | Long random string |
 
-Build: `npm run build` (default). After first deploy, run locally once:
+Build: `npm run build` (default).
+
+**After deploying a schema change** (e.g. new `RoomType` / classrooms), update the production database once from your machine:
 
 ```bash
-DATABASE_URL="your-production-url" npx prisma db push
-DATABASE_URL="your-production-url" npm run db:seed
+# Use the same DATABASE_URL as Vercel Production
+export DATABASE_URL="postgresql://postgres....pooler.supabase.com:5432/postgres?sslmode=require"
+
+npx prisma generate
+npx prisma db push
+npm run db:seed
 ```
+
+Then in **Vercel → Deployments**, open the latest deployment — it should already include the new code. If the site errors on room pages, confirm `db push` succeeded (Supabase **Table Editor** → `Room` should have a `roomType` column).
+
+**Redeploy on Vercel (optional):** push to `main` (auto-deploy) or **Deployments → … → Redeploy** on the latest build. You do **not** need to change env vars for classroom support unless `DATABASE_URL` was missing.
+
+| Public URL | Purpose |
+|------------|---------|
+| `/book` | Activity rooms (default tab) |
+| `/book?space=classroom` | Classrooms |
+| `/dashboard` | Room KPI — use **Activity / Classroom** tabs |
+| `/admin/rooms` | Admin: add/edit activity rooms and classrooms |
 
 ### 2. Split admin vs public (recommended for production)
 
@@ -140,8 +159,8 @@ Skip `ADMIN_HOST` / `PUBLIC_HOST`. Use one Vercel URL; admin stays at `/sfic/man
 
 | Area | Highlights |
 |------|------------|
-| **Public (no login)** | Today timeline, **Clubs** directory, book rooms (2 or 3 hr blocks), My Bookings by email |
-| **Admin (`/sfic/manage`)** | Password-gated + signed session; KPI, **club CRUD**, rooms, approvals |
+| **Public (no login)** | Book **activity rooms** or **classrooms**, Room KPI calendar, **Clubs** directory, My Bookings by email |
+| **Admin (`/sfic/manage`)** | Password-gated + signed session; KPI, **club CRUD**, **activity rooms & classrooms**, approvals |
 | **UX** | Strategy First brand — black `#000000`, red `#D2232A`, white; official logo in nav; glass cards |
 
 ## Project structure

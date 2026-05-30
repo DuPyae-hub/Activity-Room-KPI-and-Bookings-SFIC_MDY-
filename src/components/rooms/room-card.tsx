@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Users, Wrench } from "lucide-react";
+import { RoomTypeBadge } from "@/components/layout/space-switcher";
 import { StatusBadge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
 import type { RoomWithAmenities } from "@/lib/types";
@@ -33,7 +34,10 @@ export function RoomCard({ room, index, layoutId, onSelect }: RoomCardProps) {
       >
         <GlassCard gradient className="h-full p-5 transition hover:bg-white/[0.07]">
           <div className="mb-3 flex items-start justify-between gap-2">
-            <h3 className="text-lg font-semibold">{room.name}</h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-lg font-semibold">{room.name}</h3>
+              <RoomTypeBadge roomType={room.roomType} />
+            </div>
             <StatusBadge status={room.status} type="room" />
           </div>
           <p className="mb-4 flex items-center gap-2 text-sm text-foreground-muted">

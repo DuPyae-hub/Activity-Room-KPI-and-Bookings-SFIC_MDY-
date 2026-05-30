@@ -13,10 +13,17 @@ import { GlassCard } from "@/components/ui/glass-card";
 const quickLinks = [
   {
     href: "/book",
-    label: "Book a room",
-    description: "Reserve a 2 or 3 hour session for your club",
+    label: "Book activity room",
+    description: "Studios, labs, and club activity spaces",
     icon: CalendarDays,
     primary: true,
+  },
+  {
+    href: "/book?space=classroom",
+    label: "Book classroom",
+    description: "Teaching and lecture rooms for your club",
+    icon: CalendarDays,
+    primary: false,
   },
   {
     href: "/dashboard",
@@ -83,7 +90,7 @@ export function LandingHero() {
         </div>
       </section>
 
-      <section className="mb-14 grid gap-3 sm:grid-cols-3">
+      <section className="mb-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {quickLinks.map(({ href, label, description, icon: Icon, primary }, i) => (
           <motion.div
             key={href}

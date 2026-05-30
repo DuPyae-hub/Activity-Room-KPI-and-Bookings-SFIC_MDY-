@@ -18,6 +18,11 @@ enum RoomStatus {
   MAINTENANCE
 }
 
+enum RoomType {
+  ACTIVITY_ROOM
+  CLASSROOM
+}
+
 enum BookingStatus {
   PENDING
   APPROVED
@@ -49,7 +54,10 @@ model Room {
   capacity  Int
   amenities Json
   status    RoomStatus @default(AVAILABLE)
+  roomType  RoomType   @default(ACTIVITY_ROOM)
   bookings  Booking[]
+
+  @@index([roomType])
 }
 
 model Booking {

@@ -1,14 +1,21 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { BookingMascotHint } from "@/components/booking/booking-mascot-hint";
 import { BookRoomClient } from "@/components/booking/book-room-client";
 import { HowItWorks } from "@/components/layout/how-it-works";
 import { DbErrorBanner } from "@/components/layout/db-error-banner";
 import { PageHeader } from "@/components/layout/page-header";
+import { SpaceSwitcher } from "@/components/layout/space-switcher";
 import { TimezoneNotice } from "@/components/layout/timezone-notice";
 import { Button } from "@/components/ui/button";
 import { getClubs, getOccupiedHoursByDate, getRooms } from "@/data/queries";
 import { ensureDynamicPage } from "@/lib/ensure-dynamic";
 import { isDbConnectionError } from "@/lib/safe-query";
+import {
+  getRoomSpaceOption,
+  parseRoomSpaceParam,
+  roomTypeToSpaceParam,
+} from "@/lib/room-types";
 import { parseBookingDateParam } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
@@ -17,12 +24,15 @@ export const revalidate = 0;
 export default async function BookPage({
   searchParams,
 }: {
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; space?: string }>;
 }) {
   await ensureDynamicPage();
 
   const params = await searchParams;
   const date = parseBookingDateParam(params.date);
+  const roomType = parseRoomSpaceParam(params.space);
+  const space = roomTypeToSpaceParam(roomType);
+  const spaceMeta = getRoomSpaceOption(roomType);
 
   let rooms: Awaited<ReturnType<typeof getRooms>> = [];
   let clubs: Awaited<ReturnType<typeof getClubs>> = [];
@@ -30,7 +40,7 @@ export default async function BookPage({
   let dbError = false;
 
   try {
-    rooms = await getRooms();
+    rooms = await getRooms({ roomType });
     clubs = await getClubs();
     occupiedByRoom = await getOccupiedHoursByDate(
       date,
@@ -47,12 +57,12 @@ export default async function BookPage({
     <div>
       <PageHeader
         eyebrow="Reserve a space"
-        title="Book an activity room"
+        title={spaceMeta.param === "classroom" ? "Book a classroom" : "Book an activity room"}
         description={
           <>
-            Choose a room and time for your club. Sessions are{" "}
+            Choose a {spaceMeta.label.toLowerCase()} and time for your club. Sessions are{" "}
             <strong className="text-foreground">2 or 3 hours</strong> (8 AM – 10 PM). No account
-            needed — admin approval is required before your booking is confirmed.{" "}
+            needed — admin approval is required.{" "}
             <TimezoneNotice className="mt-2 block" />
           </>
         }
@@ -63,9 +73,13 @@ export default async function BookPage({
         }
       />
 
+      <Suspense fallback={null}>
+        <SpaceSwitcher basePath="/book" activeSpace={space} className="mb-6" />
+      </Suspense>
+
       {dbError && <DbErrorBanner />}
 
-      {!dbError && <BookingMascotHint />}
+      {!dbError && <BookingMascotHint space={space} />}
 
       {!dbError && (
         <BookRoomClient
@@ -73,6 +87,7 @@ export default async function BookPage({
           clubs={clubs}
           allAmenities={allAmenities}
           date={date}
+          space={space}
           occupiedByRoom={occupiedByRoom}
         />
       )}

@@ -1,4 +1,4 @@
-import { BookingStatus, RoomStatus } from "@prisma/client";
+import { BookingStatus, RoomStatus, RoomType } from "@prisma/client";
 import { z } from "zod";
 import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-hours";
 import { BOOKING_DURATION_OPTIONS } from "@/lib/sfic-clubs";
@@ -82,6 +82,7 @@ export const roomUpsertSchema = z.object({
   capacity: z.coerce.number().int().min(1).max(500),
   amenities: z.array(z.string().min(1)).default([]),
   status: z.nativeEnum(RoomStatus),
+  roomType: z.nativeEnum(RoomType).default(RoomType.ACTIVITY_ROOM),
 });
 
 export const amenityFilterSchema = z.array(z.string()).optional();

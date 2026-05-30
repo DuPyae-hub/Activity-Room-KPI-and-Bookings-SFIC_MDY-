@@ -9,6 +9,7 @@ import { BookingDetailModal } from "@/components/booking/booking-detail-modal";
 import { RoomCard } from "@/components/rooms/room-card";
 import { GlassCard } from "@/components/ui/glass-card";
 import { formatDateOnlyInAppTz, todayInAppTz } from "@/lib/timezone";
+import type { RoomSpaceParam } from "@/lib/room-types";
 import type { RoomWithAmenities } from "@/lib/types";
 
 type ClubOption = {
@@ -22,6 +23,7 @@ type BookRoomClientProps = {
   clubs: ClubOption[];
   allAmenities: string[];
   date: string;
+  space: RoomSpaceParam;
   occupiedByRoom: Record<string, number[]>;
 };
 
@@ -30,6 +32,7 @@ export function BookRoomClient({
   clubs,
   allAmenities,
   date,
+  space,
   occupiedByRoom,
 }: BookRoomClientProps) {
   const router = useRouter();
@@ -41,8 +44,12 @@ export function BookRoomClient({
   const today = todayInAppTz();
 
   const setBookingDate = (next: string) => {
-    router.push(`/book?date=${next}`);
+    const q = new URLSearchParams({ date: next });
+    if (space === "classroom") q.set("space", "classroom");
+    router.push(`/book?${q.toString()}`);
   };
+
+  const spaceLabel = space === "classroom" ? "classrooms" : "activity rooms";
 
   const filtered = useMemo(() => {
     return rooms.filter((room) => {
@@ -111,7 +118,7 @@ export function BookRoomClient({
           </div>
           <div className="rounded-xl bg-brand-red/10 px-4 py-3 ring-1 ring-brand-red/25">
             <p className="text-2xl font-bold text-brand-red">{availableCount}</p>
-            <p className="text-xs text-foreground-muted">rooms available to book</p>
+            <p className="text-xs text-foreground-muted">{spaceLabel} available to book</p>
           </div>
         </div>
 
@@ -171,7 +178,7 @@ export function BookRoomClient({
 
       {filtered.length === 0 && (
         <GlassCard className="p-10 text-center">
-          <p className="text-foreground-muted">No rooms match your search.</p>
+          <p className="text-foreground-muted">No {spaceLabel} match your search.</p>
           <p className="mt-1 text-sm text-foreground-subtle">Try clearing filters or another date.</p>
         </GlassCard>
       )}

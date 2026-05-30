@@ -1,4 +1,4 @@
-import { BookingStatus } from "@prisma/client";
+import { BookingStatus, type RoomType } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import {
   endOfDayInAppTz,
@@ -13,8 +13,14 @@ const bookingInclude = {
   user: { select: { id: true, name: true, email: true } },
 } as const;
 
-export async function getRooms(amenityFilters?: string[]): Promise<RoomWithAmenities[]> {
-  const rooms = await prisma.room.findMany({ orderBy: { name: "asc" } });
+export async function getRooms(options?: {
+  roomType?: RoomType;
+  amenityFilters?: string[];
+}): Promise<RoomWithAmenities[]> {
+  const rooms = await prisma.room.findMany({
+    where: options?.roomType ? { roomType: options.roomType } : undefined,
+    orderBy: { name: "asc" },
+  });
 
   return rooms
     .map((room) => ({
@@ -22,6 +28,7 @@ export async function getRooms(amenityFilters?: string[]): Promise<RoomWithAmeni
       amenities: parseAmenities(room.amenities),
     }))
     .filter((room) => {
+      const amenityFilters = options?.amenityFilters;
       if (!amenityFilters?.length) return true;
       return amenityFilters.every((tag) =>
         room.amenities.some((a) => a.toLowerCase().includes(tag.toLowerCase())),
@@ -36,16 +43,25 @@ export async function getClubs() {
   });
 }
 
-export async function getTodayTimeline(date: Date) {
-  return getApprovedBookingsBetween(startOfDayInAppTz(date), endOfDayInAppTz(date));
+export async function getTodayTimeline(date: Date, roomType?: RoomType) {
+  return getApprovedBookingsBetween(
+    startOfDayInAppTz(date),
+    endOfDayInAppTz(date),
+    roomType,
+  );
 }
 
-export async function getApprovedBookingsBetween(start: Date, end: Date) {
+export async function getApprovedBookingsBetween(
+  start: Date,
+  end: Date,
+  roomType?: RoomType,
+) {
   return prisma.booking.findMany({
     where: {
       status: BookingStatus.APPROVED,
       startTime: { lt: end },
       endTime: { gt: start },
+      ...(roomType ? { room: { roomType } } : {}),
     },
     include: bookingInclude,
     orderBy: { startTime: "asc" },

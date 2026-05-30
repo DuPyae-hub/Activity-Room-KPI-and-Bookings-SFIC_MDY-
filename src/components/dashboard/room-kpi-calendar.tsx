@@ -17,15 +17,23 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { getDateStringInAppTz, todayInAppTz } from "@/lib/timezone";
 import { cn } from "@/lib/utils";
+import type { RoomSpaceParam } from "@/lib/room-types";
 import type { BookingWithRelations } from "@/lib/types";
 
 type Props = {
   month: string;
   selectedDay: string;
   bookings: BookingWithRelations[];
+  space?: RoomSpaceParam;
 };
 
-export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
+function dashboardQuery(month: string, day: string, space?: RoomSpaceParam) {
+  const params = new URLSearchParams({ month, day });
+  if (space === "classroom") params.set("space", "classroom");
+  return `/dashboard?${params.toString()}`;
+}
+
+export function RoomKpiCalendar({ month, selectedDay, bookings, space }: Props) {
   const monthDate = parseISO(`${month}-01`);
   const gridStart = startOfWeek(startOfMonth(monthDate), { weekStartsOn: 0 });
   const gridEnd = endOfWeek(endOfMonth(monthDate), { weekStartsOn: 0 });
@@ -46,7 +54,7 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
   const dayHref = (day: Date) => {
     const d = format(day, "yyyy-MM-dd");
     const m = format(day, "yyyy-MM");
-    return `/dashboard?month=${m}&day=${d}`;
+    return dashboardQuery(m, d, space);
   };
 
   return (
@@ -58,20 +66,20 @@ export function RoomKpiCalendar({ month, selectedDay, bookings }: Props) {
         </div>
         <div className="flex items-center gap-1">
           <Link
-            href={`/dashboard?month=${prevMonth}&day=${selectedDay}`}
+            href={dashboardQuery(prevMonth, selectedDay, space)}
             className="rounded-lg p-2 text-foreground-muted transition hover:bg-stone-50 hover:text-foreground"
             aria-label="Previous month"
           >
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <Link
-            href={`/dashboard?month=${month}&day=${today}`}
+            href={dashboardQuery(month, today, space)}
             className="rounded-lg px-3 py-1.5 text-xs font-medium text-foreground-muted ring-1 ring-white/15 transition hover:text-brand-red"
           >
             Today
           </Link>
           <Link
-            href={`/dashboard?month=${nextMonth}&day=${selectedDay}`}
+            href={dashboardQuery(nextMonth, selectedDay, space)}
             className="rounded-lg p-2 text-foreground-muted transition hover:bg-stone-50 hover:text-foreground"
             aria-label="Next month"
           >

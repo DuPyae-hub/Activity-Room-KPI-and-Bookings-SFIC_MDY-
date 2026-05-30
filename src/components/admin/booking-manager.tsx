@@ -10,6 +10,7 @@ import {
   updateBookingAction,
   updateBookingStatusAction,
 } from "@/actions/bookings";
+import { RoomTypeBadge } from "@/components/layout/space-switcher";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -158,6 +159,7 @@ export function BookingManager({
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="font-semibold">{booking.room.name}</p>
+                          <RoomTypeBadge roomType={booking.room.roomType} />
                           <StatusBadge status={booking.status} />
                         </div>
                         <p className="text-sm text-brand-red">
