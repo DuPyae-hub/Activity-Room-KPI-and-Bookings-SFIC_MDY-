@@ -16,6 +16,7 @@ import {
   parseRoomSpaceParam,
   roomTypeToSpaceParam,
 } from "@/lib/room-types";
+import { BOOKING_HOURS_LABEL } from "@/lib/booking-hours";
 import { parseBookingDateParam } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
@@ -64,12 +65,12 @@ export default async function BookPage({
             {spaceMeta.param === "classroom" ? (
               <>
                 Classrooms: <strong className="text-foreground">2, 3, or 5 hours</strong>, or a{" "}
-                <strong className="text-foreground">custom</strong> length (8 AM – 10 PM).
+                <strong className="text-foreground">custom</strong> length ({BOOKING_HOURS_LABEL}).
               </>
             ) : (
               <>
-                Sessions are <strong className="text-foreground">2 or 3 hours</strong> (8 AM –
-                10 PM).
+                Sessions are <strong className="text-foreground">2 or 3 hours</strong> (
+                {BOOKING_HOURS_LABEL}).
               </>
             )}{" "}
             {spaceMeta.param === "classroom" ? (

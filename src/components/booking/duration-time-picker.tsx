@@ -4,6 +4,8 @@ import { RoomType } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import {
+  BOOKING_END_TIME_LABEL,
+  BOOKING_HOURS_LABEL,
   formatHourLabel,
   getValidStartHours,
   isSlotRangeAvailable,
@@ -119,8 +121,8 @@ export function DurationTimePicker({
               />
             </label>
             <p className="text-xs text-foreground-subtle">
-              {CLASSROOM_CUSTOM_MIN_HOURS}–{CLASSROOM_CUSTOM_MAX_HOURS} hours · must finish by
-              10:00 PM
+              {CLASSROOM_CUSTOM_MIN_HOURS}–{CLASSROOM_CUSTOM_MAX_HOURS} hours · must finish by{" "}
+              {BOOKING_END_TIME_LABEL} ({BOOKING_HOURS_LABEL})
             </p>
           </div>
         )}

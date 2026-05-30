@@ -1,4 +1,5 @@
 import { CalendarCheck, Clock, Mail } from "lucide-react";
+import { BOOKING_HOURS_LABEL } from "@/lib/booking-hours";
 import { GlassCard } from "@/components/ui/glass-card";
 
 const steps = [
@@ -6,7 +7,7 @@ const steps = [
     icon: CalendarCheck,
     title: "Choose room & time",
     description:
-      "Pick a space and time: activity rooms (2 or 3 hours) or classrooms (2, 3, 5, or custom hours), 8 AM – 10 PM Myanmar Time.",
+      `Pick a space and time: activity rooms (2 or 3 hours) or classrooms (2, 3, 5, or custom hours), ${BOOKING_HOURS_LABEL} Myanmar Time.`,
   },
   {
     icon: Mail,

@@ -9,6 +9,7 @@ import { RoomTypeBadge } from "@/components/layout/space-switcher";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
+import { BOOKING_HOURS_LABEL } from "@/lib/booking-hours";
 import { ROOM_TYPE_LABELS } from "@/lib/room-types";
 import type { RoomWithAmenities } from "@/lib/types";
 
@@ -88,7 +89,8 @@ export function RoomManager({ rooms }: { rooms: RoomWithAmenities[] }) {
             {form.id ? "Edit space" : "Add space"}
           </h3>
           <p className="mb-4 text-sm text-foreground-muted">
-            Activity rooms: 2 or 3 hours. Classrooms: 2, 3, 5, or custom hours (8 AM–10 PM MMT).
+            Activity rooms: 2 or 3 hours. Classrooms: 2, 3, 5, or custom hours ({BOOKING_HOURS_LABEL}{" "}
+            MMT).
           </p>
           <div className="space-y-3">
             <div>

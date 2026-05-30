@@ -1,5 +1,5 @@
 import { RoomType } from "@prisma/client";
-import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-hours";
+import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-window";
 
 /** Activity rooms — fixed presets only */
 export const ACTIVITY_DURATION_OPTIONS = [2, 3] as const;
@@ -50,7 +50,7 @@ export function durationValidationMessage(roomType: RoomType): string {
   if (roomType === RoomType.ACTIVITY_ROOM) {
     return "Activity rooms can only be booked for 2 or 3 hours.";
   }
-  return `Classrooms allow 2, 3, or 5 hours, or a custom length between ${CLASSROOM_CUSTOM_MIN_HOURS} and ${CLASSROOM_CUSTOM_MAX_HOURS} hours (must end by 10:00 PM).`;
+  return `Classrooms allow 2, 3, or 5 hours, or a custom length between ${CLASSROOM_CUSTOM_MIN_HOURS} and ${CLASSROOM_CUSTOM_MAX_HOURS} hours (must end by 6:00 PM).`;
 }
 
 export function formatDurationLabel(hours: number): string {

@@ -1,5 +1,14 @@
-export const BOOKING_START_HOUR = 8;
-export const BOOKING_END_HOUR = 22;
+export {
+  BOOKING_END_HOUR,
+  BOOKING_END_TIME_LABEL,
+  BOOKING_HOURS_LABEL,
+  BOOKING_START_HOUR,
+} from "@/lib/booking-window";
+
+import {
+  BOOKING_END_HOUR,
+  BOOKING_START_HOUR,
+} from "@/lib/booking-window";
 
 export const HOUR_SLOTS = Array.from(
   { length: BOOKING_END_HOUR - BOOKING_START_HOUR },

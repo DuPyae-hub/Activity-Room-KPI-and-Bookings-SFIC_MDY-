@@ -2,6 +2,7 @@
 
 import { MascotSpot } from "@/components/animated/mascot-spot";
 import { GlassCard } from "@/components/ui/glass-card";
+import { BOOKING_HOURS_LABEL } from "@/lib/booking-hours";
 import { RoomType } from "@prisma/client";
 import { getRoomSpaceOption, type RoomSpaceParam } from "@/lib/room-types";
 
@@ -25,8 +26,8 @@ export function BookingMascotHint({ space }: { space: RoomSpaceParam }) {
         title={`How ${meta.label.toLowerCase()} booking works`}
         description={
           isClassroom
-            ? "Enter your name, email, and class name — then pick 2, 3, 5, or custom hours (8 AM–10 PM MMT). No club booking."
-            : "Select your club, pick a 2 or 3 hour slot (8 AM–10 PM MMT). Admin approves before it appears on Room KPI."
+            ? `Enter your name, email, and class name — then pick 2, 3, 5, or custom hours (${BOOKING_HOURS_LABEL} MMT). No club booking.`
+            : `Select your club, pick a 2 or 3 hour slot (${BOOKING_HOURS_LABEL} MMT). Admin approves before it appears on Room KPI.`
         }
       />
     </GlassCard>

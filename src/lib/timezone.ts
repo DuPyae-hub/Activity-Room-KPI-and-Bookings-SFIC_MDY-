@@ -1,4 +1,5 @@
 import { formatInTimeZone, fromZonedTime, toZonedTime } from "date-fns-tz";
+import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-window";
 
 /** Myanmar Standard Time — UTC+6:30 (no daylight saving). */
 export const APP_TIMEZONE = "Asia/Yangon";
@@ -99,11 +100,11 @@ export function isSameCalendarDayInAppTz(a: Date, b: Date): boolean {
   return getDateStringInAppTz(a) === getDateStringInAppTz(b);
 }
 
-/** Hour slots occupied by a booking (8–22 window) in Myanmar local hours. */
+/** Hour slots occupied by a booking (booking window) in Myanmar local hours. */
 export function hoursFromBookingInAppTz(startTime: Date, endTime: Date): number[] {
   const hours: number[] = [];
-  const start = Math.max(getHourInAppTz(startTime), 8);
-  const end = Math.min(getHourInAppTz(endTime), 22);
+  const start = Math.max(getHourInAppTz(startTime), BOOKING_START_HOUR);
+  const end = Math.min(getHourInAppTz(endTime), BOOKING_END_HOUR);
   for (let h = start; h < end; h++) hours.push(h);
   return hours;
 }

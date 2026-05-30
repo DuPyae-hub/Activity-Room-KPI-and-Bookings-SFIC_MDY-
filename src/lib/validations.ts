@@ -1,6 +1,6 @@
 import { BookingStatus, RoomStatus, RoomType } from "@prisma/client";
 import { z } from "zod";
-import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-hours";
+import { BOOKING_END_HOUR, BOOKING_START_HOUR } from "@/lib/booking-window";
 import { CLASSROOM_CUSTOM_MAX_HOURS } from "@/lib/booking-duration";
 
 const durationHoursField = z
@@ -26,7 +26,7 @@ export const bookingCreateSchema = z
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   })
   .refine((d) => d.startHour + d.durationHours <= BOOKING_END_HOUR, {
-    message: "Booking must end by 10:00 PM",
+    message: "Booking must end by 6:00 PM",
     path: ["startHour"],
   });
 
@@ -70,7 +70,7 @@ export const bookingAdminUpdateSchema = z
     status: z.nativeEnum(BookingStatus),
   })
   .refine((d) => d.startHour + d.durationHours <= BOOKING_END_HOUR, {
-    message: "Booking must end by 10:00 PM",
+    message: "Booking must end by 6:00 PM",
     path: ["startHour"],
   });
 
